@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table (name = "order_type")
-public class OrderTypeEntity {
+public class ViewOrderTypeEntity {
         
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,4 +47,10 @@ public class OrderTypeEntity {
 
         @Column(name = "UpdatedBy_UserID", unique = false,nullable = true)
         private Long UpdatedBy_UserID = null;
+
+        @Column(name = "TotleMsg", unique = false,nullable = true)
+        private Integer TotleMsg = 0;
+
+        @Column(name = "TotleSend", unique = false,nullable = true)
+        private Integer TotleSend = 0;
 }

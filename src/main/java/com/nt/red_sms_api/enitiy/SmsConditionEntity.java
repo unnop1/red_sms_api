@@ -50,10 +50,10 @@ public class SmsConditionEntity {
         private String DateEnd = null;
 
         @Column(name = "IsEnable", unique = false,nullable = true)
-        private Boolean IsEnable = true;
+        private Integer IsEnable = 1;
 
         @Column(name = "IsDelete", unique = false,nullable = true)
-        private Boolean IsDelete = false;
+        private Integer IsDelete = 0;
 
         @Column(name = "CreatedDate", unique = false,nullable = true)
         private String CreatedDate = null;

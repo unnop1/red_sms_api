@@ -8,6 +8,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SmsGwOdtReq {
+    @JsonProperty("page")
+    private Integer page;
+
+    @JsonProperty("limit")
+    private Integer limit;
+
+
     @JsonProperty("orderTypeID")
     private String orderTypeID;
 

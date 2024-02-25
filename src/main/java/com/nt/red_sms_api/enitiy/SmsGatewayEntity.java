@@ -22,7 +22,7 @@ public class SmsGatewayEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         @Column(name = "GID")
-        private Long SMSID = null;
+        private Long GID = null;
 
         @Column(name = "sms_conditions_SMSID", unique = false,nullable = true)
         private Long sms_conditions_SMSID = null;
