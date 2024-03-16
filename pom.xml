@@ -12,7 +12,7 @@
 	<artifactId>red_sms_api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>red_sms_api</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Red SMS APP</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>

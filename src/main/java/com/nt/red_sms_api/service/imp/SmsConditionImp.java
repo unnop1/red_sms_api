@@ -1,7 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.enitiy.OrderTypeEntity;
-import com.nt.red_sms_api.enitiy.SmsConditionEntity;
+import com.nt.red_sms_api.enitiy.ConfigConditionsEntity;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
 
@@ -21,16 +21,16 @@ public class SmsConditionImp implements SmsConditionService{
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<SmsConditionEntity> ListAllSmsCondition(Integer page, Integer limit) {
-        List<SmsConditionEntity> smsConditionEntities = smsConditionRepo.findAll();
+    public List<ConfigConditionsEntity> ListAllSmsCondition(Integer page, Integer limit) {
+        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll();
         // List<SmsConditionResponseDto> userResponseDtoList = smsConditionEntities.stream().map(smsCondition->this.smsConditionEntityToSmsConditionRespDto(smsCondition)).collect(Collectors.toList());
         return smsConditionEntities;
     }
 
     @Override
     public void updateSmsConditionById(Long smsID, Map<String, Object> updates) {
-        SmsConditionEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
-        System.out.println("existingEntity ID: " + existingEntity.getSMSID());
+        ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
+        System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         // If the entity exists
         if (existingEntity != null) {
             // Iterate over the entries of the updates map
@@ -40,7 +40,7 @@ public class SmsConditionImp implements SmsConditionService{
 
                 try {
                     // Get the field from the entity class
-                    Field field = SmsConditionEntity.class.getDeclaredField(fieldName);
+                    Field field = ConfigConditionsEntity.class.getDeclaredField(fieldName);
                     // Set the accessibility of the field to true if it's not already accessible
                     if (!field.isAccessible()) {
                         field.setAccessible(true);
@@ -59,9 +59,9 @@ public class SmsConditionImp implements SmsConditionService{
     }
 
     @Override
-    public SmsConditionEntity getSmsConditionMoreDetail(Long smsID) {
-        SmsConditionEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
-        System.out.println("existingEntity ID: " + existingEntity.getSMSID());
+    public ConfigConditionsEntity getSmsConditionMoreDetail(Long smsID) {
+        ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
+        System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         return existingEntity;
     }
 }

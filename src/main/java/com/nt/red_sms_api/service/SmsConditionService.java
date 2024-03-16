@@ -1,6 +1,6 @@
 package com.nt.red_sms_api.service;
 
-import com.nt.red_sms_api.enitiy.SmsConditionEntity;
+import com.nt.red_sms_api.enitiy.ConfigConditionsEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 public interface SmsConditionService  {
-    public List<SmsConditionEntity> ListAllSmsCondition(Integer page, Integer limit);
+    public List<ConfigConditionsEntity> ListAllSmsCondition(Integer page, Integer limit);
     public void updateSmsConditionById(Long smsId, Map<String, Object> updates);
-    public SmsConditionEntity getSmsConditionMoreDetail(Long smsID);
+    public ConfigConditionsEntity getSmsConditionMoreDetail(Long smsID);
 }
