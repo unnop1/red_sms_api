@@ -1,15 +1,22 @@
 package com.nt.red_sms_api.dto.req;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @ToString
 public class JwtRequest {
-    private String email;
+    @JsonProperty("username")
+    private String username;
+    @JsonProperty("password")
     private String password;
+    @JsonProperty("device")
+    private String device="Unknown device";
+    @JsonProperty("system")
+    private String system="Unknown system";
+    @JsonProperty("browser")
+    private String browser="Unknown browser";
 }
