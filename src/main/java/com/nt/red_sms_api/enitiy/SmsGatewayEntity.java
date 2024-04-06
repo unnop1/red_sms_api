@@ -16,11 +16,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "sms_gateway")
+@Table (name = "SMS_GATEWAY")
 public class SmsGatewayEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
         @Column(name = "GID")
         private Long GID = null;
 

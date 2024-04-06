@@ -16,11 +16,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "order_type")
+@Table (name = "ORDER_TYPE")
 public class OrderTypeEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUST_GEN")
         @Column(name = "TYPEID")
         private Long TYPEID = null;
 

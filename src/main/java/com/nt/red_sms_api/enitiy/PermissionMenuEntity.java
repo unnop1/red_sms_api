@@ -17,10 +17,10 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table (name = "sa_menu_permission")
+@Table (name = "SA_MENU_PERMISSION")
 public class PermissionMenuEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CUST_GEN")
     @Column(name = "id")
     private Long id;
 

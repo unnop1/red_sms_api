@@ -14,10 +14,10 @@ import java.util.Collection;
 @Entity
 @Getter
 @Setter
-@Table (name = "user_db")
+@Table (name = "USER_DB")
 public class UserEnitiy implements UserDetails {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
         private long id;
 
         @Column(name = "name", unique = false,nullable = true)

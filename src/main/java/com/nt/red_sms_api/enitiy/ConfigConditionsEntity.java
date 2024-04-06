@@ -20,7 +20,7 @@ import lombok.ToString;
 public class ConfigConditionsEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
         @Column(name = "conditionsID")
         private Long conditionsID = null;
 

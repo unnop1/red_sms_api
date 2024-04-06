@@ -20,7 +20,6 @@ import lombok.ToString;
 public class ViewOrderTypeEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
         @Column(name = "TYPEID")
         private Long TYPEID = null;
 

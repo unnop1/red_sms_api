@@ -12,10 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "sa_log_login")
+@Table (name = "SA_LOG_LOGIN")
 public class LogLoginEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
     @Column(name = "log_id")
     private Long log_id;
 
