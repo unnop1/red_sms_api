@@ -23,9 +23,6 @@ public class PermissionMenuEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_id", unique = false,nullable = true)
-    private Long userID=null;
-
     @Column(name = "permission_Name", unique = false,nullable = true)
     private String permissionName=null;
 

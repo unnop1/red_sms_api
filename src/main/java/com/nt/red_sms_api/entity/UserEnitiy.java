@@ -66,6 +66,9 @@ public class UserEnitiy implements UserDetails {
         @Column(name = "updated_by", unique = false,nullable = true)
         private String updated_by;
 
+        @Column(name = "sa_menu_permission_id", unique = false,nullable = true)
+        private Long sa_permission_id;
+
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
                 return null;

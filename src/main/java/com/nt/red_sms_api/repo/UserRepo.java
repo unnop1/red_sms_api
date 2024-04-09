@@ -10,5 +10,9 @@ public interface UserRepo extends JpaRepository<UserEnitiy,Long> {
     @SuppressWarnings("null")
     @Query(value = "SELECT * FROM user_db WHERE email=?1", nativeQuery = true)
     public UserEnitiy findByEmail(String email);
+    
+    @SuppressWarnings("null")
+    @Query(value = "SELECT * FROM user_db WHERE email=?1 AND username=?2 ", nativeQuery = true)
+    public UserEnitiy findByUniqueUser(String email, String username);
 
 }

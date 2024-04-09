@@ -95,11 +95,13 @@ public class AuthController {
         loglogin.setLogin_datetime(loginDateTime);
         loglogin.setCreate_date(loginDateTime);
         loglogin.setUsername(jwtRequest.getUsername());
-        this.doAuthenticate(jwtRequest.getEmail(), jwtRequest.getPassword(), loglogin);
-        UserEnitiy userDetails = userService.loadUserByUsername(jwtRequest.getEmail());
+        UserEnitiy userDetails = userService.loadUniqueUser(jwtRequest.getEmail(), jwtRequest.getUsername());
         if( userDetails == null ){
             return new ResponseEntity<>(userResp, HttpStatus.BAD_REQUEST);
         }
+
+        this.doAuthenticate(jwtRequest.getEmail(), jwtRequest.getPassword(), loglogin);
+        
 
         String token = this.helper.generateToken(userDetails);
 
@@ -132,7 +134,7 @@ public class AuthController {
         userResp.setJwtToken(token);
 
         // permissionMenu
-        PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getId());
+        PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getSa_permission_id());
         userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
         userResp.setPermissionName(permissionMenuEntity.getPermissionName());
 
@@ -154,6 +156,7 @@ public class AuthController {
             this.logloginService.createLog(loglogin);
 
         } catch (Exception e) {
+            System.out.println("Exception:" + e.getMessage());
             System.out.println("Authentication not-successful for user: " + email);
             loglogin.setPassword(password);
             System.out.println(loglogin.toString());

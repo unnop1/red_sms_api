@@ -17,8 +17,8 @@ public class PermissionMenuImp implements PermissionMenuService {
     private PermissionMenuRepo permissionMenuRepo;
 
     @Override
-    public PermissionMenuEntity getUserMenuPermission(Long userId) {
-        PermissionMenuEntity permissionMenu = permissionMenuRepo.findPermissionByUserId(userId);
+    public PermissionMenuEntity getUserMenuPermission(Long saPermissionID) {
+        PermissionMenuEntity permissionMenu = permissionMenuRepo.findPermissionByUserId(saPermissionID);
         System.out.println("permissionMenus: " + permissionMenu);
         return permissionMenu;
     }

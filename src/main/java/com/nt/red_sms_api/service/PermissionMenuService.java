@@ -4,5 +4,5 @@ import com.nt.red_sms_api.entity.PermissionMenuEntity;
 
 
 public interface PermissionMenuService {
-    PermissionMenuEntity getUserMenuPermission(Long userId);
+    PermissionMenuEntity getUserMenuPermission(Long sa_permission_id);
 }

@@ -31,12 +31,6 @@ public class UserImp implements UserService {
     @Override
     public UserEnitiy loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEnitiy user = userRepo.findByEmail(username);
-        // System.out.println("Retrived Data");
-        // System.out.println(user.getPassword()+"Retrived Password");
-        // System.out.println(user.getUsername());
-        // System.out.println(user.getId());
-        // System.out.println(user.getEmail());
-        // System.out.println("-----");
         return user;
     }
 
@@ -94,6 +88,12 @@ public class UserImp implements UserService {
     public UserResp userEntityToUserRespDto(UserEnitiy user){
         UserResp userRespDto = this.modelMapper.map(user,UserResp.class);
         return userRespDto;
+    }
+
+    @Override
+    public UserEnitiy loadUniqueUser(String email, String username) throws UsernameNotFoundException {
+        UserEnitiy user = userRepo.findByUniqueUser(email, username);
+        return user;
     }
     
 }

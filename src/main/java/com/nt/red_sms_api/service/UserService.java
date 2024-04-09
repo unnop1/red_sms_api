@@ -15,4 +15,5 @@ public interface UserService extends UserDetailsService {
     public UserResp createUser(UserRequestDto userRequestDto);
     void updateUser(String email, HashMap<String, Object> updateInfo);
     UserEnitiy loadUserByUsername(String email) throws UsernameNotFoundException;
+    UserEnitiy loadUniqueUser(String email, String username) throws UsernameNotFoundException;
 }
