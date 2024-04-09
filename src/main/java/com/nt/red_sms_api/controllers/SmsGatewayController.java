@@ -5,7 +5,7 @@ import com.nt.red_sms_api.dto.req.SmsGwOdtReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.DefaultServiceResp;
 import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
-import com.nt.red_sms_api.enitiy.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.service.OrderTypeService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 

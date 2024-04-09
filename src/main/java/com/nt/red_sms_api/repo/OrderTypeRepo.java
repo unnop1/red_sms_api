@@ -4,10 +4,11 @@ package com.nt.red_sms_api.repo;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.nt.red_sms_api.enitiy.OrderTypeEntity;
-import com.nt.red_sms_api.enitiy.ViewOrderTypeEntity;
+import com.nt.red_sms_api.entity.OrderTypeEntity;
+import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderTypeRepo extends JpaRepository<OrderTypeEntity,Long> {
 

@@ -2,7 +2,7 @@ package com.nt.red_sms_api.service;
 
 import com.nt.red_sms_api.dto.req.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.UserResp;
-import com.nt.red_sms_api.enitiy.UserEnitiy;
+import com.nt.red_sms_api.entity.UserEnitiy;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

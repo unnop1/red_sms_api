@@ -1,7 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.dto.resp.DefaultServiceResp;
-import com.nt.red_sms_api.enitiy.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.service.SmsGatewayService;
 

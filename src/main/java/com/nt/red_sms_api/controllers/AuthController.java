@@ -8,9 +8,9 @@ import com.nt.red_sms_api.dto.resp.AuthSuccessResp;
 import com.nt.red_sms_api.dto.resp.JwtErrorResp;
 import com.nt.red_sms_api.dto.resp.LoginResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
-import com.nt.red_sms_api.enitiy.LogLoginEntity;
-import com.nt.red_sms_api.enitiy.PermissionMenuEntity;
-import com.nt.red_sms_api.enitiy.UserEnitiy;
+import com.nt.red_sms_api.entity.LogLoginEntity;
+import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.entity.UserEnitiy;
 import com.nt.red_sms_api.exp.UserAlreadyExistsException;
 import com.nt.red_sms_api.service.LogLoginService;
 import com.nt.red_sms_api.service.PermissionMenuService;
@@ -154,6 +154,7 @@ public class AuthController {
         } catch (Exception e) {
             System.out.println("Authentication not-successful for user: " + email);
             loglogin.setPassword(password);
+            System.out.println(loglogin.toString());
             this.logloginService.createLog(loglogin);
             throw new BadCredentialsException(" Invalid Username or Password  !!");
         }

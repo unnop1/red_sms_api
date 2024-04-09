@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.enitiy;
+package com.nt.red_sms_api.entity;
 
 import java.sql.Timestamp;
 
@@ -12,10 +12,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "SA_LOG_LOGIN")
+@Table (name = "sa_log_login")
 public class LogLoginEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sa_log_login_seq")
+    @SequenceGenerator(name = "sa_log_login_seq", allocationSize = 1)
     @Column(name = "log_id")
     private Long log_id;
 
@@ -37,11 +38,14 @@ public class LogLoginEntity {
     @Column(name = "system", unique = false,nullable = true)
     private String system;
 
-    @Column(name = "isDisable", unique = false,nullable = true)
+    @Column(name = "is_Disable", unique = false,nullable = true)
     private Integer isDisable=0;
 
     @Column(name = "login_datetime", unique = false,nullable = true)
     private Timestamp login_datetime;
+
+    @Column(name = "is_login", unique = false,nullable = true)
+    private Integer is_login=0;
 
     @Column(name = "create_date", unique = false,nullable = true)
     private Timestamp create_date;

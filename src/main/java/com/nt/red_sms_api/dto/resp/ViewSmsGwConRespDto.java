@@ -79,7 +79,7 @@ public class ViewSmsGwConRespDto {
         @JsonProperty("CreatedBy_UserID")
         private Long CreatedBy_UserID = null;
 
-        @JsonProperty("UpdatedDate")
+        @JsonProperty("Updated_Date")
         private String UpdatedDate = null;
 
         @JsonProperty("UpdatedBy_UserID")

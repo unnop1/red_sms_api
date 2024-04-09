@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.enitiy;
+package com.nt.red_sms_api.entity;
 
 
 import java.sql.Timestamp;
@@ -16,22 +16,26 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "SMS_GATEWAY")
+@Table (name = "sms_gateway")
 public class SmsGatewayEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sms_gateway_seq")
+        @SequenceGenerator(name = "sms_gateway_seq", allocationSize = 1)
         @Column(name = "GID")
         private Long GID = null;
 
-        @Column(name = "sms_conditions_SMSID", unique = false,nullable = true)
-        private Long sms_conditions_SMSID = null;
+        @Column(name = "config_conditions_ID", unique = false,nullable = true)
+        private Long config_conditions_ID = null;
         
         @Column(name = "SMSMessage", unique = false,nullable = true)
         private String SMSMessage = null;
 
-        @Column(name = "order_type_MainID", unique = false,nullable = true)
-        private Long order_type_MainID = null;
+        @Column(name = "Message_raw", unique = false,nullable = true)
+        private String Message_raw = null;
+
+        @Column(name = "order_type_ID", unique = false,nullable = true)
+        private Long order_type_ID = null;
 
         @Column(name = "OrderType", unique = false,nullable = true)
         private String OrderType = null;
@@ -39,24 +43,21 @@ public class SmsGatewayEntity {
         @Column(name = "PhoneNumber", unique = false,nullable = true)
         private String PhoneNumber = null;
 
-        @Column(name = "serviceType", unique = false,nullable = true)
+        @Column(name = "payloadMQ", unique = false,nullable = true)
         private Integer serviceType = null;
 
-        @Column(name = "Frequency", unique = false,nullable = true)
-        private String Frequency = null;
-
-        @Column(name = "Chanel", unique = false,nullable = true)
-        private String Chanel = null;
-
-        @Column(name = "OfferingId", unique = false,nullable = true)
+        @Column(name = "payloadGW", unique = false,nullable = true)
         private String OfferingId = null;
 
         @Column(name = "PayloadMQ", unique = false,nullable = true)
         private String PayloadMQ = null;
 
-        @Column(name = "IsStatus", unique = false,nullable = true)
+        @Column(name = "Is_Status", unique = false,nullable = true)
         private Integer IsStatus = 0;
 
-        @Column(name = "CreatedDate", unique = false,nullable = true)
+        @Column(name = "Remark", unique = false,nullable = true)
+        private String Remark = null;
+
+        @Column(name = "Created_Date", unique = false,nullable = true)
         private Timestamp CreatedDate = null;
 }

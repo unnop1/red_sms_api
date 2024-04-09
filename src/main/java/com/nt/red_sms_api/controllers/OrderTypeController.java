@@ -3,7 +3,7 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
-import com.nt.red_sms_api.enitiy.ViewOrderTypeEntity;
+import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 import com.nt.red_sms_api.service.OrderTypeService;
 
 import org.springframework.beans.factory.annotation.Autowired;

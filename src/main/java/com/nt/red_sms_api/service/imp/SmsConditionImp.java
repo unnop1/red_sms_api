@@ -1,7 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
-import com.nt.red_sms_api.enitiy.OrderTypeEntity;
-import com.nt.red_sms_api.enitiy.ConfigConditionsEntity;
+import com.nt.red_sms_api.entity.ConfigConditionsEntity;
+import com.nt.red_sms_api.entity.OrderTypeEntity;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
 
@@ -18,11 +18,11 @@ public class SmsConditionImp implements SmsConditionService{
 
     @Autowired
     private SmsConditionRepo smsConditionRepo;
-    @Autowired
-    private ModelMapper modelMapper;
+    // @Autowired
+    // private ModelMapper modelMapper;
 
     public List<ConfigConditionsEntity> ListAllSmsCondition(Integer page, Integer limit) {
-        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll();
+        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll(page, limit);
         // List<SmsConditionResponseDto> userResponseDtoList = smsConditionEntities.stream().map(smsCondition->this.smsConditionEntityToSmsConditionRespDto(smsCondition)).collect(Collectors.toList());
         return smsConditionEntities;
     }
@@ -60,8 +60,9 @@ public class SmsConditionImp implements SmsConditionService{
 
     @Override
     public ConfigConditionsEntity getSmsConditionMoreDetail(Long smsID) {
+        System.out.println("smsID: " + smsID);
         ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
-        System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
+        // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         return existingEntity;
     }
 }

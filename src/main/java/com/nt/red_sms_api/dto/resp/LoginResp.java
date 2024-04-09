@@ -3,7 +3,7 @@ package com.nt.red_sms_api.dto.resp;
 import org.hibernate.annotations.Formula;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nt.red_sms_api.enitiy.UserEnitiy;
+import com.nt.red_sms_api.entity.UserEnitiy;
 
 import jakarta.persistence.Column;
 import lombok.Getter;

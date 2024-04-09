@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.enitiy;
+package com.nt.red_sms_api.entity;
 
 
 import java.sql.Timestamp;
@@ -20,9 +20,10 @@ import lombok.ToString;
 public class ConfigConditionsEntity {
         
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
-        @Column(name = "conditionsID")
-        private Long conditionsID = null;
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "config_conditions_seq")
+        @SequenceGenerator(name = "config_conditions_seq", allocationSize = 1)
+        @Column(name = "conditions_ID")
+        private Long conditionsID;
 
         @Column(name = "order_type_MainID", unique = false,nullable = true)
         private Long order_type_MainID = null;
@@ -33,17 +34,14 @@ public class ConfigConditionsEntity {
         @Column(name = "refID", unique = false,nullable = true)
         private String refID = null;
 
-        @Column(name = "dateStart", unique = false,nullable = true)
+        @Column(name = "date_Start", unique = false,nullable = true)
         private Timestamp dateStart = null;
 
-        @Column(name = "dateEnd", unique = false,nullable = true)
+        @Column(name = "date_End", unique = false,nullable = true)
         private Timestamp dateEnd = null;
 
         @Column(name = "message", unique = false,nullable = true)
         private String message = null;
-
-        @Column(name = "messageRaw", unique = false,nullable = true)
-        private String messageRaw = null;
 
         @Column(name = "conditions_or", unique = false,nullable = true)
         private String conditions_or = null;
@@ -51,14 +49,26 @@ public class ConfigConditionsEntity {
         @Column(name = "conditions_and", unique = false,nullable = true)
         private String conditions_and = null;
 
-        @Column(name = "createdDate", unique = false,nullable = true)
-        private Timestamp createdDate = null;
+        @Column(name = "created_Date", unique = false,nullable = true)
+        private Timestamp created_Date = null;
 
-        @Column(name = "createdBy_userID", unique = false,nullable = true)
-        private Long createdBy_userID = null;
+        @Column(name = "created_By", unique = false,nullable = true)
+        private String created_By = null;
 
-        @Column(name = "updatedDate", unique = false,nullable = true)
+        @Column(name = "updated_Date", unique = false,nullable = true)
         private Timestamp updatedDate = null;
+
+        @Column(name = "updated_By", unique = false,nullable = true)
+        private String updated_By = null;
+
+        @Column(name = "is_delete", unique = false,nullable = true)
+        private Integer is_delete = 0;
+
+        @Column(name = "is_Delete_By", unique = false,nullable = true)
+        private String is_Delete_By = null;
+
+        @Column(name = "is_Delete_Date", unique = false,nullable = true)
+        private Timestamp is_Delete_Date = null;
 
         
 }

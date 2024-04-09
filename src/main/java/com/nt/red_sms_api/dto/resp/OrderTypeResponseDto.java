@@ -15,22 +15,22 @@ public class OrderTypeResponseDto {
     @Column(name = "MainID", unique = false,nullable = true)
     private Long MainID = null;
 
-    @Column(name = "OrderTypeName", unique = false,nullable = true)
+    @Column(name = "OrderType_Name", unique = false,nullable = true)
     private String OrderTypeName = null;
 
-    @Column(name = "IsEnable", unique = false,nullable = true)
+    @Column(name = "Is_Enable", unique = false,nullable = true)
     private Integer IsEnable = 1;
 
-    @Column(name = "IsDelete", unique = false,nullable = true)
+    @Column(name = "Is_Delete", unique = false,nullable = true)
     private Integer IsDelete = 0;
 
-    @Column(name = "CreatedDate", unique = false,nullable = true)
+    @Column(name = "Created_Date", unique = false,nullable = true)
     private Timestamp CreatedDate = null;
 
     @Column(name = "CreatedBy_UserID", unique = false,nullable = true)
     private Long CreatedBy_UserID = null;
 
-    @Column(name = "UpdatedDate", unique = false,nullable = true)
+    @Column(name = "Updated_Date", unique = false,nullable = true)
     private Timestamp UpdatedDate = null;
 
     @Column(name = "UpdatedBy_UserID", unique = false,nullable = true)

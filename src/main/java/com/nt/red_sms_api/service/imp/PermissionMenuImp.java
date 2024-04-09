@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nt.red_sms_api.enitiy.PermissionMenuEntity;
+import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.repo.PermissionMenuRepo;
 import com.nt.red_sms_api.service.PermissionMenuService;
 

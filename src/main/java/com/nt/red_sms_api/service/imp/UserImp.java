@@ -3,7 +3,7 @@ package com.nt.red_sms_api.service.imp;
 import com.nt.red_sms_api.config.AuthConfig;
 import com.nt.red_sms_api.dto.req.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.UserResp;
-import com.nt.red_sms_api.enitiy.UserEnitiy;
+import com.nt.red_sms_api.entity.UserEnitiy;
 import com.nt.red_sms_api.exp.UserAlreadyExistsException;
 import com.nt.red_sms_api.repo.UserRepo;
 import com.nt.red_sms_api.service.UserService;

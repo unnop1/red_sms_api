@@ -3,7 +3,7 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.dto.req.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
-import com.nt.red_sms_api.enitiy.ConfigConditionsEntity;
+import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.service.SmsConditionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +28,23 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> GetSmsConditionMoreDetail(@RequestBody SmsConditionMoreDetailReq req) throws Exception{
         ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req.getSmsID());
         DefaultControllerResp response = new DefaultControllerResp();
-        if(smsDetail.getConditionsID() != null){ 
-            response.setCount(1);
+        if( smsDetail != null){
+            if(smsDetail.getConditionsID() != null){ 
+                response.setCount(1);
+                response.setMessage("Success");
+                response.setData(smsDetail);
+                response.setStatusCode(200);
+            }else{
+                response.setCount(0);
+                response.setMessage("Not Found");
+                response.setData(smsDetail);
+                response.setStatusCode(200);
+            }
+        }else{
+            response.setCount(0);
             response.setMessage("Success");
             response.setData(smsDetail);
             response.setStatusCode(200);
-        }else{
-            response.setCount(0);
-            response.setMessage("Error");
-            response.setData(smsDetail);
-            response.setStatusCode(400);
         }
         
         return ResponseEntity.status(HttpStatus.OK).body(response);

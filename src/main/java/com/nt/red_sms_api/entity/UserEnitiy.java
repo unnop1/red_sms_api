@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.enitiy;
+package com.nt.red_sms_api.entity;
 
 
 import jakarta.persistence.*;
@@ -17,7 +17,8 @@ import java.util.Collection;
 @Table (name = "USER_DB")
 public class UserEnitiy implements UserDetails {
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ")
+        @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_db_seq")
+        @SequenceGenerator(name = "user_db_seq", allocationSize = 1)
         private long id;
 
         @Column(name = "name", unique = false,nullable = true)
@@ -44,22 +45,22 @@ public class UserEnitiy implements UserDetails {
         @Column(name = "last_login_ipaddress", unique = false,nullable = true)
         private String last_login_ipaddress;
 
-        @Column(name = "isDelete", unique = false,nullable = true)
+        @Column(name = "is_Delete", unique = false,nullable = true)
         private Integer isDelete;
 
-        @Column(name = "isDelete_by", unique = false,nullable = true)
+        @Column(name = "is_Delete_by", unique = false,nullable = true)
         private String isDelete_by;
 
-        @Column(name = "isDelete_date", unique = false,nullable = true)
+        @Column(name = "is_Delete_date", unique = false,nullable = true)
         private Timestamp isDelete_date;
 
-        @Column(name = "createdDate", unique = false,nullable = true)
+        @Column(name = "created_Date", unique = false,nullable = true)
         private Timestamp createdDate;
 
         @Column(name = "created_by", unique = false,nullable = true)
         private String created_by;
 
-        @Column(name = "updatedDate", unique = false,nullable = true)
+        @Column(name = "updated_Date", unique = false,nullable = true)
         private Timestamp updatedDate;
 
         @Column(name = "updated_by", unique = false,nullable = true)

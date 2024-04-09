@@ -1,8 +1,8 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
-import com.nt.red_sms_api.enitiy.OrderTypeEntity;
-import com.nt.red_sms_api.enitiy.ViewOrderTypeEntity;
+import com.nt.red_sms_api.entity.OrderTypeEntity;
+import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 import com.nt.red_sms_api.repo.OrderTypeRepo;
 import com.nt.red_sms_api.repo.ViewOrderTypeRepo;
 import com.nt.red_sms_api.service.OrderTypeService;

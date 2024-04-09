@@ -1,9 +1,9 @@
 package com.nt.red_sms_api.service;
 
-import com.nt.red_sms_api.enitiy.ConfigConditionsEntity;
-
 import java.util.List;
 import java.util.Map;
+
+import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 
 
 
