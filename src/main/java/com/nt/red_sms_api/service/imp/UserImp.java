@@ -10,6 +10,7 @@ import com.nt.red_sms_api.service.UserService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +30,8 @@ public class UserImp implements UserService {
     @Autowired
     private AuthConfig authConfig;
     @Override
-    public UserEnitiy loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEnitiy user = userRepo.findByEmail(username);
+    public UserEnitiy loadUniqueUser(String email, String username) throws UsernameNotFoundException {
+        UserEnitiy user = userRepo.findByUniqueUser(email, username);
         // System.out.println("Retrived Data");
         // System.out.println(user.getPassword()+"Retrived Password");
         // System.out.println(user.getUsername());
@@ -50,7 +51,7 @@ public class UserImp implements UserService {
     }
     @Override
     public UserResp createUser(UserRequestDto userRequestDto) {
-        UserEnitiy foundUser = this.userRepo.findByEmail(userRequestDto.getUsername());
+        UserEnitiy foundUser = this.userRepo.findByUniqueUser(userRequestDto.getEmail(), userRequestDto.getUsername());
         if (foundUser.getUsername() != null) {
             UserEnitiy user = this.userReqDtoToUserEntity(userRequestDto);
             user.setPassword(authConfig.passwordEncoder().encode(user.getPassword()));
@@ -63,8 +64,8 @@ public class UserImp implements UserService {
     }
 
     @Override
-    public void updateUser(String email, HashMap<String, Object> updateInfo) {
-        UserEnitiy foundUser = this.userRepo.findByEmail(email);
+    public void updateUser(Long userID, HashMap<String, Object> updateInfo) {
+        UserEnitiy foundUser = this.userRepo.findByID(userID);
         System.out.println("foundUser:"+foundUser.getUsername());
         if (foundUser.getUsername() != null) {
             for (Map.Entry<String, Object> entry : updateInfo.entrySet()) {

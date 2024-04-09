@@ -6,6 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.nt.red_sms_api.entity.UserEnitiy;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,8 +47,10 @@ public class JwtHelper {
     }
 
     // Generate token for user
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserEnitiy userDetails) {
         Map<String, Object> claims = new HashMap<>();                           // geenrate token
+        claims.put("email", userDetails.getEmail());
+        claims.put("username", userDetails.getUsername());
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
@@ -62,7 +66,7 @@ public class JwtHelper {
     }
 
     // Validate token
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserEnitiy userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

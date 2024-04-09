@@ -13,6 +13,7 @@ public class UserResp {
     private String name;
     private String phoneNumber;
     private String email;
+    private String username;
     private String aboutMe;
     private Timestamp last_login;
     private String last_login_ipaddress;
