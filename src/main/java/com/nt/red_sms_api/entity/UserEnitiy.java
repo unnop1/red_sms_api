@@ -24,10 +24,13 @@ public class UserEnitiy implements UserDetails {
         @Column(name = "name", unique = false,nullable = true)
         private String name;
 
-        @Column(name = "email", unique = true,nullable = false)
+        @Column(name = "email", unique = false,nullable = true)
         private String email;
 
-        @Column(name = "password", unique = false,nullable = false)
+        @Column(name = "username", unique = false,nullable = true)
+        private String username;
+
+        @Column(name = "password", unique = false,nullable = true)
         private String password;
 
         @Column(name = "phoneNumber", unique = false,nullable = true)
@@ -72,11 +75,6 @@ public class UserEnitiy implements UserDetails {
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
                 return null;
-        }
-
-        @Override
-        public String getUsername() {
-                return this.email;
         }
 
         @Override

@@ -30,7 +30,7 @@ public class UserImp implements UserService {
     private AuthConfig authConfig;
     @Override
     public UserEnitiy loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEnitiy user = userRepo.findByEmail(username);
+        UserEnitiy user = userRepo.findByUsername(username);
         return user;
     }
 
@@ -44,7 +44,7 @@ public class UserImp implements UserService {
     }
     @Override
     public UserResp createUser(UserRequestDto userRequestDto) {
-        UserEnitiy foundUser = this.userRepo.findByEmail(userRequestDto.getUsername());
+        UserEnitiy foundUser = this.userRepo.findByUniqueUser(userRequestDto.getEmail(), userRequestDto.getUsername());
         if (foundUser.getUsername() != null) {
             UserEnitiy user = this.userReqDtoToUserEntity(userRequestDto);
             user.setPassword(authConfig.passwordEncoder().encode(user.getPassword()));
@@ -57,8 +57,8 @@ public class UserImp implements UserService {
     }
 
     @Override
-    public void updateUser(String email, HashMap<String, Object> updateInfo) {
-        UserEnitiy foundUser = this.userRepo.findByEmail(email);
+    public void updateUser(Long userID, HashMap<String, Object> updateInfo) {
+        UserEnitiy foundUser = this.userRepo.findByID(userID);
         System.out.println("foundUser:"+foundUser.getUsername());
         if (foundUser.getUsername() != null) {
             for (Map.Entry<String, Object> entry : updateInfo.entrySet()) {
