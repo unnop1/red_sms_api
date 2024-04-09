@@ -9,6 +9,8 @@ import lombok.*;
 @Setter
 @ToString
 public class JwtRequest {
+    @JsonProperty("email")
+    private String email;
     @JsonProperty("username")
     private String username;
     @JsonProperty("password")

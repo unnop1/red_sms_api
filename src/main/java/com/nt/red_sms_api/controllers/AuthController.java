@@ -1,7 +1,6 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
-import com.nt.red_sms_api.config.AuthConfig;
 import com.nt.red_sms_api.dto.req.JwtRequest;
 import com.nt.red_sms_api.dto.req.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.AuthSuccessResp;
@@ -32,7 +31,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -78,66 +76,70 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResp> login(@RequestBody JwtRequest jwtRequest, HttpServletRequest request) {
-    // Get the IP address from the request
-    String ipAddress = request.getRemoteAddr();
-    // String userAgent = request.getHeader("User-Agent");
-    // String deviceInfo = parseUserAgent(userAgent);
-    // String systemInfo = parseUserAgentForSystem(userAgent);
-    // String browserInfo = parseUserAgentForBrowser(userAgent);
-    System.out.println("IP Address: " + ipAddress);
-  
-    // Log login
-    Timestamp loginDateTime = new Timestamp(Instant.now().toEpochMilli());
-    LogLoginEntity loglogin = new LogLoginEntity();
-    loglogin.setBrowser(jwtRequest.getBrowser());
-    loglogin.setDevice(jwtRequest.getDevice());
-    loglogin.setSystem(jwtRequest.getSystem());
-    loglogin.setIp_address(ipAddress);
-    loglogin.setLogin_datetime(loginDateTime);
-    loglogin.setCreate_date(loginDateTime);
-    loglogin.setUsername(jwtRequest.getUsername());
-    this.doAuthenticate(jwtRequest.getUsername(), jwtRequest.getPassword(), loglogin);
-    UserEnitiy userDetails = userService.loadUserByUsername(jwtRequest.getUsername());
+        // Get the IP address from the request
+        String ipAddress = request.getRemoteAddr();
+        LoginResp userResp = new LoginResp();
+        // String userAgent = request.getHeader("User-Agent");
+        // String deviceInfo = parseUserAgent(userAgent);
+        // String systemInfo = parseUserAgentForSystem(userAgent);
+        // String browserInfo = parseUserAgentForBrowser(userAgent);
+        System.out.println("IP Address: " + ipAddress);
+    
+        // Log login
+        Timestamp loginDateTime = new Timestamp(Instant.now().toEpochMilli());
+        LogLoginEntity loglogin = new LogLoginEntity();
+        loglogin.setBrowser(jwtRequest.getBrowser());
+        loglogin.setDevice(jwtRequest.getDevice());
+        loglogin.setSystem(jwtRequest.getSystem());
+        loglogin.setIp_address(ipAddress);
+        loglogin.setLogin_datetime(loginDateTime);
+        loglogin.setCreate_date(loginDateTime);
+        loglogin.setUsername(jwtRequest.getUsername());
+        this.doAuthenticate(jwtRequest.getEmail(), jwtRequest.getPassword(), loglogin);
+        UserEnitiy userDetails = userService.loadUserByUsername(jwtRequest.getEmail());
+        if( userDetails == null ){
+            return new ResponseEntity<>(userResp, HttpStatus.BAD_REQUEST);
+        }
 
-    String token = this.helper.generateToken(userDetails);
+        String token = this.helper.generateToken(userDetails);
 
-    HashMap<String, Object> updateInfo = new HashMap<String, Object>();
-    updateInfo.put("currentToken", token);
-    updateInfo.put("last_login", loginDateTime);
-    updateInfo.put("last_login_ipaddress", ipAddress);
+        HashMap<String, Object> updateInfo = new HashMap<String, Object>();
+        updateInfo.put("currentToken", token);
+        updateInfo.put("last_login", loginDateTime);
+        updateInfo.put("last_login_ipaddress", ipAddress);
 
-    this.userService.updateUser(userDetails.getUsername(), updateInfo);
+        this.userService.updateUser(userDetails.getUsername(), updateInfo);
 
-    LoginResp userResp = new LoginResp();
-    UserResp userInfo = new UserResp();
-    // PermissionMenu permissionMenu = 
+        
+        UserResp userInfo = new UserResp();
+        // PermissionMenu permissionMenu = 
 
-    // User
-    userInfo.setId(userDetails.getId());
-    userInfo.setAboutMe(userDetails.getAboutMe());
-    userInfo.setName(userDetails.getName());
-    userInfo.setPhoneNumber(userDetails.getPhoneNumber());
-    userInfo.setEmail(userDetails.getUsername());
-    userInfo.setLast_login(userDetails.getLast_login());
-    userInfo.setLast_login_ipaddress(ipAddress);
-    userInfo.setCreated_by(userDetails.getCreated_by());
-    userInfo.setCreatedDate(userDetails.getCreatedDate());
-    userInfo.setIsDelete_by(userDetails.getIsDelete_by());
-    userInfo.setIsDelete(userDetails.getIsDelete());
-    userInfo.setUpdatedDate(userDetails.getUpdatedDate());
-    userInfo.setUpdated_by(userDetails.getUpdated_by());
-    userResp.setUserLogin(userInfo);
-    userResp.setJwtToken(token);
+        // User
+        userInfo.setId(userDetails.getId());
+        userInfo.setAboutMe(userDetails.getAboutMe());
+        userInfo.setName(userDetails.getName());
+        userInfo.setPhoneNumber(userDetails.getPhoneNumber());
+        userInfo.setEmail(userDetails.getUsername());
+        userInfo.setLast_login(userDetails.getLast_login());
+        userInfo.setLast_login_ipaddress(ipAddress);
+        userInfo.setCreated_by(userDetails.getCreated_by());
+        userInfo.setCreatedDate(userDetails.getCreatedDate());
+        userInfo.setIsDelete_by(userDetails.getIsDelete_by());
+        userInfo.setIsDelete(userDetails.getIsDelete());
+        userInfo.setUpdatedDate(userDetails.getUpdatedDate());
+        userInfo.setUpdated_by(userDetails.getUpdated_by());
+        userResp.setUserLogin(userInfo);
+        userResp.setJwtToken(token);
 
-    // permissionMenu
-    PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getId());
-    userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
-    userResp.setPermissionName(permissionMenuEntity.getPermissionName());
+        // permissionMenu
+        PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getId());
+        userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
+        userResp.setPermissionName(permissionMenuEntity.getPermissionName());
 
-    System.out.println("token:"+token);
+        System.out.println("token:"+token);
 
-    return new ResponseEntity<>(userResp, HttpStatus.OK);
-}
+        return new ResponseEntity<>(userResp, HttpStatus.OK);
+    }
 
     private void doAuthenticate(String email, String password, LogLoginEntity loglogin) {
         System.out.println("Login Info");
