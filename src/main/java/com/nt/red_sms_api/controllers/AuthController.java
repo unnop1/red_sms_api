@@ -96,14 +96,13 @@ public class AuthController {
         loglogin.setLogin_datetime(loginDateTime);
         loglogin.setCreate_date(loginDateTime);
         loglogin.setUsername(jwtRequest.getUsername());
-        System.out.println("jwtEmail:"+jwtRequest.getEmail());
         System.out.println("jwtUsername:"+jwtRequest.getUsername());
-        UserEnitiy userDetails = userService.loadUniqueUser(jwtRequest.getEmail(), jwtRequest.getUsername());
+        UserEnitiy userDetails = userService.findUserLogin(jwtRequest.getUsername());
         if( userDetails == null ){
             return new ResponseEntity<>(userResp, HttpStatus.BAD_REQUEST);
         }
 
-        this.doAuthenticate(jwtRequest.getUsername(), jwtRequest.getPassword(), loglogin);
+        this.doAuthenticate(userDetails.getUsername(), jwtRequest.getPassword(), loglogin);
         
         System.out.println("getEmail:"+userDetails.getEmail());
         System.out.println("getUsername:"+userDetails.getUsername());
@@ -159,7 +158,7 @@ public class AuthController {
             String usernameClaim = this.helper.getClaimFromToken(token, claims -> (String) claims.get("username"));
             System.out.println("emailClaim:"+emailClaim);
             System.out.println("usernameClaim:"+usernameClaim);
-            UserEnitiy userDetails = userService.loadUniqueUser(emailClaim, usernameClaim);
+            UserEnitiy userDetails = userService.loadUserByUsername(usernameClaim);
             if( userDetails == null ){
                 return new ResponseEntity<>(userResp, HttpStatus.BAD_REQUEST);
             }

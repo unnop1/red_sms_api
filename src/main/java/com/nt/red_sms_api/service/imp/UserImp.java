@@ -44,7 +44,7 @@ public class UserImp implements UserService {
     }
     @Override
     public UserResp createUser(UserRequestDto userRequestDto) {
-        UserEnitiy foundUser = this.userRepo.findByUniqueUser(userRequestDto.getEmail(), userRequestDto.getUsername());
+        UserEnitiy foundUser = this.userRepo.loadByUniqueUser(userRequestDto.getEmail(), userRequestDto.getUsername());
         if (foundUser.getUsername() != null) {
             UserEnitiy user = this.userReqDtoToUserEntity(userRequestDto);
             user.setPassword(authConfig.passwordEncoder().encode(user.getPassword()));
@@ -91,8 +91,8 @@ public class UserImp implements UserService {
     }
 
     @Override
-    public UserEnitiy loadUniqueUser(String email, String username) throws UsernameNotFoundException {
-        UserEnitiy user = userRepo.findByUniqueUser(email, username);
+    public UserEnitiy findUserLogin(String username) throws UsernameNotFoundException {
+        UserEnitiy user = userRepo.findLoginUser(username);
         return user;
     }
     
