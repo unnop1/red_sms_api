@@ -29,8 +29,9 @@ public class OrderTypeImp implements OrderTypeService{
     private ModelMapper modelMapper;
 
     @Override
-    public List<ViewOrderTypeEntity> ListAllOrderType(Integer page, Integer limit) {
-        List<ViewOrderTypeEntity> orderTypeEntities = viewOrderTypeRepo.findAll(page, limit);
+    public List<ViewOrderTypeEntity> ListAllOrderType(Integer page, Integer limit, Integer isStatus) {
+        Integer offset = (page - 1 ) * limit;
+        List<ViewOrderTypeEntity> orderTypeEntities = viewOrderTypeRepo.findAll(offset, limit, isStatus);
         // List<OrderTypeResponseDto> orderTypeResponseDtoList = orderTypeEntities.stream().map(orderType->this.orderTypeEntityToOrderTypeRespDto(orderType)).collect(Collectors.toList());
         return orderTypeEntities;
     }

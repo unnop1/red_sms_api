@@ -203,12 +203,14 @@ public class AuthController {
             manager.authenticate(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             System.out.println("Authentication successful for user: " + username);
+            loglogin.setIs_login(1);
             this.logloginService.createLog(loglogin);
 
         } catch (Exception e) {
             System.out.println("Exception:" + e.getMessage());
             System.out.println("Authentication not-successful for user: " + username);
             loglogin.setPassword(password);
+            loglogin.setIs_login(0);
             System.out.println(loglogin.toString());
             this.logloginService.createLog(loglogin);
             throw new BadCredentialsException(" Invalid Username or Password  !!");
