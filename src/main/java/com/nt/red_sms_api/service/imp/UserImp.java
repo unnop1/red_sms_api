@@ -45,10 +45,17 @@ public class UserImp implements UserService {
     @Override
     public UserResp createUser(UserRequestDto userRequestDto) {
         UserEnitiy foundUser = this.userRepo.loadByUniqueUser(userRequestDto.getEmail(), userRequestDto.getUsername());
-        if (foundUser.getUsername() != null) {
+        if (foundUser == null) {
+            // Creat a new user
             UserEnitiy user = this.userReqDtoToUserEntity(userRequestDto);
+            // Encode password  
             user.setPassword(authConfig.passwordEncoder().encode(user.getPassword()));
+            // Set permissions
+            long defaultUserPermission = 2;
+            user.setSa_permission_id(defaultUserPermission);
+
             UserEnitiy createdUser = userRepo.save(user);
+
             return this.userEntityToUserRespDto(createdUser);
         } else {
             // User already exists, throw an exception

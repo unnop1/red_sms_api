@@ -12,6 +12,7 @@ public class UserResp {
     private long id;
     private String name;
     private String phoneNumber;
+    private String username;
     private String email;
     private String aboutMe;
     private Timestamp last_login;

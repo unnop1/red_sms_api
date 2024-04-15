@@ -16,7 +16,7 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService userService;
-    @GetMapping
+    @GetMapping("/permissions")
     public ResponseEntity<List<UserResp>> getAllUser(){
         return new ResponseEntity<>( userService.getAllUser(), HttpStatus.OK);
     }

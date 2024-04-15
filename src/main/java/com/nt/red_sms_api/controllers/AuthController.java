@@ -62,7 +62,7 @@ public class AuthController {
     public ResponseEntity<AuthSuccessResp> createUser(@RequestBody UserRequestDto userRequestDto) {
         try {
             UserResp userResponseDto = userService.createUser(userRequestDto);
-            UserEnitiy userDetails = userService.loadUserByUsername(userResponseDto.getEmail());
+            UserEnitiy userDetails = userService.loadUserByUsername(userResponseDto.getUsername());
             System.out.println("from db info");
             System.out.println(userDetails.getUsername());
             System.out.println(userDetails.getPassword());
@@ -123,6 +123,7 @@ public class AuthController {
         userInfo.setId(userDetails.getId());
         userInfo.setAboutMe(userDetails.getAboutMe());
         userInfo.setName(userDetails.getName());
+        userInfo.setUsername(userDetails.getUsername());
         userInfo.setPhoneNumber(userDetails.getPhoneNumber());
         userInfo.setEmail(userDetails.getEmail());
         userInfo.setLast_login(userDetails.getLast_login());
@@ -137,7 +138,7 @@ public class AuthController {
         userResp.setJwtToken(token);
 
         // permissionMenu
-        PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getSa_permission_id());
+        PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userDetails.getSa_permission_id());
         userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
         userResp.setPermissionName(permissionMenuEntity.getPermissionName());
 
@@ -182,7 +183,7 @@ public class AuthController {
             userResp.setJwtToken(token);
 
             // permissionMenu
-            PermissionMenuEntity permissionMenuEntity = permissionMenuService.getUserMenuPermission(userDetails.getSa_permission_id());
+            PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userDetails.getSa_permission_id());
             userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
             userResp.setPermissionName(permissionMenuEntity.getPermissionName());
 

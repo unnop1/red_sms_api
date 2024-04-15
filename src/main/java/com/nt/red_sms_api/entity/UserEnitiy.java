@@ -22,37 +22,37 @@ public class UserEnitiy implements UserDetails {
         private long id;
 
         @Column(name = "name", unique = false,nullable = true)
-        private String name;
+        private String name=null;
 
         @Column(name = "email", unique = false,nullable = true)
-        private String email;
+        private String email=null;
 
         @Column(name = "username", unique = false,nullable = true)
-        private String username;
+        private String username=null;
 
         @Column(name = "password", unique = false,nullable = true)
-        private String password;
+        private String password=null;
 
         @Column(name = "phoneNumber", unique = false,nullable = true)
-        private String phoneNumber;
+        private String phoneNumber=null;
 
         @Column(name = "currentToken", unique = true,nullable = true)
-        private String currentToken;
+        private String currentToken=null;
 
         @Column(name = "about_me", unique = false,nullable = true)
-        private String aboutMe;
+        private String aboutMe=null;
 
         @Column(name = "last_login", unique = false,nullable = true)
-        private Timestamp last_login;
+        private Timestamp last_login=null;
         
         @Column(name = "last_login_ipaddress", unique = false,nullable = true)
-        private String last_login_ipaddress;
+        private String last_login_ipaddress=null;
 
         @Column(name = "is_Delete", unique = false,nullable = true)
-        private Integer isDelete;
+        private Integer isDelete=null;
 
         @Column(name = "is_Delete_by", unique = false,nullable = true)
-        private String isDelete_by;
+        private String isDelete_by=null;
 
         @Column(name = "is_Delete_date", unique = false,nullable = true)
         private Timestamp isDelete_date;
@@ -61,16 +61,16 @@ public class UserEnitiy implements UserDetails {
         private Timestamp createdDate;
 
         @Column(name = "created_by", unique = false,nullable = true)
-        private String created_by;
+        private String created_by=null;
 
         @Column(name = "updated_Date", unique = false,nullable = true)
-        private Timestamp updatedDate;
+        private Timestamp updatedDate=null;
 
         @Column(name = "updated_by", unique = false,nullable = true)
-        private String updated_by;
+        private String updated_by=null;
 
         @Column(name = "sa_menu_permission_id", unique = false,nullable = true)
-        private Long sa_permission_id;
+        private Long sa_permission_id=null;
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
