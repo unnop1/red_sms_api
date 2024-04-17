@@ -2,6 +2,8 @@ package com.nt.red_sms_api.config;
 
 import com.nt.red_sms_api.Auth.JWTAuthenticationEntryPoint;
 import com.nt.red_sms_api.Auth.JwtAuthenticationFilter;
+import com.nt.red_sms_api.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +22,7 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
-    private UserDetailsService userDetailService;
+    private UserService userDetailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Bean

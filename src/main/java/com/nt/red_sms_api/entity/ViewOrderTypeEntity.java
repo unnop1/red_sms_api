@@ -52,4 +52,7 @@ public class ViewOrderTypeEntity {
 
         @Column(name = "totlesend", unique = false,nullable = true)
         private Integer totlesend = 0;
+
+        @Column(name = "totleunsend", unique = false,nullable = true)
+        private Integer totleunsend = 0;
 }

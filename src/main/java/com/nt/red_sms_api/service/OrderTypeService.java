@@ -9,6 +9,6 @@ import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 
 public interface OrderTypeService  {
     
-    public List<ViewOrderTypeEntity> ListAllOrderType(Integer page, Integer limit, Integer isStatus);
+    public List<ViewOrderTypeEntity> ListAllOrderType(Integer page, Integer limit);
     public void updateOrderTypeById(Long orderTypeId, Map<String, Object> updates);
 }

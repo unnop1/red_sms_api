@@ -20,8 +20,8 @@ public class OrderTypeController {
     @Autowired
     private OrderTypeService orderTypeService;
     @GetMapping
-    public ResponseEntity<List<ViewOrderTypeEntity>> getAllSmsConditions(Integer page, Integer limit, Integer isStatus){
-        return new ResponseEntity<>( orderTypeService.ListAllOrderType(page, limit, isStatus), HttpStatus.OK);
+    public ResponseEntity<List<ViewOrderTypeEntity>> getAllSmsConditions(@RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
+        return new ResponseEntity<>( orderTypeService.ListAllOrderType(page, limit), HttpStatus.OK);
     }
 
     @PutMapping
