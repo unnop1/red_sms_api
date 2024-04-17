@@ -30,13 +30,23 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.
                         requestMatchers("/home").permitAll().
-                        requestMatchers("/", "/css/*", "/js/*").permitAll().
+                        requestMatchers("/",
+                                        "/error",
+                                        "/favicon.ico",
+                                        "/**/*.png",
+                                        "/**/*.gif",
+                                        "/**/*.svg",
+                                        "/**/*.jpg",
+                                        "/**/*.html",
+                                        "/**/*.css",
+                                        "/**/*.js").permitAll().
                         requestMatchers("/auth/login").permitAll().
                         requestMatchers("/auth/create").permitAll().
                         anyRequest().authenticated())
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint)) // if any exception came
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // nothing to save on server
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        
         return http.build();
     }
     @Bean

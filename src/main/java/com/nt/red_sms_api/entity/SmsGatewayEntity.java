@@ -34,8 +34,8 @@ public class SmsGatewayEntity {
         @Column(name = "Message_raw", unique = false,nullable = true)
         private String Message_raw = null;
 
-        @Column(name = "order_type_ID", unique = false,nullable = true)
-        private Long order_type_ID = null;
+        @Column(name = "order_type_mainID", unique = false,nullable = true)
+        private Long order_type_mainID = null;
 
         @Column(name = "OrderType", unique = false,nullable = true)
         private String OrderType = null;
