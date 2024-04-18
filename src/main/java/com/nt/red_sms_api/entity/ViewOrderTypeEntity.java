@@ -47,12 +47,12 @@ public class ViewOrderTypeEntity {
         @Column(name = "Updated_By", unique = false,nullable = true)
         private Long UpdatedBy = null;
 
-        @Column(name = "totlemsg", unique = false,nullable = true)
-        private Integer totlemsg = 0;
+        @Column(name = "totalmsg", unique = false,nullable = true)
+        private Integer totalmsg = 0;
 
-        @Column(name = "totlesend", unique = false,nullable = true)
-        private Integer totlesend = 0;
+        @Column(name = "totalsend", unique = false,nullable = true)
+        private Integer totalsend = 0;
 
-        @Column(name = "totleunsend", unique = false,nullable = true)
-        private Integer totleunsend = 0;
+        @Column(name = "totalunsend", unique = false,nullable = true)
+        private Integer totalunsend = 0;
 }

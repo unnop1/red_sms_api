@@ -48,10 +48,4 @@ public class OrderTypeEntity {
 
         @Column(name = "Updated_By", unique = false,nullable = true)
         private Long Updated_By = null;
-
-        // @Column(name = "totlemsg", unique = false,nullable = true)
-        // private Integer totlemsg = 0;
-
-        // @Column(name = "totlesend", unique = false,nullable = true)
-        // private Integer totlesend = 0;
 }

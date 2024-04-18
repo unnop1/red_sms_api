@@ -36,10 +36,5 @@ public class OrderTypeResponseDto {
     @Column(name = "UpdatedBy_UserID", unique = false,nullable = true)
     private Long UpdatedBy_UserID = null;
 
-    @Column(name = "TotleMsg", unique = false,nullable = true)
-    private Integer TotleMsg = 0;
-
-    @Column(name = "TotleSend", unique = false,nullable = true)
-    private Integer TotleSend = 0;
 
 }
