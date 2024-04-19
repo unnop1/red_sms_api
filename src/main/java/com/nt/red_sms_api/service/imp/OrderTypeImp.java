@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
 import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 import com.nt.red_sms_api.repo.OrderTypeRepo;
@@ -29,12 +30,15 @@ public class OrderTypeImp implements OrderTypeService{
     private ModelMapper modelMapper;
 
     @Override
-    public List<ViewOrderTypeEntity> ListAllOrderType(Integer page, Integer limit) {
+    public PaginationDataResp ListAllOrderType(Integer page, Integer limit) {
+        PaginationDataResp resp = new PaginationDataResp();
         Integer offset = (page - 1 ) * limit;
         System.out.println("offset"+offset+" limit"+limit);
         List<ViewOrderTypeEntity> orderTypeEntities = viewOrderTypeRepo.findAll(offset, limit);
-        // List<OrderTypeResponseDto> orderTypeResponseDtoList = orderTypeEntities.stream().map(orderType->this.orderTypeEntityToOrderTypeRespDto(orderType)).collect(Collectors.toList());
-        return orderTypeEntities;
+        Integer count = viewOrderTypeRepo.getTotalCount(offset, limit);
+        resp.setData(orderTypeEntities);
+        resp.setCount(count);
+        return resp;
     }
 
     @Override

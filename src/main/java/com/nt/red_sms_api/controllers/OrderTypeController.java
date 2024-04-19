@@ -2,6 +2,7 @@ package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 import com.nt.red_sms_api.service.OrderTypeService;
 
@@ -21,7 +22,7 @@ public class OrderTypeController {
     @Autowired
     private OrderTypeService orderTypeService;
     @GetMapping
-    public ResponseEntity<List<ViewOrderTypeEntity>> getAllSmsConditions(@RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
+    public ResponseEntity<PaginationDataResp> getAllSmsConditions(@RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
         return new ResponseEntity<>( orderTypeService.ListAllOrderType(page, limit), HttpStatus.OK);
     }
 
