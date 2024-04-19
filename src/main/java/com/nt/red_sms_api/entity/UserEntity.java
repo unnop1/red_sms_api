@@ -15,7 +15,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Table (name = "USER_DB")
-public class UserEnitiy implements UserDetails {
+public class UserEntity implements UserDetails {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_db_seq")
         @SequenceGenerator(name = "user_db_seq", allocationSize = 1)
@@ -40,7 +40,7 @@ public class UserEnitiy implements UserDetails {
         private String currentToken=null;
 
         @Column(name = "about_me", unique = false,nullable = true)
-        private String aboutMe=null;
+        private String about_me=null;
 
         @Column(name = "last_login", unique = false,nullable = true)
         private Timestamp last_login=null;
@@ -49,28 +49,28 @@ public class UserEnitiy implements UserDetails {
         private String last_login_ipaddress=null;
 
         @Column(name = "is_Delete", unique = false,nullable = true)
-        private Integer isDelete=null;
+        private Integer is_Delete=0;
 
         @Column(name = "is_Delete_by", unique = false,nullable = true)
-        private String isDelete_by=null;
+        private String is_Delete_by=null;
 
         @Column(name = "is_Delete_date", unique = false,nullable = true)
-        private Timestamp isDelete_date;
+        private Timestamp is_Delete_date;
 
         @Column(name = "created_Date", unique = false,nullable = true)
-        private Timestamp createdDate;
+        private Timestamp created_Date;
 
         @Column(name = "created_by", unique = false,nullable = true)
         private String created_by=null;
 
         @Column(name = "updated_Date", unique = false,nullable = true)
-        private Timestamp updatedDate=null;
+        private Timestamp updated_Date=null;
 
         @Column(name = "updated_by", unique = false,nullable = true)
         private String updated_by=null;
 
         @Column(name = "sa_menu_permission_id", unique = false,nullable = true)
-        private Long sa_permission_id=null;
+        private Long sa_menu_permission_id=null;
 
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {

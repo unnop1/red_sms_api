@@ -38,7 +38,7 @@ public class OrderTypeImp implements OrderTypeService{
     }
 
     @Override
-    public void updateOrderTypeById(Long orderTypeId, Map<String, Object> updates) {
+    public void UpdateOrderTypeById(Long orderTypeId, Map<String, Object> updates) {
         OrderTypeEntity existingEntity = orderTypeRepo.findById(orderTypeId).orElse(null);
         System.out.println("existingEntity ID: " + existingEntity.getTYPEID());
         // If the entity exists
@@ -67,4 +67,6 @@ public class OrderTypeImp implements OrderTypeService{
             orderTypeRepo.save(existingEntity);
         }
     }
+
+
 }

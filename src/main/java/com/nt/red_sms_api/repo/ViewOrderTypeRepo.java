@@ -15,4 +15,7 @@ public interface ViewOrderTypeRepo extends JpaRepository<ViewOrderTypeEntity,Lon
                  nativeQuery = true)
     public List<ViewOrderTypeEntity> findAll(Integer offset, Integer limit);
 
+    @Query(value = "SELECT  COUNT(*) FROM  order_type  WHERE  odt.Is_Delete = 0 ", nativeQuery = true)
+    public Integer getTotalCount(Integer offset, Integer limit);
+
 }

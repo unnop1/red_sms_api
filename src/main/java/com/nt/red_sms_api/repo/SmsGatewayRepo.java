@@ -11,7 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
     @Query(value = "SELECT * FROM sms_gateway WHERE order_type_mainID=?3 AND Is_Status=?4 ORDER BY Created_Date DESC  OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", nativeQuery = true)
-    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndIsStatus(Integer page, Integer limit, @Param("order_type_mainID") String orderTypeID, @Param("IsStatus") String isStatus);
+    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndIsStatus(Integer offset, Integer limit, @Param("order_type_mainID") String orderTypeID, @Param("IsStatus") String isStatus);
+
+    @Query(value = "SELECT COUNT(*) FROM sms_gateway WHERE order_type_mainID=?3 AND Is_Status=?4 ", nativeQuery = true)
+    public Integer getByOrderTypeAndIsStatusTotalCount();
 
     @Query(value = "SELECT smsGW.* " +
                     "FROM sms_gateway AS smsGW LEFT JOIN "+
@@ -20,6 +23,14 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     "ORDER BY smsGW.Created_Date DESC  OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", 
                     nativeQuery = true
     )
-    public List<SmsGatewayEntity> findSmsGatewaySendUnSend(Integer page, Integer limit);
+    public List<SmsGatewayEntity> findSmsGatewaySendUnSend(Integer offset, Integer limit);
+
+    @Query(value = "SELECT COUNT(smsGW.*) " +
+                    "FROM sms_gateway AS smsGW LEFT JOIN "+
+                    "config_conditions AS smsCon ON (smsGW.order_type_mainID = smsCon.order_type_mainID) " +
+                    "WHERE smsGW.Is_Status = 1 OR smsGW.Is_Status = 3 ",
+                    nativeQuery = true
+    )
+    public Integer getSendUnSendTotalCount();
 
 }

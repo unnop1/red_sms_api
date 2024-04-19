@@ -5,6 +5,7 @@ import com.nt.red_sms_api.dto.req.SmsGwOdtReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.DefaultServiceResp;
 import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.service.OrderTypeService;
 import com.nt.red_sms_api.service.SmsGatewayService;
@@ -27,12 +28,12 @@ public class SmsGatewayController {
     @RequestMapping("/order_types")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByOrderType(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit) throws Exception{
 
-        List<SmsGatewayEntity> smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(page, limit);
+        PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(page, limit);
 
         DefaultControllerResp response = new DefaultControllerResp();
-        response.setCount(smsGateways.size());
+        response.setCount(smsGateways.getCount());
         response.setMessage("Success");
-        response.setData(smsGateways);
+        response.setData(smsGateways.getData());
         response.setStatusCode(200);
 
         // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -42,26 +43,26 @@ public class SmsGatewayController {
 
 
     @PostMapping("/order_type_with_status")
-    public ResponseEntity<List<SmsGatewayEntity>> getAllSmsConditions(@RequestBody SmsGwOdtReq req){
+    public ResponseEntity<PaginationDataResp> getAllSmsConditions(@RequestBody SmsGwOdtReq req){
         return new ResponseEntity<>( smsGatewayService.findSmsGatewayMatchAndUnMatch(req.getPage(), req.getLimit(),req.getOrderTypeID(), req.getIsStatus()), HttpStatus.OK);
     }
 
     
-    @PostMapping
-    @RequestMapping("/sms_conditions")
-    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewayAndCondition(@RequestBody SmsGwConditionReq req) throws Exception{
-        DefaultServiceResp data = smsGatewayService.getSmsGatewaysAndCondition(req.getGID(), req.getOrderTypeID());
-        DefaultControllerResp response = new DefaultControllerResp();
-        response.setCount(data.getCount());
-        response.setData(data.getResult());
-        response.setMessage(data.getMessage());
-        if( data.getError() != null ){
-            response.setStatusCode(400);
-        }else{
-            response.setStatusCode(200);
-        }
+    // @PostMapping
+    // @RequestMapping("/sms_conditions")
+    // public ResponseEntity<DefaultControllerResp> GetAllSmsGatewayAndCondition(@RequestBody SmsGwConditionReq req) throws Exception{
+    //     DefaultServiceResp data = smsGatewayService.getSmsGatewaysAndCondition(req.getGID(), req.getOrderTypeID());
+    //     DefaultControllerResp response = new DefaultControllerResp();
+    //     response.setCount(data.getCount());
+    //     response.setData(data.getResult());
+    //     response.setMessage(data.getMessage());
+    //     if( data.getError() != null ){
+    //         response.setStatusCode(400);
+    //     }else{
+    //         response.setStatusCode(200);
+    //     }
         
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
+    //     return ResponseEntity.status(HttpStatus.OK).body(response);
+    // }
 
 }

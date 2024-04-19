@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.dto.resp.DefaultServiceResp;
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.service.SmsGatewayService;
@@ -26,17 +27,23 @@ public class SmsGatewayImp implements SmsGatewayService{
     private EntityManager entityManager;
 
     @Override
-    public List<SmsGatewayEntity> findSmsGatewayMatchAndUnMatch(Integer page, Integer limit, String orderTypeID, String isStatus) {
+    public PaginationDataResp findSmsGatewayMatchAndUnMatch(Integer page, Integer limit, String orderTypeID, String isStatus) {
+        PaginationDataResp resp = new PaginationDataResp();
         List<SmsGatewayEntity> smsGatewayEntities = smsGatewayRepo.findSmsGatewayByOrderTypeAndIsStatus(page, limit, orderTypeID, isStatus);
-        // List<SmsConditionResponseDto> userResponseDtoList = smsConditionEntities.stream().map(smsCondition->this.smsConditionEntityToSmsConditionRespDto(smsCondition)).collect(Collectors.toList());
-        return smsGatewayEntities;
+        Integer count = smsGatewayRepo.getByOrderTypeAndIsStatusTotalCount();
+        resp.setCount(count);
+        resp.setData(smsGatewayEntities);
+        return resp;
     }
 
     @Override
-    public List<SmsGatewayEntity> findSmsGatewaySendAndUnSend(Integer page, Integer limit) {
+    public PaginationDataResp findSmsGatewaySendAndUnSend(Integer page, Integer limit) {
+        PaginationDataResp resp = new PaginationDataResp();
         List<SmsGatewayEntity> smsGatewayEntities = smsGatewayRepo.findSmsGatewaySendUnSend(page, limit);
-        // List<SmsConditionResponseDto> userResponseDtoList = smsConditionEntities.stream().map(smsCondition->this.smsConditionEntityToSmsConditionRespDto(smsCondition)).collect(Collectors.toList());
-        return smsGatewayEntities;
+        Integer count = smsGatewayRepo.getSendUnSendTotalCount();
+        resp.setCount(count);
+        resp.setData(smsGatewayEntities);
+        return resp;
     }
 
     @Override

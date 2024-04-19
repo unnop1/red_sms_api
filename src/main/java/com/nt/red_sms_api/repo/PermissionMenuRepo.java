@@ -12,6 +12,9 @@ public interface PermissionMenuRepo extends JpaRepository<PermissionMenuEntity,L
     @Query(value = "SELECT * FROM sa_menu_permission OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", nativeQuery = true)
     public List<PermissionMenuEntity> findAll(Integer offset, Integer limit);
 
+    @Query(value = "SELECT COUNT(*) FROM sa_menu_permission ", nativeQuery = true)
+    public Integer getTotalCount();
+
     @Query(value = "SELECT * FROM sa_menu_permission WHERE id=?1 ", nativeQuery = true)
     public PermissionMenuEntity findPermissionById(Long saPermissionID);
     

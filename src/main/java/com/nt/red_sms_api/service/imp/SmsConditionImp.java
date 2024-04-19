@@ -1,5 +1,6 @@
 package com.nt.red_sms_api.service.imp;
 
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
@@ -21,10 +22,13 @@ public class SmsConditionImp implements SmsConditionService{
     // @Autowired
     // private ModelMapper modelMapper;
 
-    public List<ConfigConditionsEntity> ListAllSmsCondition(Integer page, Integer limit) {
+    public PaginationDataResp ListAllSmsCondition(Integer page, Integer limit) {
+        PaginationDataResp resp = new PaginationDataResp();
         List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll(page, limit);
-        // List<SmsConditionResponseDto> userResponseDtoList = smsConditionEntities.stream().map(smsCondition->this.smsConditionEntityToSmsConditionRespDto(smsCondition)).collect(Collectors.toList());
-        return smsConditionEntities;
+        Integer count = smsConditionRepo.getTotalCount();
+        resp.setCount(count);
+        resp.setData(smsConditionEntities);
+        return resp;
     }
 
     @Override

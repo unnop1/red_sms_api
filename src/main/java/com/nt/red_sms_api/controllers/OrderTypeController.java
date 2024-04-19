@@ -2,9 +2,10 @@ package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
-import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
 import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
 import com.nt.red_sms_api.service.OrderTypeService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +26,9 @@ public class OrderTypeController {
     }
 
     @PutMapping
-    public ResponseEntity<DefaultControllerResp> updateOrderTypeById(@RequestBody UpdateByIdReq req) throws Exception{
+    public ResponseEntity<DefaultControllerResp> updateOrderTypeById(HttpServletRequest request, @RequestBody UpdateByIdReq req) throws Exception{
         
-        orderTypeService.updateOrderTypeById(req.getUpdateID(), req.getUpdateInfo());
+        orderTypeService.UpdateOrderTypeById(req.getUpdateID(), req.getUpdateInfo());
 
         DefaultControllerResp response = new DefaultControllerResp();
         

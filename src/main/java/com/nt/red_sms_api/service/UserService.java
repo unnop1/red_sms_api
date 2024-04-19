@@ -2,7 +2,7 @@ package com.nt.red_sms_api.service;
 
 import com.nt.red_sms_api.dto.req.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.UserResp;
-import com.nt.red_sms_api.entity.UserEnitiy;
+import com.nt.red_sms_api.entity.UserEntity;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
     List<UserResp> getAllUser();
-    public UserResp createUser(UserRequestDto userRequestDto);
+    public UserResp createUser(UserRequestDto userRequestDto, String createdBy);
     void updateUser(Long userID, HashMap<String, Object> updateInfo);
     // UserEnitiy loadUserByEmail(String email) throws UsernameNotFoundException;
-    UserEnitiy loadUserByUsername(String username) throws UsernameNotFoundException;
-    UserEnitiy findUserLogin(String username) throws UsernameNotFoundException;
+    UserEntity loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserEntity findUserLogin(String username) throws UsernameNotFoundException;
 }

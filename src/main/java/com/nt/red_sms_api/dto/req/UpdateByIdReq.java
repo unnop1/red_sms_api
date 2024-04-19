@@ -1,6 +1,6 @@
 package com.nt.red_sms_api.dto.req;
 
-import java.util.Map;
+import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -14,5 +14,5 @@ public class UpdateByIdReq {
     private Long updateID;
 
     @JsonProperty("update_info")
-    private Map<String, Object> updateInfo;
+    private HashMap<String, Object> updateInfo;
 }
