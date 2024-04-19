@@ -27,10 +27,10 @@ public class SmsGatewayImp implements SmsGatewayService{
     private EntityManager entityManager;
 
     @Override
-    public PaginationDataResp findSmsGatewayMatchAndUnMatch(Integer page, Integer limit, String orderTypeID, String isStatus) {
+    public PaginationDataResp findSmsGatewayMatchAndUnMatch(Integer page, Integer limit, Long orderTypeID, Integer isStatus) {
         PaginationDataResp resp = new PaginationDataResp();
-        List<SmsGatewayEntity> smsGatewayEntities = smsGatewayRepo.findSmsGatewayByOrderTypeAndIsStatus(page, limit, orderTypeID, isStatus);
-        Integer count = smsGatewayRepo.getByOrderTypeAndIsStatusTotalCount();
+        List<SmsGatewayEntity> smsGatewayEntities = smsGatewayRepo.findSmsGatewayByOrderTypeAndIsStatus(orderTypeID, isStatus, page, limit);
+        Integer count = smsGatewayRepo.getByOrderTypeAndIsStatusTotalCount(orderTypeID, isStatus);
         resp.setCount(count);
         resp.setData(smsGatewayEntities);
         return resp;
@@ -44,45 +44,6 @@ public class SmsGatewayImp implements SmsGatewayService{
         resp.setCount(count);
         resp.setData(smsGatewayEntities);
         return resp;
-    }
-
-    @Override
-    public DefaultServiceResp getSmsGatewaysAndCondition(Long gID, Long orderTypeID) {
-        String queryString = "SELECT new com.nt.red_sms_api.dto.resp.ViewSmsGwConRespDto( "+
-                "smsGW.GID, smsGW.sms_conditions_SMSID, smsGW.SMSMessage, " +
-                "smsGW.order_type_MainID , smsGW.OrderType, smsGW.PhoneNumber, "+
-                "smsGW.serviceType, smsGW.Frequency, smsGW.Chanel, " +
-                "smsGW.OfferingId, smsGW.PayloadMQ, smsGW.IsStatus, smsGW.CreatedDate, "+
-                "smsCon.Message, smsCon.by_offeringId, smsCon.DateStart, smsCon.DateEnd, " +
-                "smsCon.IsEnable, smsCon.IsDelete, smsCon.CreatedBy_UserID, smsCon.UpdatedDate, smsCon.UpdatedBy_UserID) " +
-                "FROM SmsGatewayEntity smsGW " +
-                "LEFT JOIN SmsConditionEntity smsCon ON (smsGW.order_type_MainID = smsCon.order_type_MainID)" +
-                "WHERE smsGW.GID = :gID AND smsGW.order_type_MainID = :orderTypeID " +
-                "ORDER BY smsGW.CreatedDate DESC";
-            
-        DefaultServiceResp response = new DefaultServiceResp();
-
-        try {
-            Query query = entityManager.createQuery(queryString)
-                .setParameter("gID", gID)
-                .setParameter("orderTypeID", orderTypeID)
-                .setMaxResults(1); // Limit the result to one row
-            // System.out.println(query.getSingleResult());
-            response.setCount(1);
-            response.setResult(query.getSingleResult());
-
-        } catch (NoResultException e) {
-            response.setCount(0);
-            response.setMessage("Not Found");
-            response.setResult(null);
-        }catch (Exception e) {
-            response.setCount(0);
-            response.setMessage(e.getMessage());
-            response.setError(e.getMessage());
-            response.setResult(null);
-        }
-
-        return response;
     }
     
 }

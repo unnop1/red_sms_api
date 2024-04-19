@@ -44,7 +44,7 @@ public class SmsGatewayController {
 
     @PostMapping("/order_type_with_status")
     public ResponseEntity<PaginationDataResp> getAllSmsConditions(@RequestBody SmsGwOdtReq req){
-        return new ResponseEntity<>( smsGatewayService.findSmsGatewayMatchAndUnMatch(req.getPage(), req.getLimit(),req.getOrderTypeID(), req.getIsStatus()), HttpStatus.OK);
+        return new ResponseEntity<>( smsGatewayService.findSmsGatewayMatchAndUnMatch(req.getPage(), req.getLimit(),req.getOrderTypeMainID(), req.getIsStatus()), HttpStatus.OK);
     }
 
     

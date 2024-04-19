@@ -15,9 +15,9 @@ public class SmsGwOdtReq {
     private Integer limit;
 
 
-    @JsonProperty("orderTypeID")
-    private String orderTypeID;
+    @JsonProperty("orderTypeMainID")
+    private Long orderTypeMainID;
 
     @JsonProperty("isStatus")
-    private String isStatus;
+    private Integer isStatus;
 }
