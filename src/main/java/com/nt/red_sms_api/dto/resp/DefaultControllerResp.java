@@ -11,4 +11,7 @@ public class DefaultControllerResp {
     private int count;
     private String message;
     private Object data;
+    private Integer draw=11;
+    private Integer recordsTotal;
+    private Integer recordsFiltered;
 }

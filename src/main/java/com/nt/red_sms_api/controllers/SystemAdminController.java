@@ -3,6 +3,7 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.dto.req.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
+import com.nt.red_sms_api.dto.req.VueListReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
@@ -29,13 +30,16 @@ public class SystemAdminController {
     @Autowired
     private JwtHelper helper;
 
-    @GetMapping("/permissions")
-    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit){
+    @PostMapping("/permissions")
+    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(@RequestBody VueListReq req){
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
-            PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(page, limit);
+            PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(req);
+            resp.setRecordsFiltered(listSaMnPm.getCount());
+            resp.setRecordsTotal(listSaMnPm.getCount());
             resp.setCount(listSaMnPm.getCount());
             resp.setData(listSaMnPm.getData());
+            resp.setDraw(req.getDraw());
             resp.setStatusCode(HttpStatus.OK.value());
             resp.setMessage("Successfully");
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import com.nt.red_sms_api.dto.req.AddPermissionReq;
+import com.nt.red_sms_api.dto.req.VueListReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
@@ -33,10 +34,16 @@ public class PermissionMenuImp implements PermissionMenuService {
     private UserRepo userRepo;
 
     @Override
-    public PaginationDataResp ListMenuPermission(Integer page, Integer limit) {
+    public PaginationDataResp ListMenuPermission(VueListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        Integer offset = (page-1)*limit;
-        List<ViewPermissionWithTotalUserEntity> permissionMenu = viewPermissionMenuRepo.findAll(offset, limit);
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        String searchName = req.getSearch();
+        String sort = "sa_pm."+req.getSortName() + " " + req.getSortBy();
+        System.out.println("VueListReq: " + req.toString());
+        List<ViewPermissionWithTotalUserEntity> permissionMenu = viewPermissionMenuRepo.findByQuery(
+            searchName, sort, offset, limit
+        );
         Integer count = viewPermissionMenuRepo.getTotalCount(offset, limit);
         resp.setData(permissionMenu);
         resp.setCount(count);
