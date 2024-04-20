@@ -24,7 +24,8 @@ public class SmsConditionImp implements SmsConditionService{
 
     public PaginationDataResp ListAllSmsCondition(Integer page, Integer limit) {
         PaginationDataResp resp = new PaginationDataResp();
-        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll(page, limit);
+        Integer offset = (page - 1 ) * limit;
+        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll(offset, limit);
         Integer count = smsConditionRepo.getTotalCount();
         resp.setCount(count);
         resp.setData(smsConditionEntities);

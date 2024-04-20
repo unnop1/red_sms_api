@@ -3,7 +3,7 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
-import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
+import com.nt.red_sms_api.entity.view.order_type.ListOrderType;
 import com.nt.red_sms_api.service.OrderTypeService;
 
 import jakarta.servlet.http.HttpServletRequest;

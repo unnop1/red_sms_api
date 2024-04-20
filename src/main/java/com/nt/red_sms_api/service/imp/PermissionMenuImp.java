@@ -9,16 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import com.nt.red_sms_api.dto.req.AddPermissionReq;
-import com.nt.red_sms_api.dto.req.VueListReq;
+import com.nt.red_sms_api.dto.req.Vue.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
-import com.nt.red_sms_api.entity.ViewPermissionWithTotalUserEntity;
+import com.nt.red_sms_api.entity.view.permission.ListPermissionTotalUser;
 import com.nt.red_sms_api.repo.PermissionMenuRepo;
 import com.nt.red_sms_api.repo.UserRepo;
+import com.nt.red_sms_api.repo.view.permission.ListPermissionTotalUserRepo;
+
 import java.sql.Timestamp;
 import com.nt.red_sms_api.Util.DateTime;
-import com.nt.red_sms_api.repo.ViewPermissionMenuRepo;
 import com.nt.red_sms_api.service.PermissionMenuService;
 
 @Service
@@ -28,23 +29,23 @@ public class PermissionMenuImp implements PermissionMenuService {
     private PermissionMenuRepo permissionMenuRepo;
 
     @Autowired
-    private ViewPermissionMenuRepo viewPermissionMenuRepo;
+    private ListPermissionTotalUserRepo viewPermissionMenuRepo;
 
     @Autowired
     private UserRepo userRepo;
 
     @Override
-    public PaginationDataResp ListMenuPermission(VueListReq req) {
+    public PaginationDataResp ListMenuPermission(PermissionListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         String searchName = req.getSearch();
         String sort = "sa_pm."+req.getSortName() + " " + req.getSortBy();
         System.out.println("VueListReq: " + req.toString());
-        List<ViewPermissionWithTotalUserEntity> permissionMenu = viewPermissionMenuRepo.findByQuery(
+        List<ListPermissionTotalUser> permissionMenu = viewPermissionMenuRepo.findByQuery(
             searchName, sort, offset, limit
         );
-        Integer count = viewPermissionMenuRepo.getTotalCount(offset, limit);
+        Integer count = viewPermissionMenuRepo.getFindQueryTotalCount(searchName);
         resp.setData(permissionMenu);
         resp.setCount(count);
         // System.out.println("permissionMenus: " + permissionMenu);

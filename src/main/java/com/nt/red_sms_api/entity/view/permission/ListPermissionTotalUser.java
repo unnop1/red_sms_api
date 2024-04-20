@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.entity;
+package com.nt.red_sms_api.entity.view.permission;
 
 
 import java.sql.Timestamp;
@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table (name = "sa_menu_permission")
-public class ViewPermissionWithTotalUserEntity {
+public class ListPermissionTotalUser {
         @Id
         @Column(name = "id")
         private Long id;

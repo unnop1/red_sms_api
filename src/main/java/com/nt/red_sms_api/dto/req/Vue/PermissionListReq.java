@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.dto.req;
+package com.nt.red_sms_api.dto.req.Vue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class VueListReq {
+public class PermissionListReq {
     @JsonProperty("draw")
     private Integer draw=11;
 

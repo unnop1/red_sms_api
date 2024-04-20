@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.entity;
+package com.nt.red_sms_api.entity.view.order_type;
 
 
 import java.sql.Timestamp;
@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Table (name = "order_type")
-public class ViewOrderTypeEntity {
+public class ListOrderType {
         
         @Id
         @Column(name = "TYPEID")

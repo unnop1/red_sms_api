@@ -16,7 +16,7 @@ public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,L
 
     @SuppressWarnings("null")
     @Query(value = "SELECT * FROM config_conditions OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", nativeQuery = true)
-    public List<ConfigConditionsEntity> findAll(Integer page, Integer limit);
+    public List<ConfigConditionsEntity> findAll(Integer offset, Integer limit);
 
     @Query(value = "SELECT COUNT(*) FROM config_conditions ", nativeQuery = true)
     public Integer getTotalCount();

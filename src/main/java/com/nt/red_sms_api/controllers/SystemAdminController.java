@@ -3,11 +3,10 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.dto.req.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
-import com.nt.red_sms_api.dto.req.VueListReq;
+import com.nt.red_sms_api.dto.req.Vue.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
-import com.nt.red_sms_api.entity.ViewPermissionWithTotalUserEntity;
 import com.nt.red_sms_api.service.PermissionMenuService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -31,7 +27,7 @@ public class SystemAdminController {
     private JwtHelper helper;
 
     @PostMapping("/permissions")
-    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(@RequestBody VueListReq req){
+    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(@RequestBody PermissionListReq req){
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
             PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(req);

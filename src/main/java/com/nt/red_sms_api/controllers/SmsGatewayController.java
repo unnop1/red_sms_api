@@ -1,21 +1,15 @@
 package com.nt.red_sms_api.controllers;
 
-import com.nt.red_sms_api.dto.req.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.SmsGwOdtReq;
+import com.nt.red_sms_api.dto.req.Vue.SmsGwListReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
-import com.nt.red_sms_api.dto.resp.DefaultServiceResp;
-import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
-import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.service.OrderTypeService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -24,21 +18,30 @@ public class SmsGatewayController {
     @Autowired
     private SmsGatewayService smsGatewayService;
 
-    @GetMapping
-    @RequestMapping("/order_types")
-    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByOrderType(@RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "limit", defaultValue = "10") Integer limit) throws Exception{
-
-        PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(page, limit);
-
+    @PostMapping
+    @RequestMapping("/by_condition")
+    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByOrderType(@RequestBody SmsGwListReq req) throws Exception{
+        
         DefaultControllerResp response = new DefaultControllerResp();
-        response.setCount(smsGateways.getCount());
-        response.setMessage("Success");
-        response.setData(smsGateways.getData());
-        response.setStatusCode(200);
+        try{
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(req);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
 
-        // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        // String json = ow.writeValueAsString(receiveSmsPayload);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+            // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            // String json = ow.writeValueAsString(receiveSmsPayload);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

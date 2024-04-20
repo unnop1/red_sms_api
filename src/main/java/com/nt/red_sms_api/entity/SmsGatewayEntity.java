@@ -43,9 +43,6 @@ public class SmsGatewayEntity {
         @Column(name = "PhoneNumber", unique = false,nullable = true)
         private String PhoneNumber = null;
 
-        @Column(name = "payloadMQ", unique = false,nullable = true)
-        private Integer serviceType = null;
-
         @Column(name = "payloadGW", unique = false,nullable = true)
         private String OfferingId = null;
 
@@ -53,11 +50,11 @@ public class SmsGatewayEntity {
         private String PayloadMQ = null;
 
         @Column(name = "Is_Status", unique = false,nullable = true)
-        private Integer IsStatus = 0;
+        private Integer Is_Status = 0;
 
         @Column(name = "Remark", unique = false,nullable = true)
         private String Remark = null;
 
         @Column(name = "Created_Date", unique = false,nullable = true)
-        private Timestamp CreatedDate = null;
+        private Timestamp Created_Date = null;
 }

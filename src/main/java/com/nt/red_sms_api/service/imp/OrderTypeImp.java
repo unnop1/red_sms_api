@@ -1,27 +1,24 @@
 package com.nt.red_sms_api.service.imp;
 
-import com.nt.red_sms_api.dto.resp.OrderTypeResponseDto;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
-import com.nt.red_sms_api.entity.ViewOrderTypeEntity;
+import com.nt.red_sms_api.entity.view.order_type.ListOrderType;
 import com.nt.red_sms_api.repo.OrderTypeRepo;
-import com.nt.red_sms_api.repo.ViewOrderTypeRepo;
+import com.nt.red_sms_api.repo.view.order_type.ListOrderTypeRepo;
 import com.nt.red_sms_api.service.OrderTypeService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderTypeImp implements OrderTypeService{
 
     @Autowired
-    private ViewOrderTypeRepo viewOrderTypeRepo;
+    private ListOrderTypeRepo viewOrderTypeRepo;
 
     @Autowired
     private OrderTypeRepo orderTypeRepo;
@@ -34,7 +31,7 @@ public class OrderTypeImp implements OrderTypeService{
         PaginationDataResp resp = new PaginationDataResp();
         Integer offset = (page - 1 ) * limit;
         System.out.println("offset"+offset+" limit"+limit);
-        List<ViewOrderTypeEntity> orderTypeEntities = viewOrderTypeRepo.findAll(offset, limit);
+        List<ListOrderType> orderTypeEntities = viewOrderTypeRepo.findAll(offset, limit);
         Integer count = viewOrderTypeRepo.getTotalCount(offset, limit);
         resp.setData(orderTypeEntities);
         resp.setCount(count);
