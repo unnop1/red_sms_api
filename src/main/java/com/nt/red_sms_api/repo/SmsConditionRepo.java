@@ -20,5 +20,6 @@ public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,L
 
     @Query(value = "SELECT COUNT(*) FROM config_conditions ", nativeQuery = true)
     public Integer getTotalCount();
+    
 
 }

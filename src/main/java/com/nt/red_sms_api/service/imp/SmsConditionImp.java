@@ -1,9 +1,12 @@
 package com.nt.red_sms_api.service.imp;
 
+import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
+import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
+import com.nt.red_sms_api.repo.view.smscondition.ListSmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +23,42 @@ public class SmsConditionImp implements SmsConditionService{
 
     @Autowired
     private SmsConditionRepo smsConditionRepo;
-    // @Autowired
-    // private ModelMapper modelMapper;
+    
+    @Autowired
+    private ListSmsConditionRepo listSmsConditionRepo;
 
-    public PaginationDataResp ListAllSmsCondition(Integer page, Integer limit) {
+    public PaginationDataResp ListAllSmsCondition(ListConditionReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        Integer offset = (page - 1 ) * limit;
-        List<ConfigConditionsEntity> smsConditionEntities = smsConditionRepo.findAll(offset, limit);
-        Integer count = smsConditionRepo.getTotalCount();
-        resp.setCount(count);
-        resp.setData(smsConditionEntities);
-        return resp;
+        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        String sort = "cf_con."+req.getSortName()+ " " + req.getSortBy();
+        String search = req.getSearch(); // CONCAT('%', ?3, '%')
+        String searchField = "cf_con."+req.getSearchField();
+
+        if ( search.isEmpty()){
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsCondition(startTime, endTime, sort, offset, limit);
+            Integer count = listSmsConditionRepo.getListSmsConditionTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }else {
+            if( !req.getSearchField().isEmpty()){
+                // System.out.println("a like:"+ searchField);
+                List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionLike(startTime, endTime, searchField, search, sort, offset, limit);
+                Integer count = listSmsConditionRepo.getListSmsConditionLikeTotalCount(startTime, endTime, searchField, search);
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
+            // System.out.println("all like:");
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(startTime, endTime, search, sort, offset, limit);
+            Integer count = listSmsConditionRepo.getListSmsConditionAllLikeTotalCount(startTime, endTime, search);
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }
     }
 
     @Override

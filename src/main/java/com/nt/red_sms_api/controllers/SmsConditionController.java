@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
+import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
@@ -20,9 +21,29 @@ import java.util.List;
 public class SmsConditionController {
     @Autowired
     private SmsConditionService smsConditionService;
-    @GetMapping
-    public ResponseEntity<PaginationDataResp> getAllSmsConditions(Integer page, Integer limit){
-        return new ResponseEntity<>( smsConditionService.ListAllSmsCondition(page, limit), HttpStatus.OK);
+    @PostMapping
+    public ResponseEntity<DefaultControllerResp> getAllSmsConditions(@RequestBody ListConditionReq req){
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            PaginationDataResp smsConditions = smsConditionService.ListAllSmsCondition(req);
+            response.setRecordsFiltered(smsConditions.getCount());
+            response.setRecordsTotal(smsConditions.getCount());
+            response.setCount(smsConditions.getCount());
+            response.setMessage("Success");
+            response.setData(smsConditions.getData());
+            response.setStatusCode(200);
+
+            // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            // String json = ow.writeValueAsString(receiveSmsPayload);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
     @PostMapping("/by_id")
@@ -32,6 +53,8 @@ public class SmsConditionController {
         if( smsDetail != null){
             if(smsDetail.getConditionsID() != null){ 
                 response.setCount(1);
+                response.setRecordsFiltered(1);
+                response.setRecordsTotal(1);
                 response.setMessage("Success");
                 response.setData(smsDetail);
                 response.setStatusCode(200);
