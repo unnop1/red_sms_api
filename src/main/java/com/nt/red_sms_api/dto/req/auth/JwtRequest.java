@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.dto.req;
+package com.nt.red_sms_api.dto.req.auth;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

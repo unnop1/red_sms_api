@@ -1,7 +1,7 @@
 package com.nt.red_sms_api.controllers;
 
-import com.nt.red_sms_api.dto.req.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
+import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;

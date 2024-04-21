@@ -1,8 +1,8 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
-import com.nt.red_sms_api.dto.req.JwtRequest;
-import com.nt.red_sms_api.dto.req.UserRequestDto;
+import com.nt.red_sms_api.dto.req.auth.JwtRequest;
+import com.nt.red_sms_api.dto.req.user.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.AuthSuccessResp;
 import com.nt.red_sms_api.dto.resp.JwtErrorResp;
 import com.nt.red_sms_api.dto.resp.LoginResp;
@@ -117,7 +117,7 @@ public class AuthController {
         updateInfo.put("last_login", loginDateTime);
         updateInfo.put("last_login_ipaddress", ipAddress);
 
-        this.userService.updateUser(userDetails.getId(), updateInfo);
+        this.userService.updateUserLogLogin(userDetails.getId(), updateInfo);
 
         
         UserResp userInfo = new UserResp();

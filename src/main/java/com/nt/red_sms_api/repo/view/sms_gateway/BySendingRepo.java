@@ -4,18 +4,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
 import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 
 import java.sql.Timestamp;
 import java.util.List;
 
-public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
+public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
     
     @Query(value =  "SELECT TRUNC(smsgw.created_date) AS DATE_ONLY, "+
-                    "COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) AS totalEvent, "+
+                    "COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend, "+
                     "COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, "+
-                    "COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) AS totalUnmatch "+
+                    "COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail "+
                     "FROM sms_gateway smsgw "+
                     "WHERE smsGW.created_date BETWEEN ?1 AND ?2 "+
                     "GROUP BY TRUNC(smsgw.created_date) "+
@@ -23,7 +22,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     "OFFSET ?4 ROWS " +
                     "FETCH NEXT ?5 ROWS ONLY ",
                     nativeQuery = true)
-    public List<ByCondition> ListByCondition(Timestamp startTime,
+    public List<BySending> ListBySending(Timestamp startTime,
                                             Timestamp endTime,
                                             String sort,
                                             Integer offset,
@@ -37,6 +36,6 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         "GROUP BY TRUNC(smsgw.created_date) "+
                     ") subquery ",
         nativeQuery = true)
-    public Integer getListByConditionTotalCount(Timestamp startTime, Timestamp endTime);
+    public Integer getListBySendingTotalCount(Timestamp startTime, Timestamp endTime);
 
 }

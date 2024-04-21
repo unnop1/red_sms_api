@@ -4,8 +4,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,8 +1,9 @@
 package com.nt.red_sms_api.service;
 
 import java.util.HashMap;
-import com.nt.red_sms_api.dto.req.AddPermissionReq;
-import com.nt.red_sms_api.dto.req.Vue.PermissionListReq;
+
+import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
+import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 

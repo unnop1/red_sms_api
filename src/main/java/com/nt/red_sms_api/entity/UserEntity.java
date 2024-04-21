@@ -72,6 +72,9 @@ public class UserEntity implements UserDetails {
         @Column(name = "sa_menu_permission_id", unique = false,nullable = true)
         private Long sa_menu_permission_id=null;
 
+        @Column(name = "departmentname", unique = false,nullable = true)
+        private String departmentname=null;
+
         @Override
         public Collection<? extends GrantedAuthority> getAuthorities() {
                 return null;

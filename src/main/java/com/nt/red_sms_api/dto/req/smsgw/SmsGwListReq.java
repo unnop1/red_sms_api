@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.dto.req.Vue;
+package com.nt.red_sms_api.dto.req.smsgw;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

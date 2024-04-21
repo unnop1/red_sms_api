@@ -1,9 +1,9 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
-import com.nt.red_sms_api.dto.req.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.UpdateByIdReq;
-import com.nt.red_sms_api.dto.req.Vue.PermissionListReq;
+import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
+import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;

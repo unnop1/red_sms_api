@@ -1,11 +1,16 @@
 package com.nt.red_sms_api.service.imp;
 
 import com.nt.red_sms_api.config.AuthConfig;
-import com.nt.red_sms_api.dto.req.UserRequestDto;
+import com.nt.red_sms_api.dto.req.user.ListUserReq;
+import com.nt.red_sms_api.dto.req.user.UpdateUserDto;
+import com.nt.red_sms_api.dto.req.user.UserRequestDto;
+import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.entity.UserEntity;
+import com.nt.red_sms_api.entity.view.user.ListUser;
 import com.nt.red_sms_api.exp.UserAlreadyExistsException;
 import com.nt.red_sms_api.repo.UserRepo;
+import com.nt.red_sms_api.repo.view.user.ListUserRepo;
 import com.nt.red_sms_api.service.UserService;
 
 import org.modelmapper.ModelMapper;
@@ -27,6 +32,8 @@ public class UserImp implements UserService {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private ListUserRepo listUserRepo;
+    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private AuthConfig authConfig;
@@ -37,10 +44,13 @@ public class UserImp implements UserService {
     }
 
     @Override
-    public List<UserResp> getAllUser() {
-        List<UserEntity> userEnitiys = userRepo.findAll();
-        List<UserResp> userResponseDtoList = userEnitiys.stream().map(user->this.userEntityToUserRespDto(user)).collect(Collectors.toList());
-        return userResponseDtoList;
+    public PaginationDataResp getAllUser(ListUserReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        List<ListUser> userResponseDtoList = listUserRepo.getAllUser(req.getStart(), req.getLength());
+        Integer count = listUserRepo.getTotalCount();
+        resp.setData(userResponseDtoList);
+        resp.setCount(count);
+        return resp;
 
 
     }
@@ -68,8 +78,23 @@ public class UserImp implements UserService {
         }
     }
 
+    public UserEntity userReqDtoToUserEntity(Object userReqDto){
+        UserEntity user = this.modelMapper.map(userReqDto,UserEntity.class);
+        return user;
+    }
+    public UserResp userEntityToUserRespDto(UserEntity user){
+        UserResp userRespDto = this.modelMapper.map(user,UserResp.class);
+        return userRespDto;
+    }
+
     @Override
-    public void updateUser(Long userID, HashMap<String, Object> updateInfo) {
+    public UserEntity findUserLogin(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepo.findLoginUser(username);
+        return user;
+    }
+
+    @Override
+    public void updateUserLogLogin(Long userID, HashMap<String, Object> updateInfo) {
         UserEntity foundUser = this.userRepo.findByID(userID);
         System.out.println("foundUser:"+foundUser.getUsername());
         if (foundUser.getUsername() != null) {
@@ -92,20 +117,42 @@ public class UserImp implements UserService {
         }
     }
 
-
-    public UserEntity userReqDtoToUserEntity(UserRequestDto userReqDto){
-        UserEntity user = this.modelMapper.map(userReqDto,UserEntity.class);
-        return user;
-    }
-    public UserResp userEntityToUserRespDto(UserEntity user){
-        UserResp userRespDto = this.modelMapper.map(user,UserResp.class);
-        return userRespDto;
-    }
-
     @Override
-    public UserEntity findUserLogin(String username) throws UsernameNotFoundException {
-        UserEntity user = userRepo.findLoginUser(username);
-        return user;
+    public void updateUser(UpdateUserDto req, String updatedBy) {
+        UserEntity foundUser = this.userRepo.findByID(req.getId());
+        Timestamp timeNow = DateTime.getTimeStampNow();
+        if (foundUser != null){
+            System.out.println("found user: " + foundUser.getId());
+
+            if (!req.getName().isEmpty()){
+                foundUser.setName(req.getName());
+            }
+            if (!req.getDepartmentName().isEmpty()){
+                foundUser.setDepartmentname(req.getDepartmentName());
+            }
+            if (!req.getPhonenumber().isEmpty()){
+                foundUser.setPhoneNumber(req.getPhonenumber());
+            }
+            if (!req.getEmail().isEmpty()){
+                foundUser.setEmail(req.getEmail());
+            }
+            if (!req.getPassword().isEmpty()){
+                foundUser.setPassword(authConfig.passwordEncoder().encode(req.getPassword()));
+            }
+            if (req.getPermissionID() != null){
+                foundUser.setSa_menu_permission_id(req.getPermissionID());
+            }
+            
+            foundUser.setUpdated_Date(timeNow);
+            foundUser.setUpdated_by(updatedBy);
+            
+            userRepo.save(foundUser);
+        }else{
+            System.out.println("not found user");
+        }
+
+        return;
+        
     }
     
 }

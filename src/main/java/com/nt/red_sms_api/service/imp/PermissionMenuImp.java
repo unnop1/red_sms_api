@@ -8,8 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
-import com.nt.red_sms_api.dto.req.AddPermissionReq;
-import com.nt.red_sms_api.dto.req.Vue.PermissionListReq;
+
+import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
+import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
