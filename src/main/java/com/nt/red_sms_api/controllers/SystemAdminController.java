@@ -33,12 +33,13 @@ public class SystemAdminController {
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
         @RequestParam(name = "length", defaultValue = "10")Integer length,
-        @RequestParam(name = "Search", defaultValue = "")String search
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ){
         DefaultControllerResp resp = new DefaultControllerResp();
         System.out.println("sortBy:" + sortBy);
         try {
-            PermissionListReq req = new PermissionListReq(draw, sortBy, sortName, start, length, search);
+            PermissionListReq req = new PermissionListReq(draw, sortBy, sortName, start, length, search, searchField);
             PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(req);
             resp.setRecordsFiltered(listSaMnPm.getCount());
             resp.setRecordsTotal(listSaMnPm.getCount());

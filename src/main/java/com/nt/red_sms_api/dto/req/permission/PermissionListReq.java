@@ -27,6 +27,9 @@ public class PermissionListReq {
 
     @JsonProperty("Search")
     private String search="";
+
+    @JsonProperty("Search_field")
+    private String searchField="";
         
 
 }
