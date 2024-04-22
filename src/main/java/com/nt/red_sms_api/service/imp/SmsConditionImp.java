@@ -49,14 +49,13 @@ public class SmsConditionImp implements SmsConditionService{
             return resp;
         }else {
             if( !req.getSearchField().isEmpty()){
-                // System.out.println("a like:"+ searchField);
                 List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionLike(startTime, endTime, searchField, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
                 Integer count = listSmsConditionRepo.getListSmsConditionLikeTotalCount(startTime, endTime, searchField, search);
                 resp.setCount(count);
                 resp.setData(smsConditionEntities);
                 return resp;
             }
-            // System.out.println("all like:");
+
             List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
             Integer count = listSmsConditionRepo.getListSmsConditionAllLikeTotalCount(startTime, endTime, search);
             resp.setCount(count);

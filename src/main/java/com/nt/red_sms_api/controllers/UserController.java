@@ -30,10 +30,19 @@ public class UserController {
     @Autowired
     private JwtHelper helper;
 
-    @PostMapping()
-    public ResponseEntity<DefaultControllerResp> getAllUser(@RequestBody ListUserReq req){
+    @GetMapping()
+    public ResponseEntity<DefaultControllerResp> getAllUser(
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String search_field
+    ){
         DefaultControllerResp response = new DefaultControllerResp();
         try{
+            ListUserReq req = new ListUserReq(draw, sortBy, sortName, start, length, search, search_field);
             PaginationDataResp smsGateways = userService.getAllUser(req);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());

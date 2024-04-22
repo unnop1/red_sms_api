@@ -15,6 +15,8 @@ import com.nt.red_sms_api.service.UserService;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.nt.red_sms_api.Util.DateTime;
@@ -46,11 +48,40 @@ public class UserImp implements UserService {
     @Override
     public PaginationDataResp getAllUser(ListUserReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        List<ListUser> userResponseDtoList = listUserRepo.getAllUser(req.getStart(), req.getLength());
-        Integer count = listUserRepo.getTotalCount();
-        resp.setData(userResponseDtoList);
-        resp.setCount(count);
-        return resp;
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = offset / limit;
+        String sortName = req.getSortName();
+        String sortBy = req.getSortBy();
+        String search = req.getSearch();
+        String searchField = req.getSearchField();
+        
+
+        if ( search.isEmpty()){
+            List<ListUser> userResponseDtoList = listUserRepo.getAllUser(PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = listUserRepo.getTotalCount();
+            resp.setData(userResponseDtoList);
+            resp.setCount(count);
+            return resp;
+        }else {
+            if( !req.getSearchField().isEmpty()){
+                List<ListUser> smsConditionEntities = listUserRepo.getListUserAllSearch(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+                Integer count = listUserRepo.getListUserAllSearchTotalCount(search);
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
+
+            List<ListUser> smsConditionEntities = listUserRepo.getListUserOneSearch(searchField, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+            
+            if (searchField.equals("permission_name")){
+                searchField = "sa_pm.permission_name";
+            }
+            Integer count = listUserRepo.getListUserOneSearchTotalCount(search);
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }
 
 
     }

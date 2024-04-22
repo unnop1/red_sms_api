@@ -44,10 +44,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
     @Query(value = "SELECT sa_pm.*, " +
                "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
                "FROM sa_menu_permission sa_pm " +
-               "WHERE :search_field like %:search% " +
-               "ORDER BY :sort " +
-               "OFFSET :offset ROWS " +
-               "FETCH NEXT :limit ROWS ONLY ",
+               "WHERE :search_field like %:search% ",
        nativeQuery = true)
     public List<ListPermissionTotalUser> GetAllWithTotalUserLike(
         @Param(value = "search_field")String search_field,    

@@ -48,12 +48,8 @@ public class PermissionMenuImp implements PermissionMenuService {
         String searchField = req.getSearchField();
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
-        String sort = req.getSortName() + " " + req.getSortBy();
-        // System.out.println("VueListReq: " + req.toString());
-        System.out.println("sort: " + sort);
+
         if ( searchName.isEmpty()){
-            System.out.println("1" );
-            
             List<ListPermissionTotalUser> permissionMenu = viewPermissionMenuRepo.GetAllWithTotalUser(
                 PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
             );
@@ -63,7 +59,6 @@ public class PermissionMenuImp implements PermissionMenuService {
             return resp;
         } else {
             if( !req.getSearchField().isEmpty()){
-                System.out.println("2" );
                 List<ListPermissionTotalUser> permissionMenu = viewPermissionMenuRepo.GetAllWithTotalUserLike(
                     searchField, searchName, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
                 );
@@ -72,7 +67,6 @@ public class PermissionMenuImp implements PermissionMenuService {
                 resp.setCount(count);
                 return resp;
             }
-            System.out.println("3" );
             // System.out.println("all like:");
             List<ListPermissionTotalUser> permissionMenu = viewPermissionMenuRepo.GetAllWithTotalUserAllLike(
                 searchName, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
@@ -89,7 +83,6 @@ public class PermissionMenuImp implements PermissionMenuService {
     @Override
     public PermissionMenuEntity getMenuPermission(Long permissionID) {
         PermissionMenuEntity permissionMenu = permissionMenuRepo.findPermissionById(permissionID);
-        // System.out.println("permissionMenus: " + permissionMenu);
         return permissionMenu;
     }
 
@@ -103,15 +96,6 @@ public class PermissionMenuImp implements PermissionMenuService {
         newPermissionMenu.setCreated_Date(timeNow);
         permissionMenuRepo.save(newPermissionMenu);
 
-        // if (!req.getUserIds().isEmpty()){
-        //     // Add user permissions
-        //     List<UserEntity> existUser = userRepo.findInID(req.getUserIds());
-        //     // System.out.println("created.getId : " +created.getId()+1);
-        //     for (UserEntity user : existUser){
-        //         user.setSa_menu_permission_id(created.getId()+1);
-        //         userRepo.save(user);
-        //     }
-        // }
         return null;
     }
 
