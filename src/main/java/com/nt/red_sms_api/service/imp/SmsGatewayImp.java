@@ -13,6 +13,8 @@ import com.nt.red_sms_api.service.SmsGatewayService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -38,11 +40,16 @@ public class SmsGatewayImp implements SmsGatewayService{
         // String endTime = req.getEndTime();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
-        System.out.println("start:" + req.getStart());
-        System.out.println("leng:" + req.getLength());
-        System.out.println("sort:" + sort);
-        System.out.println("startTime: " + startTime + " endTime: " + endTime);
-        List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime,  sort, req.getStart(), req.getLength());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = offset / limit;
+        String sortBy = req.getSortBy();
+        String sortName = req.getSortName();
+        // System.out.println("start:" + req.getStart());
+        // System.out.println("leng:" + req.getLength());
+        // System.out.println("sort:" + sort);
+        // System.out.println("startTime: " + startTime + " endTime: " + endTime);
+        List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime,  PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
         Integer count = byConditionRepo.getListByConditionTotalCount(startTime, endTime);
         resp.setCount(count);
         resp.setData(smsGatewayEntities);
@@ -52,16 +59,17 @@ public class SmsGatewayImp implements SmsGatewayService{
     @Override
     public PaginationDataResp findSmsGatewaySendAndUnSend(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        String sort = "TRUNC(smsgw.created_date)" + " " + req.getSortBy();
+        // String sort = "TRUNC(smsgw.created_date)" + " " + req.getSortBy();
         // String startTime = req.getStartTime();
         // String endTime = req.getEndTime();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
-        System.out.println("start:" + req.getStart());
-        System.out.println("leng:" + req.getLength());
-        System.out.println("sort:" + sort);
-        System.out.println("startTime: " + startTime + " endTime: " + endTime);
-        List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime,  sort, req.getStart(), req.getLength());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = offset / limit;
+        String sortBy = req.getSortBy();
+        String sortName = req.getSortName();
+        List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
         Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
         resp.setCount(count);
         resp.setData(smsGatewayEntities);
@@ -71,16 +79,17 @@ public class SmsGatewayImp implements SmsGatewayService{
     @Override
     public PaginationDataResp findSmsGatewayResponseTime(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        String sort = "TRUNC(smsgw.created_date)" + " " + req.getSortBy();
+        // String sort = "TRUNC(smsgw.created_date)" + " " + req.getSortBy();
         // String startTime = req.getStartTime();
         // String endTime = req.getEndTime();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
-        System.out.println("start:" + req.getStart());
-        System.out.println("leng:" + req.getLength());
-        System.out.println("sort:" + sort);
-        System.out.println("startTime: " + startTime + " endTime: " + endTime);
-        List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime,  sort, req.getStart(), req.getLength());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = offset / limit;
+        String sortBy = req.getSortBy();
+        String sortName = req.getSortName();
+        List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
         Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
         resp.setCount(count);
         resp.setData(smsGatewayEntities);

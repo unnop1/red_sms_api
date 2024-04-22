@@ -101,17 +101,17 @@ public class PermissionMenuImp implements PermissionMenuService {
         newPermissionMenu.setPermission_json(req.getPermission_json());
         newPermissionMenu.setCreated_By(createdBy);
         newPermissionMenu.setCreated_Date(timeNow);
-        PermissionMenuEntity created = permissionMenuRepo.save(newPermissionMenu);
+        permissionMenuRepo.save(newPermissionMenu);
 
-        if (!req.getUserIds().isEmpty()){
-            // Add user permissions
-            List<UserEntity> existUser = userRepo.findInID(req.getUserIds());
-            // System.out.println("created.getId : " +created.getId()+1);
-            for (UserEntity user : existUser){
-                user.setSa_menu_permission_id(created.getId()+1);
-                userRepo.save(user);
-            }
-        }
+        // if (!req.getUserIds().isEmpty()){
+        //     // Add user permissions
+        //     List<UserEntity> existUser = userRepo.findInID(req.getUserIds());
+        //     // System.out.println("created.getId : " +created.getId()+1);
+        //     for (UserEntity user : existUser){
+        //         user.setSa_menu_permission_id(created.getId()+1);
+        //         userRepo.save(user);
+        //     }
+        // }
         return null;
     }
 

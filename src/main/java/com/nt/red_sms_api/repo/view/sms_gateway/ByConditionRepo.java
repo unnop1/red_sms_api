@@ -1,5 +1,6 @@
 package com.nt.red_sms_api.repo.view.sms_gateway;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,16 +19,12 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     "COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) AS totalUnmatch "+
                     "FROM sms_gateway smsgw "+
                     "WHERE smsGW.created_date BETWEEN ?1 AND ?2 "+
-                    "GROUP BY TRUNC(smsgw.created_date) "+
-                    "ORDER BY ?3 "+
-                    "OFFSET ?4 ROWS " +
-                    "FETCH NEXT ?5 ROWS ONLY ",
+                    "GROUP BY TRUNC(smsgw.created_date) ",
                     nativeQuery = true)
     public List<ByCondition> ListByCondition(Timestamp startTime,
                                             Timestamp endTime,
-                                            String sort,
-                                            Integer offset,
-                                            Integer limit);
+                                            Pageable pageable
+    );
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM ( "+

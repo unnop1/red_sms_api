@@ -15,6 +15,4 @@ public class AddPermissionReq {
     @JsonProperty("permission_json")
     private String permission_json;
 
-    @JsonProperty("user_ids")
-    private List<Long> userIds;
 }
