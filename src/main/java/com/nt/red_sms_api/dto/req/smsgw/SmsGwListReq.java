@@ -7,6 +7,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class SmsGwListReq {
     @JsonProperty("draw")
     private Integer draw=11;
@@ -14,9 +16,14 @@ public class SmsGwListReq {
     @JsonProperty("order[0][dir]")
     private String sortBy="ASC";
 
+    @JsonProperty("order[0][name]")
+    private String sortName="created_date";
+
+    @lombok.NonNull
     @JsonProperty("start_time")
     private String startTime;
 
+    @lombok.NonNull
     @JsonProperty("end_time")
     private String endTime;
 

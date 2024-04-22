@@ -6,6 +6,8 @@ import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class PermissionListReq {
     @JsonProperty("draw")
@@ -24,7 +26,7 @@ public class PermissionListReq {
     private Integer length=10;
 
     @JsonProperty("Search")
-    private String search;
+    private String search="";
         
 
 }

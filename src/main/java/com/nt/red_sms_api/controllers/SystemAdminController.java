@@ -26,10 +26,19 @@ public class SystemAdminController {
     @Autowired
     private JwtHelper helper;
 
-    @PostMapping("/permissions")
-    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(@RequestBody PermissionListReq req){
+    @GetMapping("/permissions")
+    public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search
+    ){
         DefaultControllerResp resp = new DefaultControllerResp();
+        System.out.println("sortBy:" + sortBy);
         try {
+            PermissionListReq req = new PermissionListReq(draw, sortBy, sortName, start, length, search);
             PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(req);
             resp.setRecordsFiltered(listSaMnPm.getCount());
             resp.setRecordsTotal(listSaMnPm.getCount());

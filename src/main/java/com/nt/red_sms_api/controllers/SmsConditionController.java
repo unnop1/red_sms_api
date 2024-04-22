@@ -21,10 +21,21 @@ import java.util.List;
 public class SmsConditionController {
     @Autowired
     private SmsConditionService smsConditionService;
-    @PostMapping
-    public ResponseEntity<DefaultControllerResp> getAllSmsConditions(@RequestBody ListConditionReq req){
+    @GetMapping
+    public ResponseEntity<DefaultControllerResp> getAllSmsConditions(
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String search_field
+    ){
         DefaultControllerResp response = new DefaultControllerResp();
         try{
+            ListConditionReq req = new ListConditionReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsConditions = smsConditionService.ListAllSmsCondition(req);
             response.setRecordsFiltered(smsConditions.getCount());
             response.setRecordsTotal(smsConditions.getCount());

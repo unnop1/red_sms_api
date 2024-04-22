@@ -94,13 +94,13 @@ public class JwtHelper {
     //    compaction of the JWT to a URL-safe string
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                // .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     // Validate token
     public Boolean validateToken(String token, UserEntity userDetails) {
         final String username = getUsernameFromToken(token);
-        return token.equals(userDetails.getCurrentToken()) && (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return token.equals(userDetails.getCurrentToken()) && (username.equals(userDetails.getUsername()));
     }
 }
