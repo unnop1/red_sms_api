@@ -2,8 +2,10 @@ package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOdtReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,5 +128,65 @@ public class SmsGatewayController {
     }
 
 
+    @PostMapping
+    @RequestMapping("/order_type_with_status")
+    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysOrderTypeAndStatus(
+        @RequestBody SmsGwOrderTypeStatusReq req
+    ) throws Exception{
+        
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
+
+            // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+            // String json = ow.writeValueAsString(receiveSmsPayload);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("by_id")
+    public ResponseEntity<DefaultControllerResp> GetSmsGatewayMoreDetail(@RequestParam(name="id") Long id){
+        SmsGatewayEntity smsGwDetail = smsGatewayService.findSmsGatewayByID(id);
+        DefaultControllerResp response = new DefaultControllerResp();
+        if( smsGwDetail != null){
+            if(smsGwDetail.getGID() != null){ 
+                response.setCount(1);
+                response.setRecordsFiltered(1);
+                response.setRecordsTotal(1);
+                response.setMessage("Success");
+                response.setData(smsGwDetail);
+                response.setStatusCode(200);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else{
+                response.setCount(0);
+                response.setMessage("Fail");
+                response.setData(smsGwDetail);
+                response.setStatusCode(400);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+        }else{
+            response.setCount(0);
+            response.setRecordsFiltered(0);
+            response.setRecordsTotal(0);
+            response.setMessage("NOT FOUND");
+            response.setData(smsGwDetail);
+            response.setStatusCode(400);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    
+    }
 
 }

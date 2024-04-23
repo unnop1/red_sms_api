@@ -57,4 +57,10 @@ public class SmsGatewayEntity {
 
         @Column(name = "Created_Date", unique = false,nullable = true)
         private Timestamp Created_Date = null;
+
+        @Column(name = "Receive_Date", unique = false,nullable = true)
+        private Timestamp Receive_Date = null;
+
+        @Column(name = "Send_Date", unique = false,nullable = true)
+        private Timestamp Send_Date = null;
 }

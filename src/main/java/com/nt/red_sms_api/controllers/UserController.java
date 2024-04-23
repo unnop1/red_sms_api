@@ -1,14 +1,16 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
-import com.nt.red_sms_api.dto.req.UpdateByIdReq;
 import com.nt.red_sms_api.dto.req.user.ListUserReq;
 import com.nt.red_sms_api.dto.req.user.UpdateUserDto;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
+import com.nt.red_sms_api.dto.resp.LoginResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.UserInfoResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
-import com.nt.red_sms_api.dto.resp.UserResponseDto;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.service.PermissionMenuService;
 import com.nt.red_sms_api.service.UserService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,19 +20,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private PermissionMenuService permissionMenuService;
 
     @Autowired
     private JwtHelper helper;
 
-    @GetMapping()
+    @GetMapping("/list")
     public ResponseEntity<DefaultControllerResp> getAllUser(
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
@@ -62,6 +65,32 @@ public class UserController {
             return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<UserInfoResp> getUserInfo(
+        @RequestParam(name = "user_id")Long userId
+    ){
+        UserInfoResp userResp = new UserInfoResp();
+        try{
+            UserResp userInfo = userService.findUserById(userId);
+
+            if (userInfo != null){
+                PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userInfo.getSa_menu_permission_id());
+                userResp.setUserLogin(userInfo);
+                userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
+                userResp.setPermissionName(permissionMenuEntity.getPermission_Name());
+                return new ResponseEntity<>( userResp, HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>( userResp, HttpStatus.NOT_FOUND);
+            }
+
+            
+        }catch (Exception e){
+            userResp.setPermissionName(e.getMessage());
+            return new ResponseEntity<>( userResp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PutMapping
     public ResponseEntity<DefaultControllerResp> updateUser(HttpServletRequest request, @RequestBody UpdateUserDto req) throws Exception{

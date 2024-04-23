@@ -5,6 +5,7 @@ import com.nt.red_sms_api.dto.req.user.ListUserReq;
 import com.nt.red_sms_api.dto.req.user.UpdateUserDto;
 import com.nt.red_sms_api.dto.req.user.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.UserInfoResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.entity.UserEntity;
 import com.nt.red_sms_api.entity.view.user.ListUser;
@@ -39,6 +40,14 @@ public class UserImp implements UserService {
     private ModelMapper modelMapper;
     @Autowired
     private AuthConfig authConfig;
+
+    @Override
+    public UserResp findUserById(Long userID) throws UsernameNotFoundException {
+        UserEntity user = userRepo.findByID(userID);
+        UserResp userResp = userEntityToUserRespDto(user);
+        return userResp;
+    }
+
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepo.findByUsername(username);
@@ -113,6 +122,7 @@ public class UserImp implements UserService {
         UserEntity user = this.modelMapper.map(userReqDto,UserEntity.class);
         return user;
     }
+    
     public UserResp userEntityToUserRespDto(UserEntity user){
         UserResp userRespDto = this.modelMapper.map(user,UserResp.class);
         return userRespDto;

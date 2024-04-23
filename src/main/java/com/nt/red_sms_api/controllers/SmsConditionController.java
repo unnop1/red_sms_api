@@ -69,20 +69,24 @@ public class SmsConditionController {
                 response.setMessage("Success");
                 response.setData(smsDetail);
                 response.setStatusCode(200);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }else{
                 response.setCount(0);
-                response.setMessage("Not Found");
+                response.setMessage("Fail");
                 response.setData(smsDetail);
-                response.setStatusCode(200);
+                response.setStatusCode(400);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         }else{
             response.setCount(0);
-            response.setMessage("Success");
+            response.setRecordsFiltered(0);
+            response.setRecordsTotal(0);
+            response.setMessage("NOT FOUND");
             response.setData(smsDetail);
-            response.setStatusCode(200);
+            response.setStatusCode(400);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-        
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
     @PutMapping

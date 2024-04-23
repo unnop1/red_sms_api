@@ -24,4 +24,5 @@ public class UserResp {
     private String created_by;
     private Timestamp updatedDate;
     private String updated_by;
+    private Long sa_menu_permission_id;
 }

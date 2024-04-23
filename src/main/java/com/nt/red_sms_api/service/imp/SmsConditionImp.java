@@ -97,7 +97,7 @@ public class SmsConditionImp implements SmsConditionService{
 
     @Override
     public ConfigConditionsEntity getSmsConditionMoreDetail(Long smsID) {
-        System.out.println("smsID: " + smsID);
+        // System.out.println("smsID: " + smsID);
         ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
         // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         return existingEntity;

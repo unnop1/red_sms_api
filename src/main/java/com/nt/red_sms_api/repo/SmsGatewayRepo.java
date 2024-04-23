@@ -4,27 +4,128 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
-    @Query(value = "SELECT * FROM sms_gateway WHERE order_type_mainID=?1 AND Is_Status=?2 ORDER BY Created_Date DESC  OFFSET ?3 ROWS FETCH NEXT ?4 ROWS ONLY ", nativeQuery = true)
-    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndIsStatus(Long orderTypeMainID, Integer isStatus,Integer offset, Integer limit);
+    @Query(value = """
+                SELECT * FROM sms_gateway 
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status 
+                AND send_date BETWEEN :start_time AND :end_time 
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatus(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime, 
+        Pageable pageable
+    );
 
-    @Query(value = "SELECT COUNT(*) FROM sms_gateway WHERE order_type_mainID=?1 AND Is_Status=?2 ", nativeQuery = true)
-    public Integer getByOrderTypeAndIsStatusTotalCount(Long orderTypeMainID, Integer isStatus);
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway 
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status 
+                AND ( send_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayByOrderTypeAndStatusTotalCount(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
 
-    @Query(value = "SELECT smsGW.* FROM sms_gateway smsGW LEFT JOIN config_conditions smsCon ON (smsGW.order_type_mainID = smsCon.order_type_mainID) WHERE smsGW.Is_Status = 1 OR smsGW.Is_Status = 3 AND  smsGW.created_date BETWEEN ?1 AND ?2  ORDER BY ?3 OFFSET ?4 ROWS FETCH NEXT ?5 ROWS ONLY "
-                    ,nativeQuery = true
-    )
-    public List<SmsGatewayEntity> findSmsGatewaySendUnSend(Timestamp startTime,
-                                                           Timestamp endTime,
-                                                           String sort,
-                                                           Integer offset, 
-                                                           Integer limit);
 
-    @Query(value = "SELECT COUNT(*) FROM sms_gateway smsGW LEFT JOIN config_conditions smsCon ON (smsGW.order_type_mainID = smsCon.order_type_mainID) WHERE smsGW.Is_Status = 1 OR smsGW.Is_Status = 3 AND  smsGW.created_date BETWEEN ?1 AND ?2 ",nativeQuery = true)
-    public Integer getSendUnSendTotalCount(Timestamp startTime,Timestamp endTime);
+    @Query(value = """
+                SELECT *  FROM sms_gateway
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status
+                AND ( config_conditions_id like %:search% 
+                    OR phonenumber like %:search% 
+                    OR smsmessage like %:search% 
+                )
+                AND ( send_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatusAllSearch(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
 
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway 
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status
+                AND ( config_conditions_id like %:search% 
+                    OR phonenumber like %:search% 
+                    OR smsmessage like %:search% 
+                )
+                AND ( send_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayByOrderTypeAndStatusAllSearchTotalCount(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+
+    @Query(value = """
+                SELECT *  FROM sms_gateway
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status
+                AND ( :search_field like %:search% )
+                AND ( send_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatusSearch(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search_field") String searchField,
+        @Param(value = "search") String search,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway 
+                WHERE order_type_mainID=:order_type_main_id 
+                AND Is_Status=:is_status
+                AND ( :search_field like %:search% )
+                AND ( send_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayByOrderTypeAndStatusSearchTotalCount(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search_field") String searchField,
+        @Param(value = "search") String search,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+
+
+
+    @Query(value = "SELECT * FROM sms_gateway WHERE gid=:gid ",nativeQuery = true)
+    public SmsGatewayEntity GetSmsGatewayInfo(@Param(value = "gid") Long gid);
 }
