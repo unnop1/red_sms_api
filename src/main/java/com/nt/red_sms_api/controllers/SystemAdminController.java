@@ -7,6 +7,7 @@ import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.service.PermissionMenuService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,38 @@ public class SystemAdminController {
 
     @Autowired
     private JwtHelper helper;
+
+    @GetMapping("/permission")
+    public ResponseEntity<DefaultControllerResp> getSaMenuPermission(
+        @RequestParam(name = "permission_id")Long permissionID
+    ){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        try {
+            PermissionMenuEntity sapm = permissionMenuService.getMenuPermission(permissionID);
+            if (sapm != null) {
+                resp.setRecordsFiltered(1);
+                resp.setRecordsTotal(1);
+                resp.setCount(1);
+                resp.setData(sapm);
+                resp.setStatusCode(HttpStatus.OK.value());
+                resp.setMessage("Successfully");
+                return new ResponseEntity<>( resp, HttpStatus.OK);
+            }else{
+                resp.setCount(0);
+                resp.setData(null);
+                resp.setStatusCode(HttpStatus.NOT_FOUND.value());
+                resp.setMessage("Not found");
+                return new ResponseEntity<>( resp, HttpStatus.NOT_FOUND);
+            }
+            
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setData(null);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/permissions")
     public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(
