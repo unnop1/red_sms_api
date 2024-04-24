@@ -14,6 +14,7 @@ import java.lang.reflect.Field;
 
 import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
+import com.nt.red_sms_api.dto.req.permission.UpdateByPermissionReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
@@ -100,30 +101,17 @@ public class PermissionMenuImp implements PermissionMenuService {
     }
 
     @Override
-    public Void updatePermission(Long permissionID, HashMap<String, Object> updateInfo, String updatedBy) {
+    public Void updatePermission(Long permissionID, AddPermissionReq updates, String updatedBy) {
         PermissionMenuEntity existingEntity = permissionMenuRepo.findById(permissionID).orElse(null);
         // If the entity exists
         if (existingEntity != null) {
             Timestamp timeNow = DateTime.getTimeStampNow();
-            // System.out.println("existingEntity ID: " + existingEntity.getId());
-            // Iterate over the entries of the updates map
-            for (Map.Entry<String, Object> entry : updateInfo.entrySet()) {
-                String fieldName = entry.getKey();
-                Object value = entry.getValue();
+            if (updates.getPermissionName() != null ){
+                existingEntity.setPermission_Name(updates.getPermissionName());
+            }
 
-                try {
-                    // Get the field from the entity class
-                    Field field = PermissionMenuEntity.class.getDeclaredField(fieldName);
-                    // Set the accessibility of the field to true if it's not already accessible
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    // Set the value of the field in the entity
-                    field.set(existingEntity, value);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    // Handle any exceptions (e.g., field not found, access violation)
-                    e.printStackTrace();
-                }
+            if (updates.getPermission_json() != null ){
+                existingEntity.setPermission_json(updates.getPermission_json());
             }
 
             existingEntity.setUpdated_Date(timeNow);

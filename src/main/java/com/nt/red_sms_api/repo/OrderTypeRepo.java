@@ -13,4 +13,8 @@ public interface OrderTypeRepo extends JpaRepository<OrderTypeEntity,Long> {
     @SuppressWarnings("null")
     @Query(value = "SELECT * FROM order_type WHERE TYPEID=?1", nativeQuery = true)
     public Optional<OrderTypeEntity> findById(Long orderTypeID);
+
+    @SuppressWarnings("null")
+    @Query(value = "SELECT * FROM order_type WHERE MAINID=?1", nativeQuery = true)
+    public OrderTypeEntity findByMainId(Long orderTypeMainID);
 }

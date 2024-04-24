@@ -1,19 +1,22 @@
 package com.nt.red_sms_api.controllers;
 
-import com.nt.red_sms_api.dto.req.UpdateByIdReq;
+import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
+import com.nt.red_sms_api.dto.req.smscondition.UpdateBySmsConditionReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.service.SmsConditionService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -21,6 +24,10 @@ import java.util.List;
 public class SmsConditionController {
     @Autowired
     private SmsConditionService smsConditionService;
+
+    @Autowired
+    private JwtHelper helper;
+
     @GetMapping
     public ResponseEntity<DefaultControllerResp> getAllSmsConditions(
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -59,7 +66,7 @@ public class SmsConditionController {
 
     @PostMapping("/by_id")
     public ResponseEntity<DefaultControllerResp> GetSmsConditionMoreDetail(@RequestBody SmsConditionMoreDetailReq req) throws Exception{
-        ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req.getSmsID());
+        ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
         DefaultControllerResp response = new DefaultControllerResp();
         if( smsDetail != null){
             if(smsDetail.getConditionsID() != null){ 
@@ -89,19 +96,70 @@ public class SmsConditionController {
 
     }
 
-    @PutMapping
-    public ResponseEntity<DefaultControllerResp> updateSmsConditionById(@RequestBody UpdateByIdReq req) throws Exception{
-        
-        smsConditionService.updateSmsConditionById(req.getUpdateID(), req.getUpdateInfo());
+    @PostMapping("/create")
+    public ResponseEntity<DefaultControllerResp> addSmsCondition(HttpServletRequest request, @RequestBody AddSmsConditionReq  addSmsConditionReq){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
+        try {
+            smsConditionService.addSmsCondition(addSmsConditionReq, vsf.getUsername());
+            resp.setCount(1);
+            resp.setData(addSmsConditionReq);
+            resp.setStatusCode(HttpStatus.OK.value());
+            resp.setMessage("Successfully added");
 
-        DefaultControllerResp response = new DefaultControllerResp();
-        
-        response.setCount(1);
-        response.setMessage("Success");
-        response.setData(req.getUpdateInfo());
-        response.setStatusCode(200);
+            return new ResponseEntity<>( resp, HttpStatus.OK);
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setData(null);
+            resp.setMessage("Error while adding : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+    @PutMapping()
+    public ResponseEntity<DefaultControllerResp> updateSmsCondition(HttpServletRequest request, @RequestBody UpdateBySmsConditionReq  updateReq){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
+        try {
+            smsConditionService.updateSmsConditionById(updateReq.getUpdateID(), updateReq.getUpdateInfo(), vsf.getUsername());
+            resp.setCount(1);
+            resp.setData(updateReq);
+            resp.setStatusCode(HttpStatus.OK.value());
+            resp.setMessage("Successfully updated");
+
+            return new ResponseEntity<>( resp, HttpStatus.OK);
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setData(null);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setMessage("Error while updating : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("by_id")
+    public ResponseEntity<DefaultControllerResp> DeleteSmsCondition(@RequestParam(name = "sms_condition_id") Long smsConditionID){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        try {
+            smsConditionService.removeSmsCondition(smsConditionID);
+            resp.setCount(1);
+            resp.setData(smsConditionID);
+            resp.setStatusCode(HttpStatus.OK.value());
+            resp.setMessage("Successfully deleted");
+
+            return new ResponseEntity<>( resp, HttpStatus.OK);
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setData(null);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setMessage("Error while deleting : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

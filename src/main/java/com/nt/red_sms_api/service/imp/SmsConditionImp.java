@@ -1,10 +1,14 @@
 package com.nt.red_sms_api.service.imp;
 
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
+import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
 import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
+import com.nt.red_sms_api.repo.OrderTypeRepo;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
 import com.nt.red_sms_api.repo.view.smscondition.ListSmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
@@ -25,6 +29,9 @@ public class SmsConditionImp implements SmsConditionService{
 
     @Autowired
     private SmsConditionRepo smsConditionRepo;
+
+    @Autowired
+    private OrderTypeRepo orderTypeRepo;
     
     @Autowired
     private ListSmsConditionRepo listSmsConditionRepo;
@@ -65,41 +72,88 @@ public class SmsConditionImp implements SmsConditionService{
     }
 
     @Override
-    public void updateSmsConditionById(Long smsID, Map<String, Object> updates) {
-        ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
-        System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
+    public ConfigConditionsEntity getSmsConditionMoreDetail(SmsConditionMoreDetailReq req) {
+        // System.out.println("smsID: " + smsID);
+        if (req.getIsEnable() != null){
+            ConfigConditionsEntity existingEntity = smsConditionRepo.findByIdAndEnable(req.getConditionsID(), req.getIsEnable());
+            return existingEntity;
+        }else{
+            ConfigConditionsEntity existingEntity = smsConditionRepo.findSmsConditionByID(req.getConditionsID());
+            return existingEntity;
+        }
+        // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
+        
+    }
+
+    @Override
+    public void addSmsCondition(AddSmsConditionReq req, String createdBy) {
+        Timestamp timeNow = DateTime.getTimeStampNow();
+
+        // Find order type
+        OrderTypeEntity orderType = orderTypeRepo.findByMainId(req.getOrder_type_main_id());
+
+
+        Timestamp dateStart = Timestamp.valueOf(req.getDate_start());
+        Timestamp dateEnd = Timestamp.valueOf(req.getDate_end());
+
+        
+        ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
+        newCondition.setConditions_and(req.getConditions_and());
+        newCondition.setConditions_or(req.getConditions_or());
+        newCondition.setCreated_By(createdBy);
+        newCondition.setCreated_Date(timeNow);
+        newCondition.setDate_Start(dateStart);
+        newCondition.setDate_End(dateEnd);
+        newCondition.setMessage(req.getMessage());
+        newCondition.setOrderType(orderType.getOrderTypeName());
+        newCondition.setRefID(req.getRefID());
+        smsConditionRepo.save(newCondition);
+
+        return;
+    }
+
+    @Override
+    public void removeSmsCondition(Long conditionID) {
+        smsConditionRepo.deleteById(conditionID);
+        return;
+    }
+
+    @Override
+    public void updateSmsConditionById(Long conditionID, AddSmsConditionReq updates, String updatedBy) {
+        ConfigConditionsEntity existingEntity = smsConditionRepo.findById(conditionID).orElse(null);
+        // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         // If the entity exists
         if (existingEntity != null) {
             // Iterate over the entries of the updates map
-            for (Map.Entry<String, Object> entry : updates.entrySet()) {
-                String fieldName = entry.getKey();
-                Object value = entry.getValue();
-
-                try {
-                    // Get the field from the entity class
-                    Field field = ConfigConditionsEntity.class.getDeclaredField(fieldName);
-                    // Set the accessibility of the field to true if it's not already accessible
-                    if (!field.isAccessible()) {
-                        field.setAccessible(true);
-                    }
-                    // Set the value of the field in the entity
-                    field.set(existingEntity, value);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    // Handle any exceptions (e.g., field not found, access violation)
-                    e.printStackTrace();
-                }
+            Timestamp timeNow = DateTime.getTimeStampNow();
+            if (updates.getConditions_and() != null ){
+                existingEntity.setConditions_and(updates.getConditions_and());
             }
+            if (updates.getConditions_or() != null ){
+                existingEntity.setConditions_or(updates.getConditions_or());
+            }
+            if (updates.getDate_end() != null ){
+                Timestamp dateStart = Timestamp.valueOf(updates.getDate_start());
+                existingEntity.setDate_Start(dateStart);
+            }
+            if (updates.getDate_end() != null ){
+                Timestamp dateEnd = Timestamp.valueOf(updates.getDate_end());
+                existingEntity.setDate_End(dateEnd);
+            }
+
+            if (updates.getMessage() != null ){
+                existingEntity.setMessage(updates.getMessage());
+            }
+
+            if (updates.getOrder_type_main_id() != null ){
+                OrderTypeEntity orderType = orderTypeRepo.findByMainId(updates.getOrder_type_main_id());
+                existingEntity.setOrderType(orderType.getOrderTypeName());
+            }
+            existingEntity.setUpdated_By(updatedBy);
+            existingEntity.setUpdated_Date(timeNow);
 
             // Save the updated entity back to the database
             smsConditionRepo.save(existingEntity);
         }
-    }
-
-    @Override
-    public ConfigConditionsEntity getSmsConditionMoreDetail(Long smsID) {
-        // System.out.println("smsID: " + smsID);
-        ConfigConditionsEntity existingEntity = smsConditionRepo.findById(smsID).orElse(null);
-        // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
-        return existingEntity;
     }
 }

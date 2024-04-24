@@ -35,10 +35,10 @@ public class ConfigConditionsEntity {
         private String refID = null;
 
         @Column(name = "date_Start", unique = false,nullable = true)
-        private Timestamp dateStart = null;
+        private Timestamp date_Start = null;
 
         @Column(name = "date_End", unique = false,nullable = true)
-        private Timestamp dateEnd = null;
+        private Timestamp date_End = null;
 
         @Column(name = "message", unique = false,nullable = true)
         private String message = null;
@@ -56,7 +56,7 @@ public class ConfigConditionsEntity {
         private String created_By = null;
 
         @Column(name = "updated_Date", unique = false,nullable = true)
-        private Timestamp updatedDate = null;
+        private Timestamp updated_Date = null;
 
         @Column(name = "updated_By", unique = false,nullable = true)
         private String updated_By = null;

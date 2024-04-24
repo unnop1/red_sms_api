@@ -1,6 +1,4 @@
-package com.nt.red_sms_api.dto.req;
-
-import java.util.HashMap;
+package com.nt.red_sms_api.dto.req.permission;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,10 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateByIdReq {
+public class UpdateByPermissionReq {
     @JsonProperty("update_id")
     private Long updateID;
 
     @JsonProperty("update_info")
-    private HashMap<String, Object> updateInfo;
+    private AddPermissionReq updateInfo;
 }

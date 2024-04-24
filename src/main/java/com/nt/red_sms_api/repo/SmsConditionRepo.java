@@ -12,7 +12,11 @@ public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,L
 
     @SuppressWarnings("null")
     @Query(value = "SELECT * FROM config_conditions WHERE conditions_ID=?1 ", nativeQuery = true)
-    public Optional<ConfigConditionsEntity> findById(Long smsID);
+    public ConfigConditionsEntity findSmsConditionByID(Long smsID);
+
+    @SuppressWarnings("null")
+    @Query(value = "SELECT * FROM config_conditions WHERE conditions_ID=?1 AND is_enable=?2 ", nativeQuery = true)
+    public ConfigConditionsEntity findByIdAndEnable(Long smsID, Integer isEnable);
 
     @SuppressWarnings("null")
     @Query(value = "SELECT * FROM config_conditions OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", nativeQuery = true)

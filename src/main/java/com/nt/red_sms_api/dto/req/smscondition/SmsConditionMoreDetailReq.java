@@ -7,6 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SmsConditionMoreDetailReq {
-    @JsonProperty("smsID")
-    private Long smsID;
+    @JsonProperty("conditions_id")
+    private Long conditionsID;
+
+    @JsonProperty("is_enable")
+    private Integer isEnable=null;
 }
