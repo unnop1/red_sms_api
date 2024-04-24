@@ -15,11 +15,13 @@ import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 
 public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEntity,Long> {
     
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
-                    "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= ?1 OR cf_con.date_start IS NULL) "+
-                    "AND (cf_con.date_end <= ?2 OR cf_con.date_end IS NULL) ",
-                    nativeQuery = true)
+    @Query(value =  """
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete
+                    FROM config_conditions cf_con 
+                    WHERE (cf_con.date_start >= ?1 OR cf_con.date_start IS NULL) 
+                    AND (cf_con.date_end <= ?2 OR cf_con.date_end IS NULL) 
+                    """
+                    ,nativeQuery = true)
     public List<ListSmsCondition> ListSmsCondition(Timestamp startTime,
                                             Timestamp endTime,
                                             Pageable pageable);

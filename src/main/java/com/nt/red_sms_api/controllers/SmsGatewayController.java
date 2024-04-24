@@ -21,6 +21,41 @@ public class SmsGatewayController {
     private SmsGatewayService smsGatewayService;
 
     @GetMapping
+    @RequestMapping("/all_send")
+    public ResponseEntity<DefaultControllerResp> getAllSendSmsGateways(
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String search_field
+    ){
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
+            PaginationDataResp smsGws = smsGatewayService.ListSendSmsGateWays(req);
+            response.setRecordsFiltered(smsGws.getCount());
+            response.setRecordsTotal(smsGws.getCount());
+            response.setCount(smsGws.getCount());
+            response.setMessage("Success");
+            response.setData(smsGws.getData());
+            response.setStatusCode(200);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+    }
+
+    @GetMapping
     @RequestMapping("/by_sending")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysBySending(
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -29,12 +64,14 @@ public class SmsGatewayController {
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
-        @RequestParam(name = "length", defaultValue = "10")Integer length
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ) throws Exception{
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(req);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
@@ -65,12 +102,14 @@ public class SmsGatewayController {
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
-        @RequestParam(name = "length", defaultValue = "10")Integer length
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ) throws Exception{
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayMatchAndUnMatch(req);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
@@ -97,16 +136,19 @@ public class SmsGatewayController {
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByResponseTime(
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
-        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
-        @RequestParam(name = "length", defaultValue = "10")Integer length
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+
     ) throws Exception{
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
@@ -188,5 +230,7 @@ public class SmsGatewayController {
         }
     
     }
+
+
 
 }

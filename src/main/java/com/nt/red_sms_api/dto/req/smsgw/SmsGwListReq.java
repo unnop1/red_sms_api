@@ -33,4 +33,10 @@ public class SmsGwListReq {
     @JsonProperty("length")
     private Integer length=10;
 
+    @JsonProperty("Search")
+    private String search="";
+
+    @JsonProperty("Search_field")
+    private String searchField="";
+
 }

@@ -9,8 +9,9 @@ import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
 public interface SmsGatewayService  {
     public SmsGatewayEntity findSmsGatewayByID(Long id);
+    public PaginationDataResp ListSendSmsGateWays(SmsGwListReq req);
     public PaginationDataResp findSmsGatewayOrderTypeAndStatus(SmsGwOrderTypeStatusReq req);
-    public PaginationDataResp findSmsGatewayMatchAndUnMatch(SmsGwListReq req);
     public PaginationDataResp findSmsGatewaySendAndUnSend(SmsGwListReq req);
+    public PaginationDataResp findSmsGatewayMatchAndUnMatch(SmsGwListReq req);
     public PaginationDataResp findSmsGatewayResponseTime(SmsGwListReq req);
 }
