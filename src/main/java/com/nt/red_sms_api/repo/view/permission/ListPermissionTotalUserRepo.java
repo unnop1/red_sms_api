@@ -21,6 +21,12 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
         Pageable pageable
     );
 
+    @Query(value = "SELECT sa_pm.*, " +
+               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
+               "FROM sa_menu_permission sa_pm ",
+       nativeQuery = true)
+    public List<ListPermissionTotalUser> GetAllWithTotalUser();
+
     @Query(value = "SELECT COUNT(*) FROM sa_menu_permission ",
         nativeQuery = true)
     public Integer getGetAllWithTotalUserTotalCount();

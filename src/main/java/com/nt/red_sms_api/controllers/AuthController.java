@@ -174,6 +174,7 @@ public class AuthController {
             userInfo.setAbout_Me(userDetails.getAbout_me());
             userInfo.setName(userDetails.getName());
             userInfo.setPhoneNumber(userDetails.getPhoneNumber());
+            userInfo.setIs_Enable(userDetails.getIs_Enable());
             userInfo.setEmail(userDetails.getEmail());
             userInfo.setLast_login(userDetails.getLast_login());
             userInfo.setCreated_by(userDetails.getCreated_by());
@@ -181,6 +182,7 @@ public class AuthController {
             userInfo.setIs_Delete_by(userDetails.getIs_Delete_by());
             userInfo.setIs_Delete(userDetails.getIs_Delete());
             userInfo.setUpdated_Date(userDetails.getUpdated_Date());
+            userInfo.setSa_menu_permission_id(userDetails.getSa_menu_permission_id());
             userInfo.setUpdated_by(userDetails.getUpdated_by());
             userResp.setUserLogin(userInfo);
             userResp.setJwtToken(token);
