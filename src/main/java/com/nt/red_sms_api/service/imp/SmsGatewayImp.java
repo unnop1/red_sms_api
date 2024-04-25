@@ -96,8 +96,7 @@ public class SmsGatewayImp implements SmsGatewayService{
         Integer page = offset / limit;
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
-        String search = req.getSearch();
-        String searchField = req.getSearchField();
+        String search = req.getSearch(); // fix search phone number
 
         if ( search.isEmpty()){
             List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
@@ -125,13 +124,10 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch();
-        String searchField = req.getSearchField();
-        // String searchDateField = "send_date";
+        String searchField = req.getSearchField().toLowerCase();
+
         Long orderTypeMainID = req.getOrder_type_main_id();
         Integer isStatus = req.getIsStatus();
-        // if (req.getIsStatus() == 2){
-        //     searchDateField = "receive_date";
-        // }
 
         if ( search.isEmpty()){
             List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayByOrderTypeAndStatus(
@@ -153,37 +149,74 @@ public class SmsGatewayImp implements SmsGatewayService{
             return resp;
         }else {
             if( !req.getSearchField().isEmpty()){
-                // System.out.println("2");
-                List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.findSmsGatewayByOrderTypeAndStatusSearch(
-                    orderTypeMainID,
-                    isStatus,
-                    searchField,
-                    search,
-                    // searchDateField,
-                    startTime,
-                    endTime,
-                    PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
-                );
 
-                Integer count = smsGatewayRepo.getSmsGatewayByOrderTypeAndStatusSearchTotalCount(
-                    orderTypeMainID,
-                    isStatus,
-                    searchField,
-                    search,
-                    // searchDateField,
-                    startTime,
-                    endTime
-                );
-                resp.setCount(count);
-                resp.setData(smsConditionEntities);
-                return resp;
+                if (searchField.equals("phonenumber")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusPhoneFieldSearch(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getOdtStatusPhoneFieldSearchTotalCount(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("smsmessage")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusSmsMsgFieldSearch(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getOdtStatusSmsMsgFieldSearchTotalCount(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("config_conditions_id")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusConfIdFieldSearch(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getOdtStatusConfIdFieldSearchTotalCount(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }
             }
-            // System.out.println("3");
+
             List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.findSmsGatewayByOrderTypeAndStatusAllSearch(
                 orderTypeMainID,
                 isStatus,
                 search,
-                // searchDateField,
                 startTime,
                 endTime,
                 PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
@@ -192,7 +225,6 @@ public class SmsGatewayImp implements SmsGatewayService{
                 orderTypeMainID,
                 isStatus,
                 search,
-                // searchDateField,
                 startTime,
                 endTime
             );
@@ -219,23 +251,35 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch();
-        String searchField = req.getSearchField();
+        String searchField = req.getSearchField().toLowerCase();
 
         if ( search.isEmpty()){
-            // System.out.println("1");
             List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGw(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
             Integer count = listSmsGatewayRepo.getListSendSmsGwTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;
         }else {
-            // System.out.println("2");
             if( !req.getSearchField().isEmpty()){
-                List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGwSearch(startTime, endTime, searchField, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                Integer count = listSmsGatewayRepo.getListSendSmsGwSearchTotalCount(startTime, endTime, searchField, search);
-                resp.setCount(count);
-                resp.setData(smsGws);
-                return resp;
+                if(searchField.equals("smsmessage")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsMsgField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendSmsMsgFieldTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                }if(searchField.equals("config_conditions_id")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendConfIdField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendConfIdFieldTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                }if(searchField.equals("ordertype")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendOrderTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendOrderTypeFieldTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                }
             }
             // System.out.println("3");
             List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGwAllSearch(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));

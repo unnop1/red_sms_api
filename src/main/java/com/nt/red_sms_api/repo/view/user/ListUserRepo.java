@@ -25,43 +25,149 @@ public interface ListUserRepo extends JpaRepository<UserEntity,Long> {
     public Integer getTotalCount();
 
     @Query(value = """
-                    SELECT u.*, sa_pm.*
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
                     FROM user_db u 
                     LEFT JOIN sa_menu_permission sa_pm 
                     ON (u.sa_menu_permission_id = sa_pm.id)
-                    WHERE ( u.username like %:search% OR u.name like %:search% OR u.departmentname like %:search% OR sa_pm.permission_name like %:search% )
+                    WHERE ( u.username like %:search% OR u.email like %:search% OR u.name like %:search% OR u.departmentname like %:search% OR sa_pm.permission_name like %:search% )
                 """,
                  nativeQuery = true)
     public List<ListUser> getListUserAllSearch(@Param(value = "search") String search, Pageable pageable);
 
     @Query(value = """
                     SELECT  COUNT(*) FROM  user_db u
-                    WHERE ( u.username like %:search% OR u.name like %:search% OR u.departmentname like %:search% OR sa_pm.permission_name like %:search% )
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( u.username like %:search% OR u.email like %:search% OR u.name like %:search% OR u.departmentname like %:search% OR sa_pm.permission_name like %:search% )
                     """
                     , nativeQuery = true)
     public Integer getListUserAllSearchTotalCount(@Param(value = "search") String search);
 
+
+    // permission_name
     @Query(value = """
-                    SELECT u.*, sa_pm.*
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
                     FROM user_db u 
                     LEFT JOIN sa_menu_permission sa_pm 
-                    ON (u.sa_menu_permission_id = sa_pm.id)
-                    WHERE ( :search_field like %:search%  )
+                    ON (u.sa_menu_permission_id = sa_pm.id) 
+                    WHERE ( sa_pm.permission_name LIKE %:search% )
                 """,
                  nativeQuery = true)
-    public List<ListUser> getListUserOneSearch(
-        @Param(value = "search_field") String searchField,
-        @Param(value = "search") String search, 
+    public List<ListUser> getListUserSAPMFieldSearch(
+        @Param(value = "search")String search,
         Pageable pageable
     );
 
     @Query(value = """
                     SELECT  COUNT(*) FROM  user_db u
-                    WHERE ( :search_field like %:search%  )
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( sa_pm.permission_name LIKE %:search% )
                     """
                     , nativeQuery = true)
-    public Integer getListUserOneSearchTotalCount(                                                        
-        @Param(value = "search") String search
+    public Integer getListUserSAPMFieldTotalCount(                                          
+        @Param(value = "search")String search
+    );
+
+
+    // username
+    @Query(value = """
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    FROM user_db u 
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id) 
+                    WHERE ( u.username LIKE %:search% )
+                """,
+                 nativeQuery = true)
+    public List<ListUser> getListUserUsernameFieldSearch(
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT  COUNT(*) FROM  user_db u
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( u.username LIKE %:search% )
+                    """
+                    , nativeQuery = true)
+    public Integer getListUserUsernameFieldTotalCount(                                          
+        @Param(value = "search")String search
+    );
+
+    // email
+    @Query(value = """
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    FROM user_db u 
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id) 
+                    WHERE ( u.email LIKE %:search% )
+                """,
+                 nativeQuery = true)
+    public List<ListUser> getListUserEmailFieldSearch(
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT  COUNT(*) FROM  user_db u
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( u.email LIKE %:search% )
+                    """
+                    , nativeQuery = true)
+    public Integer getListUserEmailFieldTotalCount(                                          
+        @Param(value = "search")String search
+    );
+
+    // departmentname
+    @Query(value = """
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    FROM user_db u 
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id) 
+                    WHERE ( u.departmentname LIKE %:search% )
+                """,
+                 nativeQuery = true)
+    public List<ListUser> getListUserdepartmentnameFieldSearch(
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT  COUNT(*) FROM  user_db u
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( u.departmentname LIKE %:search% )
+                    """
+                    , nativeQuery = true)
+    public Integer getListUserdepartmentnameTotalCount(                                          
+        @Param(value = "search")String search
+    );
+
+    // name
+    @Query(value = """
+                    SELECT u.id, u.username as username, u.email as email, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    FROM user_db u 
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id) 
+                    WHERE ( u.name LIKE %:search% )
+                """,
+                 nativeQuery = true)
+    public List<ListUser> getListUserNameFieldSearch(
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT  COUNT(*) FROM  user_db u
+                    LEFT JOIN sa_menu_permission sa_pm 
+                    ON (u.sa_menu_permission_id = sa_pm.id)
+                    WHERE ( u.name LIKE %:search% )
+                    """
+                    , nativeQuery = true)
+    public Integer getListUserNameTotalCount(                                          
+        @Param(value = "search")String search
     );
 
 }

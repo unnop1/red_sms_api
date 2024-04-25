@@ -44,7 +44,7 @@ public class UserController {
         @RequestParam(name = "Search_field", defaultValue = "")String search_field
     ){
         DefaultControllerResp response = new DefaultControllerResp();
-        try{
+        // try{
             ListUserReq req = new ListUserReq(draw, sortBy, sortName, start, length, search, search_field);
             PaginationDataResp smsGateways = userService.getAllUser(req);
             response.setRecordsFiltered(smsGateways.getCount());
@@ -57,13 +57,13 @@ public class UserController {
             // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
             // String json = ow.writeValueAsString(receiveSmsPayload);
             return new ResponseEntity<>( response, HttpStatus.OK);
-        }catch (Exception e){
-            response.setCount(0);
-            response.setData(null);
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setMessage("Error while getting : " + e.getMessage());
-            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // }catch (Exception e){
+        //     response.setCount(0);
+        //     response.setData(null);
+        //     response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        //     response.setMessage("Error while getting : " + e.getMessage());
+        //     return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
     }
 
     @GetMapping("/info")

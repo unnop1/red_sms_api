@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.nt.red_sms_api.Util.DateTime;
@@ -63,33 +64,62 @@ public class UserImp implements UserService {
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch();
-        String searchField = req.getSearchField();
-        
+        String searchField = req.getSearchField().toLowerCase();
+        if (sortName.toLowerCase().equals("permission_name")){
+            sortName = "sa_pm.permission_name";
+        }
+
+        JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), sortName);
 
         if ( search.isEmpty()){
-            List<ListUser> userResponseDtoList = listUserRepo.getAllUser(PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            List<ListUser> userResponseDtoList = listUserRepo.getAllUser(PageRequest.of(page, limit, sort));
             Integer count = listUserRepo.getTotalCount();
             resp.setData(userResponseDtoList);
             resp.setCount(count);
             return resp;
         }else {
+            
             if( !req.getSearchField().isEmpty()){
-                List<ListUser> smsConditionEntities = listUserRepo.getListUserAllSearch(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+                if (searchField.equals("permission_name")){
+                    List<ListUser> userResponseDtoList = listUserRepo.getListUserSAPMFieldSearch(search, PageRequest.of(page, limit, sort));
+                    Integer count = listUserRepo.getListUserSAPMFieldTotalCount(search);
+                    resp.setCount(count);
+                    resp.setData(userResponseDtoList);
+                    return resp;
+                }else if (searchField.equals("username")){
+                    List<ListUser> userResponseDtoList = listUserRepo.getListUserUsernameFieldSearch(search, PageRequest.of(page, limit, sort));
+                    Integer count = listUserRepo.getListUserUsernameFieldTotalCount(search);
+                    resp.setCount(count);
+                    resp.setData(userResponseDtoList);
+                    return resp;
+                }else if (searchField.equals("name")){
+                    List<ListUser> userResponseDtoList = listUserRepo.getListUserNameFieldSearch(search, PageRequest.of(page, limit, sort));
+                    Integer count = listUserRepo.getListUserNameTotalCount(search);
+                    resp.setCount(count);
+                    resp.setData(userResponseDtoList);
+                    return resp;
+                }else if (searchField.equals("email")){
+                    List<ListUser> userResponseDtoList = listUserRepo.getListUserEmailFieldSearch(search, PageRequest.of(page, limit, sort));
+                    Integer count = listUserRepo.getListUserEmailFieldTotalCount(search);
+                    resp.setCount(count);
+                    resp.setData(userResponseDtoList);
+                    return resp;
+                }else if (searchField.equals("departmentname")){
+                    List<ListUser> userResponseDtoList = listUserRepo.getListUserdepartmentnameFieldSearch(search, PageRequest.of(page, limit, sort));
+                    Integer count = listUserRepo.getListUserdepartmentnameTotalCount(search);
+                    resp.setCount(count);
+                    resp.setData(userResponseDtoList);
+                    return resp;
+                }
+
+                
+            }
+            System.out.println("all");
+            List<ListUser> userResponseDtoList = listUserRepo.getListUserAllSearch(search, PageRequest.of(page, limit, sort));
                 Integer count = listUserRepo.getListUserAllSearchTotalCount(search);
                 resp.setCount(count);
-                resp.setData(smsConditionEntities);
+                resp.setData(userResponseDtoList);
                 return resp;
-            }
-
-            List<ListUser> smsConditionEntities = listUserRepo.getListUserOneSearch(searchField, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
-            
-            if (searchField.equals("permission_name")){
-                searchField = "sa_pm.permission_name";
-            }
-            Integer count = listUserRepo.getListUserOneSearchTotalCount(search);
-            resp.setCount(count);
-            resp.setData(smsConditionEntities);
-            return resp;
         }
 
 

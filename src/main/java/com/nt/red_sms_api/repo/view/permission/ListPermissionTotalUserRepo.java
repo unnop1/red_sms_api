@@ -35,10 +35,12 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
         Pageable pageable
     );
 
-    @Query(value = "SELECT COUNT(*) FROM sa_menu_permission "+
+    @Query(value = "SELECT COUNT(*) FROM sa_menu_permission sa_pm"+
                     "WHERE sa_pm.permission_name like %:search% ",
         nativeQuery = true)
-    public Integer getGetAllWithTotalUserAllLikeTotalCount(String search);
+    public Integer getGetAllWithTotalUserAllLikeTotalCount(
+        @Param(value = "search")String search
+    );
 
 
     @Query(value = "SELECT sa_pm.*, " +

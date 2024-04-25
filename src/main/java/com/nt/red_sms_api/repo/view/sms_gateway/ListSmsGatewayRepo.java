@@ -66,17 +66,17 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
         @Param(value = "search")String search
     );
 
+    // smsmessage
     @Query(value =  """
                     SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
                     FROM sms_gateway smsgw 
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( :search_field like %:search% ) 
+                    AND ( smsmessage like %:search% ) 
                     """
                     ,nativeQuery = true)
-    public List<ListSmsGateway> ListSendSmsGwSearch(
+    public List<ListSmsGateway> ListSendSmsMsgField(
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
-        @Param(value = "search_field")String searchField,
         @Param(value = "search")String search,
         Pageable pageable
     );
@@ -85,13 +85,69 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( :search_field like %:search% ) 
+                    AND ( smsmessage like %:search% ) 
                     """
                     ,nativeQuery = true)
-    public Integer getListSendSmsGwSearchTotalCount(
+    public Integer getListSendSmsMsgFieldTotalCount(
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,  
-        @Param(value = "search_field")String searchField,
+        @Param(value = "search")String search
+    );
+
+    // config_conditions_id
+    @Query(value =  """
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    FROM sms_gateway smsgw 
+                    WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
+                    AND ( config_conditions_id like %:search% ) 
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsGateway> ListSendConfIdField(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT COUNT(*) 
+                    FROM sms_gateway smsgw 
+                    WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
+                    AND ( config_conditions_id like %:search% ) 
+                    """
+                    ,nativeQuery = true)
+    public Integer getListSendConfIdFieldTotalCount(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,  
+        @Param(value = "search")String search
+    );
+
+
+    // ordertype
+    @Query(value =  """
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    FROM sms_gateway smsgw 
+                    WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
+                    AND ( ordertype like %:search% ) 
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsGateway> ListSendOrderTypeField(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                    SELECT COUNT(*) 
+                    FROM sms_gateway smsgw 
+                    WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
+                    AND ( ordertype like %:search% ) 
+                    """
+                    ,nativeQuery = true)
+    public Integer getListSendOrderTypeFieldTotalCount(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,  
         @Param(value = "search")String search
     );
 
