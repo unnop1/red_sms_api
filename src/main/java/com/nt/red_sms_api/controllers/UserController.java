@@ -91,7 +91,6 @@ public class UserController {
         }
     }
 
-
     @PutMapping
     public ResponseEntity<DefaultControllerResp> updateUser(HttpServletRequest request, @RequestBody UpdateUserDto req) throws Exception{
         
@@ -105,7 +104,7 @@ public class UserController {
             
             response.setCount(1);
             response.setMessage("Success");
-            // response.setData(req.getUpdateInfo());
+            response.setData(req);
             
             response.setStatusCode(200);
 
@@ -117,4 +116,23 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("by_id")
+    public ResponseEntity<DefaultControllerResp> DeleteUser(@RequestParam(name = "user_id") Long userID){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        try {
+            userService.removeUser(userID);
+            resp.setCount(1);
+            resp.setData(userID);
+            resp.setStatusCode(HttpStatus.OK.value());
+            resp.setMessage("Successfully deleted");
+
+            return new ResponseEntity<>( resp, HttpStatus.OK);
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setData(null);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setMessage("Error while deleting : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

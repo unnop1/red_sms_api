@@ -125,7 +125,7 @@ public class AuthController {
 
         // User
         userInfo.setId(userDetails.getId());
-        userInfo.setAboutMe(userDetails.getAbout_me());
+        userInfo.setAbout_Me(userDetails.getAbout_me());
         userInfo.setName(userDetails.getName());
         userInfo.setUsername(userDetails.getUsername());
         userInfo.setPhoneNumber(userDetails.getPhoneNumber());
@@ -133,10 +133,11 @@ public class AuthController {
         userInfo.setLast_login(userDetails.getLast_login());
         userInfo.setLast_login_ipaddress(ipAddress);
         userInfo.setCreated_by(userDetails.getCreated_by());
-        userInfo.setCreatedDate(userDetails.getCreated_Date());
-        userInfo.setIsDelete_by(userDetails.getIs_Delete_by());
-        userInfo.setIsDelete(userDetails.getIs_Delete());
-        userInfo.setUpdatedDate(userDetails.getUpdated_Date());
+        userInfo.setCreated_Date(userDetails.getCreated_Date());
+        userInfo.setIs_Enable(userDetails.getIs_Enable());
+        userInfo.setIs_Delete_by(userDetails.getIs_Delete_by());
+        userInfo.setIs_Delete(userDetails.getIs_Delete());
+        userInfo.setUpdated_Date(userDetails.getUpdated_Date());
         userInfo.setUpdated_by(userDetails.getUpdated_by());
         userResp.setUserLogin(userInfo);
         userResp.setJwtToken(token);
@@ -170,16 +171,16 @@ public class AuthController {
 
             // User
             userInfo.setId(userDetails.getId());
-            userInfo.setAboutMe(userDetails.getAbout_me());
+            userInfo.setAbout_Me(userDetails.getAbout_me());
             userInfo.setName(userDetails.getName());
             userInfo.setPhoneNumber(userDetails.getPhoneNumber());
             userInfo.setEmail(userDetails.getEmail());
             userInfo.setLast_login(userDetails.getLast_login());
             userInfo.setCreated_by(userDetails.getCreated_by());
-            userInfo.setCreatedDate(userDetails.getCreated_Date());
-            userInfo.setIsDelete_by(userDetails.getIs_Delete_by());
-            userInfo.setIsDelete(userDetails.getIs_Delete());
-            userInfo.setUpdatedDate(userDetails.getUpdated_Date());
+            userInfo.setCreated_Date(userDetails.getCreated_Date());
+            userInfo.setIs_Delete_by(userDetails.getIs_Delete_by());
+            userInfo.setIs_Delete(userDetails.getIs_Delete());
+            userInfo.setUpdated_Date(userDetails.getUpdated_Date());
             userInfo.setUpdated_by(userDetails.getUpdated_by());
             userResp.setUserLogin(userInfo);
             userResp.setJwtToken(token);

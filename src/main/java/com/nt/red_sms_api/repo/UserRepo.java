@@ -30,7 +30,7 @@ public interface UserRepo extends JpaRepository<UserEntity,Long> {
     public UserEntity loadByUniqueUser(String email, String username);
 
     @SuppressWarnings("null")
-    @Query(value = "SELECT * FROM user_db WHERE email=?1 OR username=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM user_db WHERE email=?1 OR username=?1 AND is_enable=1", nativeQuery = true)
     public UserEntity findLoginUser(String username);
 
 }

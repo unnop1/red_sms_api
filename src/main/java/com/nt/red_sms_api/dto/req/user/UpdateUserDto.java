@@ -20,15 +20,18 @@ public class UpdateUserDto {
         @JsonProperty("email")
         private String email="";
 
-        @JsonProperty("phone_number")
+        @JsonProperty("is_enable")
+        private Integer is_enable=null;
+
+        @JsonProperty("phonenumber")
         private String phonenumber="";
 
         @JsonProperty("password")
         private String password="";
 
-        @JsonProperty("department_name")
+        @JsonProperty("departmentname")
         private String departmentName="";
 
-        @JsonProperty("permission_id")
+        @JsonProperty("sa_menu_permission_id")
         private Long permissionID=null;
 }

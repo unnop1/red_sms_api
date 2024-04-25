@@ -177,6 +177,9 @@ public class UserImp implements UserService {
             if (!req.getEmail().isEmpty()){
                 foundUser.setEmail(req.getEmail());
             }
+            if (req.getIs_enable() != null){
+                foundUser.setIs_Enable(req.getIs_enable());
+            }
             if (!req.getPassword().isEmpty()){
                 foundUser.setPassword(authConfig.passwordEncoder().encode(req.getPassword()));
             }
@@ -194,6 +197,12 @@ public class UserImp implements UserService {
 
         return;
         
+    }
+
+    @Override
+    public Void removeUser(Long userID) {
+        userRepo.deleteById(userID);
+        return null;
     }
     
 }

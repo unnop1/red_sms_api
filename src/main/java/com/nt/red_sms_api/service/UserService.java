@@ -19,6 +19,7 @@ public interface UserService extends UserDetailsService {
     public UserResp createUser(UserRequestDto userRequestDto, String createdBy);
     void updateUser(UpdateUserDto updateUser, String updatedBy);
     void updateUserLogLogin(Long userID, HashMap<String, Object> updates);
+    Void removeUser(Long userID);
     // UserEnitiy loadUserByEmail(String email) throws UsernameNotFoundException;
     UserEntity loadUserByUsername(String username) throws UsernameNotFoundException;
     UserEntity findUserLogin(String username) throws UsernameNotFoundException;

@@ -48,6 +48,9 @@ public class UserEntity implements UserDetails {
         @Column(name = "last_login_ipaddress", unique = false,nullable = true)
         private String last_login_ipaddress=null;
 
+        @Column(name = "is_Enable", unique = false,nullable = true)
+        private Integer is_Enable=1;
+
         @Column(name = "is_Delete", unique = false,nullable = true)
         private Integer is_Delete=0;
 
