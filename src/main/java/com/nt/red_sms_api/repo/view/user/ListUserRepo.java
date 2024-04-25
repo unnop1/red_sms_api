@@ -13,7 +13,7 @@ import com.nt.red_sms_api.entity.view.user.ListUser;
 public interface ListUserRepo extends JpaRepository<UserEntity,Long> {
     
     @Query(value = """
-                    SELECT u.id, u.username as username, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    SELECT u.id, u.username as username, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
                     FROM user_db u 
                     LEFT JOIN sa_menu_permission sa_pm 
                     ON (u.sa_menu_permission_id = sa_pm.id) 
@@ -25,7 +25,7 @@ public interface ListUserRepo extends JpaRepository<UserEntity,Long> {
     public Integer getTotalCount();
 
     @Query(value = """
-                    SELECT u.id, u.username as username, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    SELECT u.id, u.username as username, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
                     FROM user_db u 
                     LEFT JOIN sa_menu_permission sa_pm 
                     ON (u.sa_menu_permission_id = sa_pm.id)
@@ -42,7 +42,7 @@ public interface ListUserRepo extends JpaRepository<UserEntity,Long> {
     public Integer getListUserAllSearchTotalCount(@Param(value = "search") String search);
 
     @Query(value = """
-                    SELECT u.id, u.username as username, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
+                    SELECT u.id, u.username as username, u.is_enable as is_enable, u.name as name , u.departmentname as departmentname, u.created_date as created_date, u.last_login as last_login, sa_pm.permission_name as permission_name
                     FROM user_db u 
                     LEFT JOIN sa_menu_permission sa_pm 
                     ON (u.sa_menu_permission_id = sa_pm.id)
