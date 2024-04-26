@@ -170,14 +170,25 @@ public class SmsGatewayController {
     }
 
 
-    @PostMapping
+    @GetMapping
     @RequestMapping("/order_type_with_status")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysOrderTypeAndStatus(
-        @RequestBody SmsGwOrderTypeStatusReq req
+        @RequestParam(name = "order_type_main_id")Long orderTypeMainID,
+        @RequestParam(name = "is_status")Integer isStatus,
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ) throws Exception{
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
+            SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq();
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());

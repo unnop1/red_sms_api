@@ -1,23 +1,15 @@
 package com.nt.red_sms_api.service.imp;
 
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import java.lang.reflect.Field;
-
 import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
-import com.nt.red_sms_api.dto.req.permission.UpdateByPermissionReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
-import com.nt.red_sms_api.entity.UserEntity;
 import com.nt.red_sms_api.entity.view.permission.ListPermissionTotalUser;
 import com.nt.red_sms_api.repo.PermissionMenuRepo;
 import com.nt.red_sms_api.repo.UserRepo;
