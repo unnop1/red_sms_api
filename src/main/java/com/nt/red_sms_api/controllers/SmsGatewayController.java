@@ -188,8 +188,9 @@ public class SmsGatewayController {
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq();
+            SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq(orderTypeMainID,isStatus,sortBy,sortName,startTime, endTime,start,length,search,searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
@@ -201,6 +202,7 @@ public class SmsGatewayController {
             // String json = ow.writeValueAsString(receiveSmsPayload);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
