@@ -16,6 +16,15 @@ public class VerifyAuthResp {
     @JsonProperty("email")
     private String email=null;
 
+    @JsonProperty("device")
+    private String device=null;
+
+    @JsonProperty("browser")
+    private String browser=null;
+
+    @JsonProperty("system")
+    private String system=null;
+
     @JsonProperty("userInfo")
     private UserEntity userInfo=null;
 

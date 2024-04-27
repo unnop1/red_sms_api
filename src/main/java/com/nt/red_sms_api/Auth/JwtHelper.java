@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import com.nt.red_sms_api.dto.req.auth.JwtRequest;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.UserEntity;
 import com.nt.red_sms_api.service.UserService;
@@ -55,6 +56,9 @@ public class JwtHelper {
                 String token = bearerToken.substring(7);
                 String emailClaim = getClaimFromToken(token, claims -> (String) claims.get("email"));
                 String usernameClaim = getClaimFromToken(token, claims -> (String) claims.get("username"));
+                String deviceClaim = getClaimFromToken(token, claims -> (String) claims.get("device"));
+                String browserClaim = getClaimFromToken(token, claims -> (String) claims.get("browser"));
+                String systemClaim = getClaimFromToken(token, claims -> (String) claims.get("system"));
                 System.out.println("emailClaim:"+emailClaim);
                 System.out.println("usernameClaim:"+usernameClaim);
                 UserEntity userDetails = userService.loadUserByUsername(usernameClaim);
@@ -62,6 +66,9 @@ public class JwtHelper {
                     vrf.setEmail(emailClaim);
                     vrf.setUsername(usernameClaim);
                     vrf.setUserInfo(userDetails);
+                    vrf.setDevice(deviceClaim);
+                    vrf.setBrowser(browserClaim);
+                    vrf.setSystem(systemClaim);
                 }
             }else{
                 vrf.setError(bearerToken);
@@ -80,11 +87,14 @@ public class JwtHelper {
     }
 
     // Generate token for user
-    public String generateToken(UserEntity userDetails) {
+    public String generateToken(JwtRequest req, String email) {
         Map<String, Object> claims = new HashMap<>();                           // geenrate token
-        claims.put("email",  userDetails.getEmail());
-        claims.put("username",  userDetails.getUsername());
-        return doGenerateToken(claims, userDetails.getUsername());
+        claims.put("email",  email);
+        claims.put("username",  req.getUsername());
+        claims.put("device", req.getDevice());
+        claims.put("browser", req.getBrowser());
+        claims.put("system", req.getSystem());
+        return doGenerateToken(claims, req.getUsername());
     }
 
     // While creating the token -

@@ -1,7 +1,15 @@
 package com.nt.red_sms_api.controllers;
 
+import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.AuditLogEntity;
+import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.OrderTypeService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +22,33 @@ import org.springframework.web.bind.annotation.*;
 public class OrderTypeController {
     @Autowired
     private OrderTypeService orderTypeService;
+
+    @Autowired
+    private JwtHelper helper;
+
+    @Autowired
+    private AuditService auditService;
+
     @GetMapping
-    public ResponseEntity<PaginationDataResp> getAllSmsConditions(@RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
+    public ResponseEntity<PaginationDataResp> getAllOrderTypes(HttpServletRequest request, @RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
+        
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAction("get");
+        auditLog.setAuditable("order_type");
+        auditLog.setUsername(vsf.getUsername());
+        auditLog.setBrowser(vsf.getBrowser());
+        auditLog.setDevice(vsf.getDevice());
+        auditLog.setOperating_system(vsf.getSystem());
+        auditLog.setIp_address(ipAddress);
+        auditLog.setComment("getAllOrderTypes");
+        auditLog.setCreated_date(DateTime.getTimeStampNow());
+        auditService.AddAuditLog(auditLog);
+        
         return new ResponseEntity<>( orderTypeService.ListAllOrderType(page, limit), HttpStatus.OK);
     }
     

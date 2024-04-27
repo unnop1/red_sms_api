@@ -1,13 +1,17 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.permission.AddPermissionReq;
 import com.nt.red_sms_api.dto.req.permission.PermissionListReq;
 import com.nt.red_sms_api.dto.req.permission.UpdateByPermissionReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.PermissionMenuService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,13 +31,34 @@ public class SystemAdminController {
     @Autowired
     private JwtHelper helper;
 
+    @Autowired
+    private AuditService auditService;
+
     @GetMapping("/permission")
     public ResponseEntity<DefaultControllerResp> getSaMenuPermission(
+        HttpServletRequest request,
         @RequestParam(name = "permission_id")Long permissionID
     ){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
             PermissionMenuEntity sapm = permissionMenuService.getMenuPermission(permissionID);
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("get");
+            auditLog.setAuditable_id(permissionID);
+            auditLog.setAuditable("sa_menu_permission");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("getSaMenuPermission");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
             if (sapm != null) {
                 resp.setRecordsFiltered(1);
                 resp.setRecordsTotal(1);
@@ -61,6 +86,7 @@ public class SystemAdminController {
 
     @GetMapping("/permissions")
     public ResponseEntity<DefaultControllerResp> getAllSaMenuPermission(
+        HttpServletRequest request,
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
@@ -69,11 +95,28 @@ public class SystemAdminController {
         @RequestParam(name = "Search", defaultValue = "")String search,
         @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        
         DefaultControllerResp resp = new DefaultControllerResp();
         System.out.println("sortBy:" + sortBy);
         try {
             PermissionListReq req = new PermissionListReq(draw, sortBy, sortName, start, length, search, searchField);
             PaginationDataResp listSaMnPm = permissionMenuService.ListMenuPermission(req);
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("get");
+            auditLog.setAuditable("sa_menu_permission");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("getAllSaMenuPermission");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setRecordsFiltered(listSaMnPm.getCount());
             resp.setRecordsTotal(listSaMnPm.getCount());
             resp.setCount(listSaMnPm.getCount());
@@ -95,11 +138,27 @@ public class SystemAdminController {
     @PostMapping("/permission")
     public ResponseEntity<DefaultControllerResp> addSaMenuPermission(HttpServletRequest request, @RequestBody AddPermissionReq  addPermissionReq){
         DefaultControllerResp resp = new DefaultControllerResp();
+        String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
             
-        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        
         try {
-            permissionMenuService.addSaMenuPermission(addPermissionReq, vsf.getUsername());
+            Long createdlastID = permissionMenuService.addSaMenuPermission(addPermissionReq, vsf.getUsername());
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("create");
+            auditLog.setAuditable_id(createdlastID+1);
+            auditLog.setAuditable("sa_menu_permission");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("addSaMenuPermission");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setCount(1);
             resp.setData(addPermissionReq);
             resp.setStatusCode(HttpStatus.OK.value());
@@ -118,11 +177,27 @@ public class SystemAdminController {
     @PutMapping("/permission")
     public ResponseEntity<DefaultControllerResp> updateSaMenuPermission(HttpServletRequest request, @RequestBody UpdateByPermissionReq  updateReq){
         DefaultControllerResp resp = new DefaultControllerResp();
+        String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
             
-        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        
         try {
             permissionMenuService.updatePermission(updateReq.getUpdateID(), updateReq.getUpdateInfo(), vsf.getUsername());
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("update");
+            auditLog.setAuditable_id(updateReq.getUpdateID());
+            auditLog.setAuditable("sa_menu_permission");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("updateSaMenuPermission");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setCount(1);
             resp.setData(updateReq);
             resp.setStatusCode(HttpStatus.OK.value());
@@ -139,10 +214,29 @@ public class SystemAdminController {
     }
 
     @DeleteMapping("/permission")
-    public ResponseEntity<DefaultControllerResp> DeleteSaMenuPermission(@RequestParam(name = "permission_id") Long permissionID){
+    public ResponseEntity<DefaultControllerResp> DeleteSaMenuPermission(HttpServletRequest request, @RequestParam(name = "permission_id") Long permissionID){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
             permissionMenuService.removePermission(permissionID);
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("delete");
+            auditLog.setAuditable_id(permissionID);
+            auditLog.setAuditable("sa_menu_permission");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("DeleteSaMenuPermission");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setCount(1);
             resp.setData(permissionID);
             resp.setStatusCode(HttpStatus.OK.value());

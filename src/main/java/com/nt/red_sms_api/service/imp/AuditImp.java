@@ -1,14 +1,17 @@
 package com.nt.red_sms_api.service.imp;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.audit.ListAuditReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
-import com.nt.red_sms_api.entity.AuditEntity;
+import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.repo.AuditRepo;
 import com.nt.red_sms_api.service.AuditService;
 
@@ -34,10 +37,28 @@ public class AuditImp implements AuditService {
         Sort sort = Sort.by(Sort.Direction.fromString(sortBy), orderList);
             // Sort.Direction.fromString(sortBy), sortName );
 
-        List<AuditEntity> resp = auditRepo.findAll(sort);
+        List<AuditLogEntity> resp = auditRepo.findAll(sort);
         pageResp.setCount(resp.size());
         pageResp.setData(resp);
         return pageResp;
+    }
+
+    @Override
+    public void AddAuditLog(AuditLog req) {
+        System.out.println(req.toString());
+        AuditLogEntity auditEntity = new AuditLogEntity();
+        auditEntity.setAction(req.getAction());
+        auditEntity.setAuditable(req.getAuditable());
+        auditEntity.setUsername(req.getUsername());
+        auditEntity.setBrowser(req.getBrowser());
+        auditEntity.setDevice(req.getDevice());
+        auditEntity.setIp_address(req.getIp_address());
+        auditEntity.setOperating_system(req.getOperating_system());
+        auditEntity.setAuditable_id(req.getAuditable_id());
+        auditEntity.setComment(req.getComment());
+        auditEntity.setCreated_date(req.getCreated_date());
+        auditRepo.save(auditEntity);
+        return;
     }
 
     

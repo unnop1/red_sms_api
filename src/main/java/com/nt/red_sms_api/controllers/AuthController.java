@@ -1,6 +1,8 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.auth.JwtRequest;
 import com.nt.red_sms_api.dto.req.user.UserRequestDto;
 import com.nt.red_sms_api.dto.resp.AuthSuccessResp;
@@ -8,10 +10,13 @@ import com.nt.red_sms_api.dto.resp.JwtErrorResp;
 import com.nt.red_sms_api.dto.resp.LoginResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.AuditLogEntity;
+import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.LogLoginEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
 import com.nt.red_sms_api.exp.UserAlreadyExistsException;
+import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.LogLoginService;
 import com.nt.red_sms_api.service.PermissionMenuService;
 import com.nt.red_sms_api.service.UserService;
@@ -48,6 +53,8 @@ public class AuthController {
     @Autowired
     private JwtHelper helper;
 
+    @Autowired
+    private AuditService auditService;
 
     @Autowired
     private UserService userService;
@@ -62,16 +69,32 @@ public class AuthController {
     @PostMapping("/create")
     public ResponseEntity<AuthSuccessResp> createUser(HttpServletRequest request, @RequestBody UserRequestDto userRequestDto) {
         String requestHeader = request.getHeader("Authorization");
-            
+        String ipAddress = request.getRemoteAddr();
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
             UserResp userResponseDto = userService.createUser(userRequestDto, vsf.getUsername());
             UserEntity userDetails = userService.loadUserByUsername(userResponseDto.getUsername());
-            System.out.println("from db info");
-            System.out.println(userDetails.getUsername());
-            System.out.println(userDetails.getPassword());
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("create");
+            auditLog.setAuditable("user_db");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setAuditable_id(userDetails.getId());
+            auditLog.setComment("createUser");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
 
-            String token = this.helper.generateToken(userDetails);
+            JwtRequest jwtReq = new JwtRequest();
+            jwtReq.setUsername(vsf.getUsername());
+            jwtReq.setBrowser(vsf.getBrowser());
+            jwtReq.setDevice(vsf.getDevice());
+            jwtReq.setSystem(vsf.getSystem());
+
+            String token = this.helper.generateToken(jwtReq, userDetails.getEmail());
             return new ResponseEntity<>(new AuthSuccessResp(token), HttpStatus.CREATED);
         } catch (UserAlreadyExistsException ex) {
             // Handle the exception and return an appropriate response
@@ -110,7 +133,7 @@ public class AuthController {
         
         System.out.println("getEmail:"+userDetails.getEmail());
         System.out.println("getUsername:"+userDetails.getUsername());
-        String token = this.helper.generateToken(userDetails);
+        String token = this.helper.generateToken(jwtRequest, userDetails.getEmail());
 
         HashMap<String, Object> updateInfo = new HashMap<String, Object>();
         updateInfo.put("currentToken", token);
@@ -148,6 +171,18 @@ public class AuthController {
         userResp.setPermissionName(permissionMenuEntity.getPermission_Name());
 
         // System.out.println("token:"+token);
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAction("login");
+        auditLog.setAuditable_id(userDetails.getId());
+        auditLog.setAuditable("user_db");
+        auditLog.setIp_address(ipAddress);
+        auditLog.setUsername(userDetails.getUsername());
+        auditLog.setDevice(jwtRequest.getDevice());
+        auditLog.setBrowser(jwtRequest.getBrowser());
+        auditLog.setOperating_system(jwtRequest.getSystem());
+        auditLog.setComment("authentication login");
+        auditLog.setCreated_date(DateTime.getTimeStampNow());
+        auditService.AddAuditLog(auditLog);
 
         return new ResponseEntity<>(userResp, HttpStatus.OK);
     }

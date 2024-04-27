@@ -12,7 +12,7 @@ import com.nt.red_sms_api.entity.PermissionMenuEntity;
 public interface PermissionMenuService {
     PaginationDataResp ListMenuPermission(PermissionListReq req);
     PermissionMenuEntity getMenuPermission(Long permissionID);
-    Void addSaMenuPermission(AddPermissionReq req, String createdBy);
+    Long addSaMenuPermission(AddPermissionReq req, String createdBy);
     Void updatePermission(Long permissionID, AddPermissionReq updateInfo, String updatedBy);
     Void removePermission(Long permissionID);
 }

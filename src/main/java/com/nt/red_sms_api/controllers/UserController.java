@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.user.ListUserReq;
 import com.nt.red_sms_api.dto.req.user.UpdateUserDto;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
@@ -9,7 +10,9 @@ import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.UserInfoResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.PermissionMenuService;
 import com.nt.red_sms_api.service.UserService;
 
@@ -33,8 +36,12 @@ public class UserController {
     @Autowired
     private JwtHelper helper;
 
+    @Autowired
+    private AuditService auditService;
+
     @GetMapping("/list")
     public ResponseEntity<DefaultControllerResp> getAllUser(
+        HttpServletRequest request,
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
@@ -43,10 +50,27 @@ public class UserController {
         @RequestParam(name = "Search", defaultValue = "")String search,
         @RequestParam(name = "Search_field", defaultValue = "")String search_field
     ){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+       
         DefaultControllerResp response = new DefaultControllerResp();
-        // try{
+        try{
             ListUserReq req = new ListUserReq(draw, sortBy, sortName, start, length, search, search_field);
             PaginationDataResp smsGateways = userService.getAllUser(req);
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("get");
+            auditLog.setAuditable("user_db");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("getAllUser");
+            auditService.AddAuditLog(auditLog);
+            
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
@@ -54,25 +78,41 @@ public class UserController {
             response.setData(smsGateways.getData());
             response.setStatusCode(200);
 
-            // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            // String json = ow.writeValueAsString(receiveSmsPayload);
             return new ResponseEntity<>( response, HttpStatus.OK);
-        // }catch (Exception e){
-        //     response.setCount(0);
-        //     response.setData(null);
-        //     response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        //     response.setMessage("Error while getting : " + e.getMessage());
-        //     return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
-        // }
+        }catch (Exception e){
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/info")
     public ResponseEntity<UserInfoResp> getUserInfo(
+        HttpServletRequest request,
         @RequestParam(name = "user_id")Long userId
     ){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+       
         UserInfoResp userResp = new UserInfoResp();
         try{
             UserResp userInfo = userService.findUserById(userId);
+
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("get");
+            auditLog.setAuditable_id(userId);
+            auditLog.setAuditable("user_db");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("getUserInfo");
+            auditService.AddAuditLog(auditLog);
 
             if (userInfo != null){
                 PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userInfo.getSa_menu_permission_id());
@@ -94,6 +134,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<DefaultControllerResp> updateUser(HttpServletRequest request, @RequestBody UpdateUserDto req) throws Exception{
         
+        String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
@@ -102,6 +143,18 @@ public class UserController {
         try{
             userService.updateUser(req, vsf.getUsername());
             
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("update");
+            auditLog.setAuditable_id(req.getId());
+            auditLog.setAuditable("user_db");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("updateUser");
+            auditService.AddAuditLog(auditLog);
+
             response.setCount(1);
             response.setMessage("Success");
             response.setData(req);
@@ -117,10 +170,28 @@ public class UserController {
     }
 
     @DeleteMapping("by_id")
-    public ResponseEntity<DefaultControllerResp> DeleteUser(@RequestParam(name = "user_id") Long userID){
+    public ResponseEntity<DefaultControllerResp> DeleteUser(HttpServletRequest request, @RequestParam(name = "user_id") Long userID){
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+       
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
             userService.removeUser(userID);
+
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("delete");
+            auditLog.setAuditable_id(userID);
+            auditLog.setAuditable("user_db");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("DeleteUser");
+            auditService.AddAuditLog(auditLog);
+
             resp.setCount(1);
             resp.setData(userID);
             resp.setStatusCode(HttpStatus.OK.value());

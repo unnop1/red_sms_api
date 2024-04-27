@@ -100,7 +100,7 @@ public class SmsConditionImp implements SmsConditionService{
     }
 
     @Override
-    public void addSmsCondition(AddSmsConditionReq req, String createdBy) {
+    public Long addSmsCondition(AddSmsConditionReq req, String createdBy) {
         Timestamp timeNow = DateTime.getTimeStampNow();
 
         // Find order type
@@ -121,9 +121,9 @@ public class SmsConditionImp implements SmsConditionService{
         newCondition.setMessage(req.getMessage());
         newCondition.setOrderType(orderType.getOrderTypeName());
         newCondition.setRefID(req.getRefID());
-        smsConditionRepo.save(newCondition);
+        ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
 
-        return;
+        return created.getConditionsID();
     }
 
     @Override

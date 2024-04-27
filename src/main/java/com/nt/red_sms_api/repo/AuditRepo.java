@@ -1,12 +1,9 @@
 package com.nt.red_sms_api.repo;
 
     import org.springframework.data.jpa.repository.JpaRepository;
-    import org.springframework.data.jpa.repository.Query;
-
-import com.nt.red_sms_api.entity.AuditEntity;
-import java.util.List;
+    import com.nt.red_sms_api.entity.AuditLogEntity;
     
-    public interface AuditRepo extends JpaRepository<AuditEntity,Long> {
+    public interface AuditRepo extends JpaRepository<AuditLogEntity,Long> {
         
         // @Query(value = "SELECT * FROM audit ",
         //              nativeQuery = true)

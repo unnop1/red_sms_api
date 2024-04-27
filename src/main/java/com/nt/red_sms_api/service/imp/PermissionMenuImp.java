@@ -92,16 +92,16 @@ public class PermissionMenuImp implements PermissionMenuService {
     }
 
     @Override
-    public Void addSaMenuPermission(AddPermissionReq req, String createdBy) {
+    public Long addSaMenuPermission(AddPermissionReq req, String createdBy) {
         Timestamp timeNow = DateTime.getTimeStampNow();
         PermissionMenuEntity newPermissionMenu = new PermissionMenuEntity();
         newPermissionMenu.setPermission_Name(req.getPermissionName());
         newPermissionMenu.setPermission_json(req.getPermission_json());
         newPermissionMenu.setCreated_By(createdBy);
         newPermissionMenu.setCreated_Date(timeNow);
-        permissionMenuRepo.save(newPermissionMenu);
+        PermissionMenuEntity created = permissionMenuRepo.save(newPermissionMenu);
 
-        return null;
+        return created.getId();
     }
 
     @Override

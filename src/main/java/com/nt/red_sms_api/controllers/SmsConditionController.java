@@ -1,6 +1,8 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.DateTime;
+import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
@@ -8,7 +10,9 @@ import com.nt.red_sms_api.dto.req.smscondition.UpdateBySmsConditionReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
+import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsConditionService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +32,12 @@ public class SmsConditionController {
     @Autowired
     private JwtHelper helper;
 
+    @Autowired
+    private AuditService auditService;
+
     @GetMapping
     public ResponseEntity<DefaultControllerResp> getAllSmsConditions(
+        HttpServletRequest request,
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
@@ -44,6 +52,25 @@ public class SmsConditionController {
         try{
             ListConditionReq req = new ListConditionReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsConditions = smsConditionService.ListAllSmsCondition(req);
+            
+            String ipAddress = request.getRemoteAddr();
+            String requestHeader = request.getHeader("Authorization");
+                
+            VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+            System.out.println("vsf:"+vsf.toString());
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("Get");
+            auditLog.setAuditable("config_conditions");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("getAllSmsConditions");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
+            
             response.setRecordsFiltered(smsConditions.getCount());
             response.setRecordsTotal(smsConditions.getCount());
             response.setCount(smsConditions.getCount());
@@ -65,9 +92,30 @@ public class SmsConditionController {
     }
 
     @PostMapping("/by_id")
-    public ResponseEntity<DefaultControllerResp> GetSmsConditionMoreDetail(@RequestBody SmsConditionMoreDetailReq req) throws Exception{
+    public ResponseEntity<DefaultControllerResp> GetSmsConditionMoreDetail(
+        HttpServletRequest request,    
+        @RequestBody SmsConditionMoreDetailReq req
+    ) throws Exception{
         ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
         DefaultControllerResp response = new DefaultControllerResp();
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAction("get");
+        auditLog.setAuditable("config_conditions");
+        auditLog.setUsername(vsf.getUsername());
+        auditLog.setBrowser(vsf.getBrowser());
+        auditLog.setDevice(vsf.getDevice());
+        auditLog.setAuditable_id(req.getConditionsID());
+        auditLog.setOperating_system(vsf.getSystem());
+        auditLog.setIp_address(ipAddress);
+        auditLog.setComment("GetSmsConditionMoreDetail");
+        auditLog.setCreated_date(DateTime.getTimeStampNow());
+        auditService.AddAuditLog(auditLog);
+        
+
         if( smsDetail != null){
             if(smsDetail.getConditionsID() != null){ 
                 response.setCount(1);
@@ -100,10 +148,26 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> addSmsCondition(HttpServletRequest request, @RequestBody AddSmsConditionReq  addSmsConditionReq){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
+        String ipAddress = request.getRemoteAddr();
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
-            smsConditionService.addSmsCondition(addSmsConditionReq, vsf.getUsername());
+            Long createdlastID = smsConditionService.addSmsCondition(addSmsConditionReq, vsf.getUsername());
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("create");
+            auditLog.setAuditable("config_conditions");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setAuditable_id(createdlastID+1);
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("addSmsCondition");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
+
             resp.setCount(1);
             resp.setData(addSmsConditionReq);
             resp.setStatusCode(HttpStatus.OK.value());
@@ -123,10 +187,25 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> updateSmsCondition(HttpServletRequest request, @RequestBody UpdateBySmsConditionReq  updateReq){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
+        String ipAddress = request.getRemoteAddr();
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
             smsConditionService.updateSmsConditionById(updateReq.getUpdateID(), updateReq.getUpdateInfo(), vsf.getUsername());
+            
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("update");
+            auditLog.setAuditable("config_conditions");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setAuditable_id(updateReq.getUpdateID());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("updateSmsCondition");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setCount(1);
             resp.setData(updateReq);
             resp.setStatusCode(HttpStatus.OK.value());
@@ -143,10 +222,27 @@ public class SmsConditionController {
     }
 
     @DeleteMapping("by_id")
-    public ResponseEntity<DefaultControllerResp> DeleteSmsCondition(@RequestParam(name = "sms_condition_id") Long smsConditionID){
+    public ResponseEntity<DefaultControllerResp> DeleteSmsCondition(HttpServletRequest request, @RequestParam(name = "sms_condition_id") Long smsConditionID){
+        String requestHeader = request.getHeader("Authorization");
+        String ipAddress = request.getRemoteAddr();
+            
+        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         DefaultControllerResp resp = new DefaultControllerResp();
         try {
             smsConditionService.removeSmsCondition(smsConditionID);
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("delete");
+            auditLog.setAuditable("config_conditions");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setAuditable_id(smsConditionID);
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("DeleteSmsCondition");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
             resp.setCount(1);
             resp.setData(smsConditionID);
             resp.setStatusCode(HttpStatus.OK.value());
