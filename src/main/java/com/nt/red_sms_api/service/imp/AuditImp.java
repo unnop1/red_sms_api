@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +24,23 @@ public class AuditImp implements AuditService {
     @Override
     public PaginationDataResp ListAllAudit(ListAuditReq req) {
         PaginationDataResp pageResp = new PaginationDataResp();
-        // Integer offset = req.getStart();
-        // Integer limit = req.getLength();
-        // Integer page = 0;
-        // if (limit > 0){
-        //     page = offset / limit;
-        // }
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = 0;
+        if (limit > 0){
+            page = offset / limit;
+        }
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
+        System.out.println("sortName:" + sortName + " sortBy:" + sortBy);
         // String search = req.getSearch();
         // String searchField = req.getSearchField().toLowerCase();
-        String[] orderList = {sortName};
-        Sort sort = Sort.by(Sort.Direction.fromString(sortBy), orderList);
-            // Sort.Direction.fromString(sortBy), sortName );
+        // Sort.Direction.fromString(sortBy), sortName );
 
-        List<AuditLogEntity> resp = auditRepo.findAll(sort);
-        pageResp.setCount(resp.size());
+        List<AuditLogEntity> resp = auditRepo.ListAllAudit(PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+        Integer count = auditRepo.getTotalCount();
+        
+        pageResp.setCount(count);
         pageResp.setData(resp);
         return pageResp;
     }

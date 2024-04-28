@@ -34,8 +34,9 @@ public class AuditController {
         @RequestParam(name = "Search", defaultValue = "")String search,
         @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ) {
+        System.out.println("draw: " + draw);    
         DefaultControllerResp response = new DefaultControllerResp();
-        try {
+        // try {
             ListAuditReq req = new ListAuditReq(draw, sortBy, sortName,  start, length, search, searchField);
             PaginationDataResp listAudits = auditService.ListAllAudit(req);
             response.setRecordsFiltered(listAudits.getCount());
@@ -45,13 +46,13 @@ public class AuditController {
             response.setData(listAudits.getData());
             response.setStatusCode(200);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            response.setCount(0);
-            response.setData(null);
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setMessage("Error while getting : " + e.getMessage());
-            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // } catch (Exception e) {
+        //     response.setCount(0);
+        //     response.setData(null);
+        //     response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        //     response.setMessage("Error while getting : " + e.getMessage());
+        //     return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
     }
     
 }
