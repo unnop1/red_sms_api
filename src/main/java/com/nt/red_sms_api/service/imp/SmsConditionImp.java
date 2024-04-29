@@ -13,16 +13,13 @@ import com.nt.red_sms_api.repo.SmsConditionRepo;
 import com.nt.red_sms_api.repo.view.smscondition.ListSmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class SmsConditionImp implements SmsConditionService{
@@ -57,19 +54,19 @@ public class SmsConditionImp implements SmsConditionService{
         }else {
             if( !req.getSearchField().isEmpty()){
                 if (searchField.equals("ordertype")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsConditionRepo.getListOrderTypeLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("conditions_id")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsConditionRepo.getListConditionIdLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("message")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsConditionRepo.getListMessageLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
@@ -77,7 +74,7 @@ public class SmsConditionImp implements SmsConditionService{
                 }
             }
 
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy)));
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
             Integer count = listSmsConditionRepo.getListSmsConditionAllLikeTotalCount(startTime, endTime, search);
             resp.setCount(count);
             resp.setData(smsConditionEntities);

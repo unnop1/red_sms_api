@@ -1,6 +1,5 @@
 package com.nt.red_sms_api.service.imp;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.audit.ListAuditReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;

@@ -27,25 +27,25 @@ public class ListOrderType {
         private Long MainID = null;
 
         @Column(name = "OrderType_Name", unique = false,nullable = true)
-        private String OrderTypeName = null;
+        private String OrderType_Name = null;
 
         @Column(name = "Is_Enable", unique = false,nullable = true)
-        private Integer IsEnable = 1;
+        private Integer Is_Enable = 1;
 
         @Column(name = "Is_Delete", unique = false,nullable = true)
-        private Integer IsDelete = 0;
+        private Integer Is_Delete = 0;
 
         @Column(name = "Created_Date", unique = false,nullable = true)
-        private Timestamp CreatedDate = null;
+        private Timestamp Created_Date = null;
 
         @Column(name = "Created_By", unique = false,nullable = true)
-        private Long CreatedBy = null;
+        private Long Created_By = null;
 
         @Column(name = "Updated_Date", unique = false,nullable = true)
-        private Timestamp UpdatedDate = null;
+        private Timestamp Updated_Date = null;
 
         @Column(name = "Updated_By", unique = false,nullable = true)
-        private Long UpdatedBy = null;
+        private Long Updated_By = null;
 
         @Column(name = "totalmsg", unique = false,nullable = true)
         private Integer totalmsg = 0;

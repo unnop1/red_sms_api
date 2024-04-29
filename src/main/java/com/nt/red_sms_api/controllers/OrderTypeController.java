@@ -3,6 +3,7 @@ package com.nt.red_sms_api.controllers;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
+import com.nt.red_sms_api.dto.req.ordertype.ListOrderTypeReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.AuditLogEntity;
@@ -30,12 +31,33 @@ public class OrderTypeController {
     private AuditService auditService;
 
     @GetMapping
-    public ResponseEntity<PaginationDataResp> getAllOrderTypes(HttpServletRequest request, @RequestParam(name="page", defaultValue = "1") Integer page,@RequestParam(name="limit", defaultValue = "10") Integer limit){
+    public ResponseEntity<PaginationDataResp> getAllOrderTypes(
+        HttpServletRequest request,    
+        @RequestParam(name = "page", defaultValue = "1")Integer page,
+        @RequestParam(name = "limit", defaultValue = "10")Integer limit,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+    ){
         
         String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
             
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+
+        ListOrderTypeReq req = new ListOrderTypeReq(
+            page,
+            limit,
+            sortBy,
+            sortName,
+            startTime,
+            endTime,
+            search,
+            searchField
+        );
 
         AuditLog auditLog = new AuditLog();
         auditLog.setAction("get");
@@ -49,7 +71,7 @@ public class OrderTypeController {
         auditLog.setCreated_date(DateTime.getTimeStampNow());
         auditService.AddAuditLog(auditLog);
         
-        return new ResponseEntity<>( orderTypeService.ListAllOrderType(page, limit), HttpStatus.OK);
+        return new ResponseEntity<>( orderTypeService.ListAllOrderType(req), HttpStatus.OK);
     }
     
 }
