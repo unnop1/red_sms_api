@@ -4,6 +4,8 @@ import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.ordertype.ListOrderTypeReq;
+import com.nt.red_sms_api.dto.req.ordertype.UpdateByIdReq;
+import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.AuditLogEntity;
@@ -74,4 +76,22 @@ public class OrderTypeController {
         return new ResponseEntity<>( orderTypeService.ListAllOrderType(req), HttpStatus.OK);
     }
     
+    @PutMapping
+    public ResponseEntity<DefaultControllerResp> updateOrderTypeById(HttpServletRequest request, @RequestBody UpdateByIdReq req) throws Exception{
+        
+        orderTypeService.UpdateOrderTypeById(req.getUpdateID(), req.getUpdateInfo());
+
+        DefaultControllerResp response = new DefaultControllerResp();
+        
+        response.setCount(1);
+        response.setMessage("Success");
+        response.setData(req.getUpdateInfo());
+        
+        response.setStatusCode(200);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
+
 }

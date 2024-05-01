@@ -50,4 +50,38 @@ public class OrderTypeImp implements OrderTypeService{
         return resp;
     }
 
+    @Override
+    public void UpdateOrderTypeById(Long orderTypeId, Map<String, Object> updates) {
+        OrderTypeEntity existingEntity = orderTypeRepo.findById(orderTypeId).orElse(null);
+        // System.out.println("existingEntity ID: " + existingEntity.getTYPEID());
+        // If the entity exists
+        if (existingEntity != null) {
+            // Iterate over the entries of the updates map
+            for (Map.Entry<String, Object> entry : updates.entrySet()) {
+                String fieldName = entry.getKey();
+                Object value = entry.getValue();
+
+                try {
+                    // Get the field from the entity class
+                    Field field = OrderTypeEntity.class.getDeclaredField(fieldName);
+                    // Set the accessibility of the field to true if it's not already accessible
+                    if (!field.isAccessible()) {
+                        field.setAccessible(true);
+                    }
+                    // Set the value of the field in the entity
+                    field.set(existingEntity, value);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    // Handle any exceptions (e.g., field not found, access violation)
+                    e.printStackTrace();
+                }
+            }
+
+            // Save the updated entity back to the database
+            orderTypeRepo.save(existingEntity);
+        }
+    }
+
+
+
+
 }

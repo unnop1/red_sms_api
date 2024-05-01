@@ -10,4 +10,6 @@ import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 public interface OrderTypeService  {
     
     public PaginationDataResp ListAllOrderType(ListOrderTypeReq req);
+    public void UpdateOrderTypeById(Long orderTypeId, Map<String, Object> updates);
+
 }
