@@ -47,5 +47,5 @@ public class OrderTypeEntity {
         private Timestamp UpdatedDate = null;
 
         @Column(name = "Updated_By", unique = false,nullable = true)
-        private Long Updated_By = null;
+        private String Updated_By = null;
 }

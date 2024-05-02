@@ -16,10 +16,10 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateByIdReq {
+public class UpdateOrderTypeReq {
     @JsonProperty("update_id")
     private Long updateID;
 
     @JsonProperty("update_info")
-    private Map<String, Object> updateInfo;
+    private AddOrderTypeReq updateInfo;
 }

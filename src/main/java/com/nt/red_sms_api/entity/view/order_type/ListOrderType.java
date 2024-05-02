@@ -39,13 +39,13 @@ public class ListOrderType {
         private Timestamp Created_Date = null;
 
         @Column(name = "Created_By", unique = false,nullable = true)
-        private Long Created_By = null;
+        private String Created_By = null;
 
         @Column(name = "Updated_Date", unique = false,nullable = true)
         private Timestamp Updated_Date = null;
 
         @Column(name = "Updated_By", unique = false,nullable = true)
-        private Long Updated_By = null;
+        private String Updated_By = null;
 
         @Column(name = "totalmsg", unique = false,nullable = true)
         private Integer totalmsg = 0;

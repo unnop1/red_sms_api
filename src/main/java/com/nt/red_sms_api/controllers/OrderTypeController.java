@@ -4,7 +4,7 @@ import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.ordertype.ListOrderTypeReq;
-import com.nt.red_sms_api.dto.req.ordertype.UpdateByIdReq;
+import com.nt.red_sms_api.dto.req.ordertype.UpdateOrderTypeReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
@@ -77,12 +77,30 @@ public class OrderTypeController {
     }
     
     @PutMapping
-    public ResponseEntity<DefaultControllerResp> updateOrderTypeById(HttpServletRequest request, @RequestBody UpdateByIdReq req) throws Exception{
+    public ResponseEntity<DefaultControllerResp> updateOrderTypeById(HttpServletRequest request, @RequestBody UpdateOrderTypeReq req) throws Exception{
         
-        orderTypeService.UpdateOrderTypeById(req.getUpdateID(), req.getUpdateInfo());
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+
+        orderTypeService.UpdateOrderTypeById(req.getUpdateID(), req.getUpdateInfo(), vsf.getUsername());
 
         DefaultControllerResp response = new DefaultControllerResp();
         
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAction("update");
+        auditLog.setAuditable("order_type");
+        auditLog.setAuditable_id(req.getUpdateID());
+        auditLog.setUsername(vsf.getUsername());
+        auditLog.setBrowser(vsf.getBrowser());
+        auditLog.setDevice(vsf.getDevice());
+        auditLog.setOperating_system(vsf.getSystem());
+        auditLog.setIp_address(ipAddress);
+        auditLog.setComment("updateOrderTypeById");
+        auditLog.setCreated_date(DateTime.getTimeStampNow());
+        auditService.AddAuditLog(auditLog);
+
         response.setCount(1);
         response.setMessage("Success");
         response.setData(req.getUpdateInfo());
