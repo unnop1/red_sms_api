@@ -153,6 +153,9 @@ public class SmsConditionImp implements SmsConditionService{
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
         newCondition.setConditions_and(req.getConditions_and());
+        newCondition.setConditions_and_select(req.getCONDITIONS_AND_SELECT());
+        newCondition.setConditions_or(req.getConditions_or());
+        newCondition.setConditions_or_select(req.getCONDITIONS_OR_SELECT());
         newCondition.setConditions_or(req.getConditions_or());
         newCondition.setCreated_By(createdBy);
         newCondition.setCreated_Date(timeNow);
