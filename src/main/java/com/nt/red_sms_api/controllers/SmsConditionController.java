@@ -41,8 +41,8 @@ public class SmsConditionController {
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
-        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
-        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start_time", defaultValue = "")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
         @RequestParam(name = "length", defaultValue = "10")Integer length,
         @RequestParam(name = "Search", defaultValue = "")String search,
@@ -172,6 +172,47 @@ public class SmsConditionController {
             resp.setData(addSmsConditionReq);
             resp.setStatusCode(HttpStatus.OK.value());
             resp.setMessage("Successfully added");
+
+            return new ResponseEntity<>( resp, HttpStatus.OK);
+        }catch (Exception e){
+            resp.setCount(0);
+            resp.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            resp.setData(null);
+            resp.setMessage("Error while adding : " + e.getMessage());
+            return new ResponseEntity<>( resp, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/duplicate")
+    public ResponseEntity<DefaultControllerResp> duplicateSmsCondition(HttpServletRequest request, @RequestBody Long conditionID){
+        DefaultControllerResp resp = new DefaultControllerResp();
+        String requestHeader = request.getHeader("Authorization");
+        String ipAddress = request.getRemoteAddr();
+            
+        VerifyAuthResp vsf = helper.verifyToken(requestHeader);
+        try {
+            Long createdlastID = smsConditionService.duplicateSmsCondition(conditionID, vsf.getUsername());
+            
+            if(createdlastID != null){
+                AuditLog auditLog = new AuditLog();
+                auditLog.setAction("create");
+                auditLog.setAuditable("config_conditions");
+                auditLog.setUsername(vsf.getUsername());
+                auditLog.setBrowser(vsf.getBrowser());
+                auditLog.setDevice(vsf.getDevice());
+                auditLog.setAuditable_id(createdlastID+1);
+                auditLog.setOperating_system(vsf.getSystem());
+                auditLog.setIp_address(ipAddress);
+                auditLog.setComment("duplicateSmsCondition");
+                auditLog.setCreated_date(DateTime.getTimeStampNow());
+                auditService.AddAuditLog(auditLog);
+            }
+            
+
+            resp.setCount(1);
+            resp.setData(createdlastID+1);
+            resp.setStatusCode(HttpStatus.OK.value());
+            resp.setMessage("Successfully");
 
             return new ResponseEntity<>( resp, HttpStatus.OK);
         }catch (Exception e){

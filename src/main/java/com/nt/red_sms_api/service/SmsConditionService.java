@@ -14,6 +14,7 @@ import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 public interface SmsConditionService  {
     public PaginationDataResp ListAllSmsCondition(ListConditionReq req);
     public Long addSmsCondition(AddSmsConditionReq req, String createdBy);
+    public Long duplicateSmsCondition(Long smsID, String createdBy);
     public void updateSmsConditionById(Long smsId, AddSmsConditionReq updates, String updatedBy);
     public void removeSmsCondition(Long permissionID);
     public ConfigConditionsEntity getSmsConditionMoreDetail(SmsConditionMoreDetailReq req);

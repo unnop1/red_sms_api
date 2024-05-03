@@ -35,8 +35,14 @@ public class SmsConditionImp implements SmsConditionService{
 
     public PaginationDataResp ListAllSmsCondition(ListConditionReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Timestamp startTime = null;
+        if (!req.getStartTime().isEmpty()){
+            startTime = Timestamp.valueOf(req.getStartTime());
+        }
+        Timestamp endTime = null;
+        if (!req.getStartTime().isEmpty()){
+            endTime = Timestamp.valueOf(req.getEndTime());
+        }
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         Integer page = offset / limit;
@@ -46,36 +52,72 @@ public class SmsConditionImp implements SmsConditionService{
         String searchField = req.getSearchField().toLowerCase();
 
         if ( search.isEmpty()){
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsCondition(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
-            Integer count = listSmsConditionRepo.getListSmsConditionTotalCount(startTime, endTime);
+            if (req.getStartTime().isEmpty() || req.getEndTime().isEmpty()){
+                List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsCondition(PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+                Integer count = listSmsConditionRepo.getListSmsConditionTotalCount();
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithTimeTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsConditionEntities);
             return resp;
         }else {
             if( !req.getSearchField().isEmpty()){
                 if (searchField.equals("ordertype")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListOrderTypeLikeTotalCount(startTime, endTime, search);
+                    if (req.getStartTime().isEmpty() || req.getEndTime().isEmpty()){
+                        List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeLike(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                        Integer count = listSmsConditionRepo.getListOrderTypeLikeTotalCount(search);
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeWithTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListOrderTypeLikeWithTimeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("conditions_id")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListConditionIdLikeTotalCount(startTime, endTime, search);
+                    if (req.getStartTime().isEmpty() || req.getEndTime().isEmpty()){
+                        List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdLike(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                        Integer count = listSmsConditionRepo.getListConditionIdLikeTotalCount(search);
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdWithTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListConditionIdWithTimeLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("message")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListMessageLikeTotalCount(startTime, endTime, search);
+                    if (req.getStartTime().isEmpty() || req.getEndTime().isEmpty()){
+                        List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageLike(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                        Integer count = listSmsConditionRepo.getListMessageLikeTotalCount(search);
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageWithTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListMessageWithTimeLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }
             }
 
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-            Integer count = listSmsConditionRepo.getListSmsConditionAllLikeTotalCount(startTime, endTime, search);
+            
+            if (req.getStartTime().isEmpty() || req.getEndTime().isEmpty()){
+                List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionAllLike(search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                Integer count = listSmsConditionRepo.getListSmsConditionAllLikeTotalCount(search);
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithTimeAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithTimeAllLikeTotalCount(startTime, endTime, search);
             resp.setCount(count);
             resp.setData(smsConditionEntities);
             return resp;
@@ -102,11 +144,12 @@ public class SmsConditionImp implements SmsConditionService{
 
         // Find order type
         OrderTypeEntity orderType = orderTypeRepo.findByMainId(req.getOrder_type_main_id());
-
-
+        Long countAll = smsConditionRepo.count();
+        String orderTypeName = orderType.getOrderTypeName();
         Timestamp dateStart = Timestamp.valueOf(req.getDate_start());
         Timestamp dateEnd = Timestamp.valueOf(req.getDate_end());
-
+        String paddedNumber = String.format("%05d", countAll+1);
+        String refID = orderTypeName + paddedNumber;
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
         newCondition.setConditions_and(req.getConditions_and());
@@ -116,8 +159,8 @@ public class SmsConditionImp implements SmsConditionService{
         newCondition.setDate_Start(dateStart);
         newCondition.setDate_End(dateEnd);
         newCondition.setMessage(req.getMessage());
-        newCondition.setOrderType(orderType.getOrderTypeName());
-        newCondition.setRefID(req.getRefID());
+        newCondition.setOrderType(orderTypeName);
+        newCondition.setRefID(refID);
         ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
 
         return created.getConditionsID();
@@ -132,10 +175,9 @@ public class SmsConditionImp implements SmsConditionService{
     @Override
     public void updateSmsConditionById(Long conditionID, AddSmsConditionReq updates, String updatedBy) {
         ConfigConditionsEntity existingEntity = smsConditionRepo.findById(conditionID).orElse(null);
-        // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
-        // If the entity exists
+        
         if (existingEntity != null) {
-            // Iterate over the entries of the updates map
+
             Timestamp timeNow = DateTime.getTimeStampNow();
             if (updates.getConditions_and() != null ){
                 existingEntity.setConditions_and(updates.getConditions_and());
@@ -156,6 +198,18 @@ public class SmsConditionImp implements SmsConditionService{
                 existingEntity.setMessage(updates.getMessage());
             }
 
+            if (updates.getCONDITIONS_OR_SELECT() != null ){
+                existingEntity.setConditions_or_select(updates.getCONDITIONS_OR_SELECT());
+            }
+
+            if (updates.getCONDITIONS_AND_SELECT() != null ){
+                existingEntity.setConditions_and_select(updates.getCONDITIONS_AND_SELECT());
+            }
+
+            if (updates.getMessage() != null ){
+                existingEntity.setMessage(updates.getMessage());
+            }
+
             if (updates.getOrder_type_main_id() != null ){
                 OrderTypeEntity orderType = orderTypeRepo.findByMainId(updates.getOrder_type_main_id());
                 existingEntity.setOrderType(orderType.getOrderTypeName());
@@ -166,5 +220,33 @@ public class SmsConditionImp implements SmsConditionService{
             // Save the updated entity back to the database
             smsConditionRepo.save(existingEntity);
         }
+    }
+
+    @Override
+    public Long duplicateSmsCondition(Long conditionID, String createdBy) {
+        ConfigConditionsEntity exist = smsConditionRepo.findById(conditionID).orElse(null);
+
+        if (exist != null) {
+            Timestamp timeNow = DateTime.getTimeStampNow();
+
+            // Find order type
+            OrderTypeEntity orderType = orderTypeRepo.findByMainId(exist.getOrder_type_MainID());
+            
+            ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
+            newCondition.setConditions_and(exist.getConditions_and());
+            newCondition.setConditions_or(exist.getConditions_or());
+            newCondition.setCreated_By(createdBy);
+            newCondition.setCreated_Date(timeNow);
+            newCondition.setDate_Start(exist.getDate_Start());
+            newCondition.setDate_End(exist.getDate_End());
+            newCondition.setMessage(exist.getMessage());
+            newCondition.setOrderType(orderType.getOrderTypeName());
+            newCondition.setRefID(exist.getRefID());
+            ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
+            return created.getConditionsID();
+        }
+
+        return null;
+
     }
 }

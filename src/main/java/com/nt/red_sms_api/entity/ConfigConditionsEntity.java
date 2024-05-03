@@ -70,5 +70,11 @@ public class ConfigConditionsEntity {
         @Column(name = "is_Delete_Date", unique = false,nullable = true)
         private Timestamp is_Delete_Date = null;
 
+        @Column(name = "conditions_or_select", unique = false,nullable = true)
+        private String conditions_or_select = null;
+
+        @Column(name = "conditions_and_select", unique = false,nullable = true)
+        private String conditions_and_select = null;
+
         
 }

@@ -30,6 +30,11 @@ public class AddSmsConditionReq {
     @JsonProperty("message")
     private String message;
 
-    @JsonProperty("ref_id")
-    private String refID;
+    @JsonProperty("conditions_or_select")
+    private String CONDITIONS_OR_SELECT;
+
+    @JsonProperty("conditions_and_select")
+    private String CONDITIONS_AND_SELECT;
+
+    
 }
