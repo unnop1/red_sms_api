@@ -14,11 +14,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListOrderTypeReq {
-    @JsonProperty("page")
-    private Integer page=1;
+    @JsonProperty("start")
+    private Integer start=0;
 
-    @JsonProperty("limit")
-    private Integer limit=10;
+    @JsonProperty("length")
+    private Integer length=10;
 
     @JsonProperty("order[0][dir]")
     private String sortBy="ASC";
