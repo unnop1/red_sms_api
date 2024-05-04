@@ -23,13 +23,11 @@ public class ListConditionReq {
     @JsonProperty("order[0][name]")
     private String sortName="created_date";
 
-    @lombok.NonNull
     @JsonProperty("start_time")
-    private String startTime;
+    private String startTime="";
 
-    @lombok.NonNull
     @JsonProperty("end_time")
-    private String endTime;
+    private String endTime="";
 
     @JsonProperty("start")
     private Integer start=0;

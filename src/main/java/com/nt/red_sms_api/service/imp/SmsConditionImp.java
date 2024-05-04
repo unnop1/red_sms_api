@@ -40,7 +40,7 @@ public class SmsConditionImp implements SmsConditionService{
             startTime = Timestamp.valueOf(req.getStartTime());
         }
         Timestamp endTime = null;
-        if (!req.getStartTime().isEmpty()){
+        if (!req.getEndTime().isEmpty()){
             endTime = Timestamp.valueOf(req.getEndTime());
         }
         Integer offset = req.getStart();
