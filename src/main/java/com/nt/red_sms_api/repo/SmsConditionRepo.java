@@ -1,5 +1,6 @@
 package com.nt.red_sms_api.repo;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,6 +25,9 @@ public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,L
 
     @Query(value = "SELECT COUNT(*) FROM config_conditions ", nativeQuery = true)
     public Integer getTotalCount();
+
+    @Query(value = "SELECT condition_id FROM config_conditions ORDER BY condition_id ASC", nativeQuery = true)
+    public List<ConfigConditionsEntity> getLastID(Pageable pageable);
     
 
 }

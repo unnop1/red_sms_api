@@ -30,6 +30,9 @@ public class AddSmsConditionReq {
     @JsonProperty("message")
     private String message;
 
+    @JsonProperty("is_enable")
+    private Integer is_enable;
+
     @JsonProperty("conditions_or_select")
     private String CONDITIONS_OR_SELECT;
 

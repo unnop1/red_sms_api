@@ -64,6 +64,9 @@ public class ConfigConditionsEntity {
         @Column(name = "is_delete", unique = false,nullable = true)
         private Integer is_delete = 0;
 
+        @Column(name = "is_enable", unique = false,nullable = true)
+        private Integer is_enable = 1;
+
         @Column(name = "is_Delete_By", unique = false,nullable = true)
         private String is_Delete_By = null;
 

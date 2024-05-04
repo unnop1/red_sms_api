@@ -184,7 +184,7 @@ public class SmsConditionController {
     }
 
     @PostMapping("/duplicate")
-    public ResponseEntity<DefaultControllerResp> duplicateSmsCondition(HttpServletRequest request, @RequestBody Long conditionID){
+    public ResponseEntity<DefaultControllerResp> duplicateSmsCondition(HttpServletRequest request, @RequestParam(value = "condition_id") Long conditionID){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
         String ipAddress = request.getRemoteAddr();

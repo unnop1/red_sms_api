@@ -144,15 +144,16 @@ public class SmsConditionImp implements SmsConditionService{
 
         // Find order type
         OrderTypeEntity orderType = orderTypeRepo.findByMainId(req.getOrder_type_main_id());
-        Long countAll = smsConditionRepo.count();
+        List<ConfigConditionsEntity> lastConditions = smsConditionRepo.getLastID(PageRequest.of(0,1));
         String orderTypeName = orderType.getOrderTypeName();
         Timestamp dateStart = Timestamp.valueOf(req.getDate_start());
         Timestamp dateEnd = Timestamp.valueOf(req.getDate_end());
-        String paddedNumber = String.format("%05d", countAll+1);
-        String refID = orderTypeName + paddedNumber;
+        String paddedNumber = String.format("%05d", lastConditions.get(0).getConditionsID()+1);
+        String refID = orderTypeName.toUpperCase() + paddedNumber;
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
         newCondition.setConditions_and(req.getConditions_and());
+        newCondition.setOrder_type_MainID(orderType.getMainID());
         newCondition.setConditions_and_select(req.getCONDITIONS_AND_SELECT());
         newCondition.setConditions_or(req.getConditions_or());
         newCondition.setConditions_or_select(req.getCONDITIONS_OR_SELECT());
@@ -195,6 +196,10 @@ public class SmsConditionImp implements SmsConditionService{
             if (updates.getDate_end() != null ){
                 Timestamp dateEnd = Timestamp.valueOf(updates.getDate_end());
                 existingEntity.setDate_End(dateEnd);
+            }
+
+            if (updates.getIs_enable() != null ){
+                existingEntity.setIs_enable(updates.getIs_enable());
             }
 
             if (updates.getMessage() != null ){
@@ -241,10 +246,12 @@ public class SmsConditionImp implements SmsConditionService{
             newCondition.setCreated_By(createdBy);
             newCondition.setCreated_Date(timeNow);
             newCondition.setDate_Start(exist.getDate_Start());
+            newCondition.setOrder_type_MainID(orderType.getMainID());
             newCondition.setDate_End(exist.getDate_End());
             newCondition.setMessage(exist.getMessage());
             newCondition.setOrderType(orderType.getOrderTypeName());
             newCondition.setRefID(exist.getRefID());
+            newCondition.setIs_enable(0);
             ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
             return created.getConditionsID();
         }
