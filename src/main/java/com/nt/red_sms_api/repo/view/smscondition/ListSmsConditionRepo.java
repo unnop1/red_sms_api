@@ -16,7 +16,7 @@ import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEntity,Long> {
     /* WITH TIME */
     @Query(value =  """
-                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid
                     FROM config_conditions cf_con 
                     WHERE (cf_con.date_start >= ?1) 
                     AND (cf_con.date_end <= ?2) 
@@ -33,7 +33,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
                     nativeQuery = true)
     public Integer getListSmsConditionWithTimeTotalCount(Timestamp startTime, Timestamp endTime);
 
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE (cf_con.date_start >= :start_time) "+
                     "AND (cf_con.date_end <= :end_time) "+
@@ -55,7 +55,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
                                                         @Param(value = "search") String search);
 
     // ordertype
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE (cf_con.date_start >= :start_time) "+
                     "AND (cf_con.date_end <= :end_time) "+
@@ -78,7 +78,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // conditions_id
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE (cf_con.date_start >= :start_time) "+
                     "AND (cf_con.date_end <= :end_time) "+
@@ -101,7 +101,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // message
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE (cf_con.date_start >= :start_time) "+
                     "AND (cf_con.date_end <= :end_time) "+
@@ -125,7 +125,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     /* WITHOUT TIME */
     @Query(value =  """
-                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid
                     FROM config_conditions cf_con 
                     """
                     ,nativeQuery = true)
@@ -135,7 +135,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
                     nativeQuery = true)
     public Integer getListSmsConditionTotalCount();
 
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
                     nativeQuery = true)
@@ -151,7 +151,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
     public Integer getListSmsConditionAllLikeTotalCount(@Param(value = "search") String search);
 
     // ordertype
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.ordertype like %:search% ) ",
                     nativeQuery = true)
@@ -167,7 +167,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // conditions_id
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.conditions_id like %:search% ) ",
                     nativeQuery = true)
@@ -183,7 +183,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // message
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.message like %:search% ) ",
                     nativeQuery = true)

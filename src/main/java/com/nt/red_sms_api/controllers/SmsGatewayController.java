@@ -11,6 +11,7 @@ import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
@@ -278,7 +279,7 @@ public class SmsGatewayController {
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq(orderTypeMainID,isStatus,sortBy,sortName,startTime, endTime,start,length,search,searchField);
+            SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq(orderTypeMainID, isStatus,sortBy,sortName,startTime, endTime,start,length,search,searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
             
             AuditLog auditLog = new AuditLog();

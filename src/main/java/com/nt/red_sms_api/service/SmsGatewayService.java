@@ -4,6 +4,7 @@ import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
 
 
 

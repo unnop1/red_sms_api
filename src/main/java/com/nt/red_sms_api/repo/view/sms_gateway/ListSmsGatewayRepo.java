@@ -16,8 +16,11 @@ import java.util.List;
 public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
     
     @Query(value =  """
-                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status, conf.refid 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time
                     """
                     ,nativeQuery = true)
@@ -30,6 +33,9 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time
                     """
                     ,nativeQuery = true)
@@ -38,10 +44,12 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
         @Param(value = "end_time")Timestamp endTime
     );
 
-
     @Query(value =  """
-                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time
                     AND ( smsgw.TRANSACTION_ID like %:search% OR smsgw.phonenumber like %:search% OR smsgw.ordertype like %:search% OR smsgw.is_status like %:search% )
                     """
@@ -56,6 +64,9 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND ( smsgw.TRANSACTION_ID like %:search% OR smsgw.phonenumber like %:search% OR smsgw.ordertype like %:search% OR smsgw.is_status like %:search% ) 
                     """
@@ -68,8 +79,11 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
 
     // smsmessage
     @Query(value =  """
-                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND ( smsmessage like %:search% ) 
                     """
@@ -84,6 +98,9 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND ( smsmessage like %:search% ) 
                     """
@@ -94,15 +111,18 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
         @Param(value = "search")String search
     );
 
-    // config_conditions_id
+    // refID
     @Query(value =  """
-                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( config_conditions_id like %:search% ) 
+                    AND ( conf.refid like %:search% ) 
                     """
                     ,nativeQuery = true)
-    public List<ListSmsGateway> ListSendConfIdField(
+    public List<ListSmsGateway> ListSendRefIdField(
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
         @Param(value = "search")String search,
@@ -112,11 +132,14 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( config_conditions_id like %:search% ) 
+                    AND ( conf.refid like %:search% ) 
                     """
                     ,nativeQuery = true)
-    public Integer getListSendConfIdFieldTotalCount(
+    public Integer getListSendRefIdFieldTotalCount(
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,  
         @Param(value = "search")String search
@@ -125,8 +148,11 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
 
     // ordertype
     @Query(value =  """
-                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status 
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND ( ordertype like %:search% ) 
                     """
@@ -141,6 +167,9 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND ( ordertype like %:search% ) 
                     """

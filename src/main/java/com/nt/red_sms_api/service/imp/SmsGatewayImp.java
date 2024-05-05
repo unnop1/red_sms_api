@@ -8,6 +8,7 @@ import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
+import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByConditionRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByResponseTimeRepo;
@@ -190,8 +191,8 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
-                }else if (searchField.equals("config_conditions_id")){
-                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusConfIdFieldSearch(
+                }else if (searchField.equals("refid")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusRefIdFieldSearch(
                         orderTypeMainID,
                         isStatus,
                         search,
@@ -200,7 +201,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                         PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
                     );
 
-                    Integer count = smsGatewayRepo.getOdtStatusConfIdFieldSearchTotalCount(
+                    Integer count = smsGatewayRepo.getOdtStatusRefIdFieldSearchTotalCount(
                         orderTypeMainID,
                         isStatus,
                         search,
@@ -267,9 +268,9 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
-                }if(searchField.equals("config_conditions_id")){
-                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendConfIdField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsGatewayRepo.getListSendConfIdFieldTotalCount(startTime, endTime, search);
+                }if(searchField.equals("refid")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendRefIdField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendRefIdFieldTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;

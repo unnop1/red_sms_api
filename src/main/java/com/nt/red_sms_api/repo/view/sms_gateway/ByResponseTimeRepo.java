@@ -24,6 +24,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     smsgw.ordertype,
                     smsgw.receive_date,
                     smsgw.send_date,
+                    conf.refid,
                     SUM(
                             extract ( day from (send_date - receive_date) )*86400 
                         + extract ( hour from (send_date - receive_date) )*3600 
@@ -31,8 +32,11 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( second from (send_date - receive_date) )
                     ) as response_time
                     FROM sms_gateway smsgw
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    GROUP BY GID, config_conditions_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date
+                    GROUP BY GID, config_conditions_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, conf.refid
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTime(
@@ -44,6 +48,9 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     """
                     ,nativeQuery = true)
@@ -61,6 +68,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     smsgw.ordertype,
                     smsgw.receive_date,
                     smsgw.send_date,
+                    conf.refid,
                     SUM(
                             extract ( day from (send_date - receive_date) )*86400 
                         + extract ( hour from (send_date - receive_date) )*3600 
@@ -68,9 +76,12 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( second from (send_date - receive_date) )
                     ) as response_time
                     FROM sms_gateway smsgw
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND smsgw.phonenumber like %:search%
-                    GROUP BY GID, config_conditions_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date
+                    GROUP BY GID, config_conditions_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, conf.refid
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTimeSearch(
@@ -83,6 +94,9 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
     @Query(value = """
                     SELECT COUNT(*) 
                     FROM sms_gateway smsgw
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
                     AND smsgw.phonenumber like %:search%
                     """

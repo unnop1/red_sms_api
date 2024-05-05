@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public interface ListSmsCondition {
     Long getCONDITIONS_ID();
+    String getREFID();
     Timestamp getDATE_START();
     Timestamp getDATE_END();
     Timestamp getCREATED_DATE();
