@@ -7,6 +7,7 @@ import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
+import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 import com.nt.red_sms_api.repo.OrderTypeRepo;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
@@ -144,11 +145,11 @@ public class SmsConditionImp implements SmsConditionService{
 
         // Find order type
         OrderTypeEntity orderType = orderTypeRepo.findByMainId(req.getOrder_type_main_id());
-        Long count = smsConditionRepo.count();
+        ConfigConditionsEntity lastRow = smsConditionRepo.getLastID();
         String orderTypeName = orderType.getOrderTypeName();
         Timestamp dateStart = Timestamp.valueOf(req.getDate_start());
         Timestamp dateEnd = Timestamp.valueOf(req.getDate_end());
-        String paddedNumber = String.format("%05d", count+1);
+        String paddedNumber = String.format("%05d", lastRow.getConditionsID()+1);
         String refID = orderTypeName.toUpperCase() + paddedNumber;
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
