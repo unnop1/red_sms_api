@@ -20,7 +20,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status 
-                AND smsgw.send_date BETWEEN :start_time AND :end_time 
+                AND smsgw.receive_date BETWEEN :start_time AND :end_time 
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatus(
@@ -39,7 +39,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status 
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getSmsGatewayByOrderTypeAndStatusTotalCount(
@@ -62,7 +62,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     OR smsgw.phonenumber like %:search% 
                     OR smsgw.smsmessage like %:search% 
                 )
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatusAllSearch(
@@ -86,7 +86,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     OR smsgw.phonenumber like %:search% 
                     OR smsgw.smsmessage like %:search% 
                 )
-                AND ( send_date BETWEEN :start_time AND :end_time )
+                AND ( receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getSmsGatewayByOrderTypeAndStatusAllSearchTotalCount(
@@ -106,7 +106,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND ( smsgw.phonenumber like %:search% )
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusPhoneFieldSearch(
@@ -126,7 +126,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND ( smsgw.phonenumber like %:search% )
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusPhoneFieldSearchTotalCount(
@@ -146,7 +146,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND ( smsgw.smsmessage like %:search% )
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusSmsMsgFieldSearch(
@@ -166,7 +166,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND ( smsmessage like %:search% )
-                AND ( send_date BETWEEN :start_time AND :end_time )
+                AND ( receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusSmsMsgFieldSearchTotalCount(
@@ -186,7 +186,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND conf.refid=:search
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusRefIdFieldSearch(
@@ -206,7 +206,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
                 AND conf.refid=:search
-                AND ( smsgw.send_date BETWEEN :start_time AND :end_time )
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusRefIdFieldSearchTotalCount(
