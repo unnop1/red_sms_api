@@ -144,11 +144,11 @@ public class SmsConditionImp implements SmsConditionService{
 
         // Find order type
         OrderTypeEntity orderType = orderTypeRepo.findByMainId(req.getOrder_type_main_id());
-        List<ConfigConditionsEntity> lastConditions = smsConditionRepo.getLastID(PageRequest.of(0,1));
+        Long count = smsConditionRepo.count();
         String orderTypeName = orderType.getOrderTypeName();
         Timestamp dateStart = Timestamp.valueOf(req.getDate_start());
         Timestamp dateEnd = Timestamp.valueOf(req.getDate_end());
-        String paddedNumber = String.format("%05d", lastConditions.get(0).getConditionsID()+1);
+        String paddedNumber = String.format("%05d", count+1);
         String refID = orderTypeName.toUpperCase() + paddedNumber;
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
