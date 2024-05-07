@@ -11,5 +11,6 @@ public interface ListSmsCondition {
     Timestamp getCREATED_DATE();
     String getMESSAGE();
     String getORDERTYPE();
-    String getIS_DELETE();
+    Integer getIS_DELETE();
+    Integer getIS_ENABLE();
 }

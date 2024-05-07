@@ -14,29 +14,237 @@ import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 
 public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEntity,Long> {
-    /* WITH TIME */
+    
+    /* WITH END TIME ONLY */
     @Query(value =  """
-                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable
                     FROM config_conditions cf_con 
-                    WHERE (cf_con.date_start >= ?1) 
-                    AND (cf_con.date_end <= ?2) 
+                    WHERE (cf_con.date_end <= :end_time ) 
                     """
                     ,nativeQuery = true)
-    public List<ListSmsCondition> ListSmsConditionWithTime(Timestamp startTime,
-                                            Timestamp endTime,
+    public List<ListSmsCondition> ListSmsConditionWithEndTime(
+        @Param(value = "end_time")   Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time ) ",
+                    nativeQuery = true)
+    public Integer getListSmsConditionWithEndTimeTotalCount(
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time )  "+
+                    "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListSmsConditionWithEndTimeAllLike(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time ) "+
+                    "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListSmsConditionWithEndTimeAllLikeTotalCount(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search
+    );
+
+    // ordertype
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time ) "+
+                    "AND ( cf_con.ordertype like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListOrderTypeWithEndTimeLike(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time ) "+
+                    "AND ( cf_con.ordertype like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListOrderTypeLikeWithEndTimeTotalCount(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search
+    );
+
+
+    // conditions_id
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time ) "+
+                    "AND ( cf_con.conditions_id like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListConditionIdWithEndTimeLike(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time )  "+
+                    "AND ( cf_con.conditions_id like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListConditionIdWithEndTimeLikeTotalCount(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search
+    );
+
+
+    // message
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time )  "+
+                    "AND ( cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListMessageWithEndTimeLike(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end <= :end_time )  "+
+                    "AND ( cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListMessageWithEndTimeLikeTotalCount(
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search") String search
+    );
+    
+    
+    /* WITH START TIME ONLY */
+    @Query(value =  """
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable
+                    FROM config_conditions cf_con 
+                    WHERE (cf_con.date_start >= :start_time ) 
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsCondition> ListSmsConditionWithStartTime(
+        @Param(value = "start_time") Timestamp startTime,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) ",
+                    nativeQuery = true)
+    public Integer getListSmsConditionWithStartTimeTotalCount(
+        @Param(value = "start_time") Timestamp startTime
+    );
+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListSmsConditionWithStartTimeAllLike(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "search") String search,
+        Pageable pageable
+    );
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListSmsConditionWithStartTimeAllLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
+                                                        @Param(value = "search") String search);
+
+    // ordertype
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.ordertype like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListOrderTypeWithStartTimeLike(@Param(value = "start_time") Timestamp startTime,
+                                            @Param(value = "search") String search,
                                             Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= ?1) "+
-                    "AND (cf_con.date_end <= ?2) ",
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.ordertype like %:search% ) ",
                     nativeQuery = true)
-    public Integer getListSmsConditionWithTimeTotalCount(Timestamp startTime, Timestamp endTime);
+    public Integer getListOrderTypeLikeWithStartTimeTotalCount(@Param(value = "start_time") Timestamp startTime,
+                                                        @Param(value = "search") String search);
 
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+
+    // conditions_id
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.conditions_id like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListConditionIdWithStartTimeLike(@Param(value = "start_time") Timestamp startTime,
+                                            @Param(value = "search") String search,
+                                            Pageable pageable);
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.conditions_id like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListConditionIdWithStartTimeLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
+                                                        @Param(value = "search") String search);
+
+
+    // message
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public List<ListSmsCondition> ListMessageWithStartTimeLike(@Param(value = "start_time") Timestamp startTime,
+                                            @Param(value = "search") String search,
+                                            Pageable pageable);
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_start >= :start_time ) "+
+                    "AND ( cf_con.message like %:search% ) ",
+                    nativeQuery = true)
+    public Integer getListMessageWithStartTimeLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
+                                                        @Param(value = "search") String search);
+    
+    
+    /* WITH TIME */
+    @Query(value =  """
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable
+                    FROM config_conditions cf_con 
+                    WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) 
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsCondition> ListSmsConditionWithTime(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time")   Timestamp endTime,
+                                            Pageable pageable);
+
+    @Query(value = "SELECT COUNT(*) "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) ",
+                    nativeQuery = true)
+    public Integer getListSmsConditionWithTimeTotalCount(
+        @Param(value = "start_time") Timestamp startTime, 
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
+                    "FROM config_conditions cf_con "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
                     nativeQuery = true)
     public List<ListSmsCondition> ListSmsConditionWithTimeAllLike(@Param(value = "start_time") Timestamp startTime,
@@ -46,8 +254,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
                     nativeQuery = true)
     public Integer getListSmsConditionWithTimeAllLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
@@ -55,10 +262,9 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
                                                         @Param(value = "search") String search);
 
     // ordertype
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.ordertype like %:search% ) ",
                     nativeQuery = true)
     public List<ListSmsCondition> ListOrderTypeWithTimeLike(@Param(value = "start_time") Timestamp startTime,
@@ -68,8 +274,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.ordertype like %:search% ) ",
                     nativeQuery = true)
     public Integer getListOrderTypeLikeWithTimeTotalCount(@Param(value = "start_time") Timestamp startTime,
@@ -78,10 +283,9 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // conditions_id
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.conditions_id like %:search% ) ",
                     nativeQuery = true)
     public List<ListSmsCondition> ListConditionIdWithTimeLike(@Param(value = "start_time") Timestamp startTime,
@@ -91,8 +295,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.conditions_id like %:search% ) ",
                     nativeQuery = true)
     public Integer getListConditionIdWithTimeLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
@@ -101,10 +304,9 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // message
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.message like %:search% ) ",
                     nativeQuery = true)
     public List<ListSmsCondition> ListMessageWithTimeLike(@Param(value = "start_time") Timestamp startTime,
@@ -114,8 +316,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     @Query(value = "SELECT COUNT(*) "+
                     "FROM config_conditions cf_con "+
-                    "WHERE (cf_con.date_start >= :start_time) "+
-                    "AND (cf_con.date_end <= :end_time) "+
+                    "WHERE (cf_con.date_end BETWEEN :start_time AND :end_time ) "+
                     "AND ( cf_con.message like %:search% ) ",
                     nativeQuery = true)
     public Integer getListMessageWithTimeLikeTotalCount(@Param(value = "start_time") Timestamp startTime,
@@ -125,7 +326,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
     /* WITHOUT TIME */
     @Query(value =  """
-                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid
+                    SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable
                     FROM config_conditions cf_con 
                     """
                     ,nativeQuery = true)
@@ -135,7 +336,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
                     nativeQuery = true)
     public Integer getListSmsConditionTotalCount();
 
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.ordertype like %:search% OR cf_con.conditions_id like %:search% OR cf_con.message like %:search% ) ",
                     nativeQuery = true)
@@ -151,7 +352,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
     public Integer getListSmsConditionAllLikeTotalCount(@Param(value = "search") String search);
 
     // ordertype
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.ordertype like %:search% ) ",
                     nativeQuery = true)
@@ -167,7 +368,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // conditions_id
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.conditions_id like %:search% ) ",
                     nativeQuery = true)
@@ -183,7 +384,7 @@ public interface ListSmsConditionRepo extends JpaRepository<ConfigConditionsEnti
 
 
     // message
-    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid "+
+    @Query(value =  "SELECT cf_con.conditions_id,cf_con.ordertype,cf_con.date_start, cf_con.date_end,cf_con.created_date,cf_con.message,cf_con.is_delete, cf_con.refid, cf_con.is_enable "+
                     "FROM config_conditions cf_con "+
                     "WHERE ( cf_con.message like %:search% ) ",
                     nativeQuery = true)
