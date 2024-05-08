@@ -81,6 +81,7 @@ public class UserController {
 
             return new ResponseEntity<>( response, HttpStatus.OK);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());

@@ -81,6 +81,7 @@ public class SmsGatewayController {
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -138,6 +139,7 @@ public class SmsGatewayController {
             // String json = ow.writeValueAsString(receiveSmsPayload);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -195,6 +197,7 @@ public class SmsGatewayController {
             // String json = ow.writeValueAsString(receiveSmsPayload);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
@@ -252,6 +255,7 @@ public class SmsGatewayController {
             // String json = ow.writeValueAsString(receiveSmsPayload);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
+            response.setDraw(draw);
             response.setCount(0);
             response.setData(null);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
