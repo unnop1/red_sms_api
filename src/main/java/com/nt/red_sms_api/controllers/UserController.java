@@ -71,6 +71,7 @@ public class UserController {
             auditLog.setComment("getAllUser");
             auditService.AddAuditLog(auditLog);
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());

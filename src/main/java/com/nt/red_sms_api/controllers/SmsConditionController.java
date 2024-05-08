@@ -71,6 +71,7 @@ public class SmsConditionController {
             auditService.AddAuditLog(auditLog);
             
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsConditions.getCount());
             response.setRecordsTotal(smsConditions.getCount());
             response.setCount(smsConditions.getCount());

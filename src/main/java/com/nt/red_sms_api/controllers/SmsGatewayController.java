@@ -71,6 +71,7 @@ public class SmsGatewayController {
             auditService.AddAuditLog(auditLog);
             
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGws.getCount());
             response.setRecordsTotal(smsGws.getCount());
             response.setCount(smsGws.getCount());
@@ -125,6 +126,7 @@ public class SmsGatewayController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
@@ -181,6 +183,7 @@ public class SmsGatewayController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
@@ -237,6 +240,7 @@ public class SmsGatewayController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
             
+            response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
