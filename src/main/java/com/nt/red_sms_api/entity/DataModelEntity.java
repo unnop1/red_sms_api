@@ -26,4 +26,10 @@ public class DataModelEntity {
         @Column(name = "model_name", unique = false,nullable = true)
         private String model_name = null;
 
+        @Column(name = "data_type", unique = false,nullable = true)
+        private String data_type = null;
+
+        @Column(name = "format", unique = false,nullable = true)
+        private String format = null;
+
 }
