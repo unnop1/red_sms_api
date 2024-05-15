@@ -3,7 +3,13 @@ package com.nt.red_sms_api.entity;
 
 import java.sql.Timestamp;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,4 +72,10 @@ public class SmsGatewayEntity {
 
         @Column(name = "RefID", unique = false,nullable = true)
         private String RefID = null;
+
+        @Column(name = "DATE_START", unique = false,nullable = true)
+        private Timestamp date_Start = null;
+
+        @Column(name = "DATE_END", unique = false,nullable = true)
+        private Timestamp date_End = null;
 }

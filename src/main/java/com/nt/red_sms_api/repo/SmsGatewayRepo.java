@@ -3,18 +3,16 @@ package com.nt.red_sms_api.repo;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
     @Query(value = """
-                SELECT smsgw.*, conf.refid FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.refid , conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
@@ -219,7 +217,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
 
     @Query(value = """
-                    SELECT smsgw.*, conf.refid 
+                    SELECT smsgw.*, conf.refid , conf.DATE_START , conf.DATE_END
                     FROM sms_gateway smsgw 
                     LEFT JOIN config_conditions conf 
                     ON conf.conditions_id = smsgw.CONFIG_CONDITIONS_ID
