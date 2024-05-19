@@ -1,6 +1,6 @@
 package com.nt.red_sms_api.dto.resp;
 
-import jakarta.persistence.Column;
+import javax.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 

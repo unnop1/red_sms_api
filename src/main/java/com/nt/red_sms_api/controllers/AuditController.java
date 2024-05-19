@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 @CrossOrigin(origins = "*")
 @RequestMapping("/audit")
 public class AuditController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private AuditService auditService;

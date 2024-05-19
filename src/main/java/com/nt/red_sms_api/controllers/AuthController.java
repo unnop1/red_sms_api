@@ -22,7 +22,7 @@ import com.nt.red_sms_api.service.PermissionMenuService;
 import com.nt.red_sms_api.service.UserService;
 
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -45,7 +45,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private AuthenticationManager manager;

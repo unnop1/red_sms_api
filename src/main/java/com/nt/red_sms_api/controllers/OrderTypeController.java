@@ -12,7 +12,7 @@ import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.OrderTypeService;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

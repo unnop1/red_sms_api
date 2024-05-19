@@ -3,10 +3,10 @@ package com.nt.red_sms_api.Auth;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,6 @@ import java.util.Map;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
     @Autowired
     private JwtHelper jwtHelper;
 
@@ -48,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String requestHeader = request.getHeader("Authorization");
         //Bearer 2352345235sdfrsfgsdfsdf
-        logger.info(" Header :  {}", request);
         String username = null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer")) {
@@ -60,15 +58,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = this.jwtHelper.getUsernameFromToken(token);
 
             } catch (IllegalArgumentException e) {
-                logger.info("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
             } catch (ExpiredJwtException e) {
-                logger.info("Given jwt token is expired !!");
                 e.printStackTrace();
                 JwtExpiredHandler(e.getMessage(), request, response);
                 return;
             } catch (MalformedJwtException e) {
-                logger.info("Some changed has done in token !! Invalid Token");
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -93,8 +88,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-            } else {
-                logger.info("Validation fails !!");
             }
 
 

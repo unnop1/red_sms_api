@@ -5,7 +5,7 @@ import org.hibernate.annotations.Formula;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nt.red_sms_api.entity.UserEntity;
 
-import jakarta.persistence.Column;
+import javax.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 

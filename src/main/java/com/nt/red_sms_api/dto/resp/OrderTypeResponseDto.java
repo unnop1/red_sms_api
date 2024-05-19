@@ -2,7 +2,7 @@ package com.nt.red_sms_api.dto.resp;
 
 import java.sql.Timestamp;
 
-import jakarta.persistence.Column;
+import javax.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
