@@ -32,4 +32,7 @@ public class DataModelEntity {
         @Column(name = "format", unique = false,nullable = true)
         private String format = null;
 
+        @Column(name = "group_data_type", unique = false,nullable = true)
+        private String group_data_type = null;
+
 }
