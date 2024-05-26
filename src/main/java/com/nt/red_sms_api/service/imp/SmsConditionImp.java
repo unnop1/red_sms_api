@@ -1,5 +1,13 @@
 package com.nt.red_sms_api.service.imp;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
@@ -7,20 +15,11 @@ import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
-import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.smscondition.ListSmsCondition;
 import com.nt.red_sms_api.repo.OrderTypeRepo;
 import com.nt.red_sms_api.repo.SmsConditionRepo;
 import com.nt.red_sms_api.repo.view.smscondition.ListSmsConditionRepo;
 import com.nt.red_sms_api.service.SmsConditionService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 public class SmsConditionImp implements SmsConditionService{
@@ -283,6 +282,7 @@ public class SmsConditionImp implements SmsConditionService{
         newCondition.setDate_End(dateEnd);
         newCondition.setMessage(req.getMessage());
         newCondition.setOrderType(orderTypeName);
+        newCondition.setIs_enable(req.getIs_enable());
         newCondition.setRefID(refID);
         ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
 
