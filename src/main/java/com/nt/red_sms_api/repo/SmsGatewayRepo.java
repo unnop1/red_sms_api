@@ -50,7 +50,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
 
     @Query(value = """
-                SELECT smsgw.*, conf.refid  FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END  FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
@@ -97,7 +97,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     // phonenumber
     @Query(value = """
-                SELECT smsgw.*, conf.refid FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
@@ -137,7 +137,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     // smsmessage
     @Query(value = """
-                SELECT smsgw.*, conf.refid FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
@@ -177,7 +177,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     // refid
     @Query(value = """
-                SELECT smsgw.*, conf.refid FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
