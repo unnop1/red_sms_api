@@ -56,10 +56,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
-                AND ( smsgw.config_conditions_id like %:search% 
-                    OR smsgw.phonenumber like %:search% 
-                    OR smsgw.smsmessage like %:search% 
-                )
+                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.phonenumber || smsgw.smsmessage like %:search% )
                 AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
@@ -80,10 +77,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                 WHERE smsgw.order_type_mainID=:order_type_main_id 
                 AND smsgw.Is_Status=:is_status
-                AND ( smsgw.config_conditions_id like %:search% 
-                    OR smsgw.phonenumber like %:search% 
-                    OR smsgw.smsmessage like %:search% 
-                )
+                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.phonenumber || smsgw.smsmessage like %:search% )
                 AND ( receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
