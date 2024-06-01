@@ -32,6 +32,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.
                         requestMatchers("/home").permitAll().
+                        requestMatchers(
+                            "/actuator/*",
+                            "actuator/metrics/*"
+                        ).permitAll().
                         requestMatchers("/",
                                         "/error",
                                         "/favicon.ico",
