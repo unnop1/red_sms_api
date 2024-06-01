@@ -138,53 +138,6 @@ public class SmsConditionImp implements SmsConditionService{
         if (!req.getStartTime().isEmpty()){
             startTime = Timestamp.valueOf(req.getStartTime());
         }
-        Integer offset = req.getStart();
-        Integer limit = req.getLength();
-        Integer page = offset / limit;
-        String sortName = req.getSortName();
-        String sortBy = req.getSortBy();
-        String search = req.getSearch();
-        String searchField = req.getSearchField().toLowerCase();
-
-        if ( search.isEmpty()){
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithStartTime(startTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
-            Integer count = listSmsConditionRepo.getListSmsConditionWithStartTimeTotalCount(startTime);
-            resp.setCount(count);
-            resp.setData(smsConditionEntities);
-            return resp;
-        }else {
-            if( !req.getSearchField().isEmpty()){
-                if (searchField.equals("ordertype")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeWithStartTimeLike(startTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListOrderTypeLikeWithStartTimeTotalCount(startTime, search);
-                    resp.setCount(count);
-                    resp.setData(smsConditionEntities);
-                    return resp;
-                }else if (searchField.equals("conditions_id")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdWithStartTimeLike(startTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListConditionIdWithStartTimeLikeTotalCount(startTime, search);
-                    resp.setCount(count);
-                    resp.setData(smsConditionEntities);
-                    return resp;
-                }else if (searchField.equals("message")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageWithStartTimeLike(startTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListMessageWithStartTimeLikeTotalCount(startTime, search);
-                    resp.setCount(count);
-                    resp.setData(smsConditionEntities);
-                    return resp;
-                }
-            }
-            
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithStartTimeAllLike(startTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-            Integer count = listSmsConditionRepo.getListSmsConditionWithStartTimeAllLikeTotalCount(startTime, search);
-            resp.setCount(count);
-            resp.setData(smsConditionEntities);
-            return resp;
-        }
-    }
-
-    public PaginationDataResp ListAllSmsConditionOnlyEndTime(ListConditionReq req) {
-        PaginationDataResp resp = new PaginationDataResp();
         Timestamp endTime = null;
         if (!req.getEndTime().isEmpty()){
             endTime = Timestamp.valueOf(req.getEndTime());
@@ -198,36 +151,91 @@ public class SmsConditionImp implements SmsConditionService{
         String searchField = req.getSearchField().toLowerCase();
 
         if ( search.isEmpty()){
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithEndTime(endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
-            Integer count = listSmsConditionRepo.getListSmsConditionWithEndTimeTotalCount(endTime);
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithStartTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithStartTimeTotalCount(startTime,endTime);
             resp.setCount(count);
             resp.setData(smsConditionEntities);
             return resp;
         }else {
             if( !req.getSearchField().isEmpty()){
                 if (searchField.equals("ordertype")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeWithEndTimeLike(endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListOrderTypeLikeWithEndTimeTotalCount(endTime, search);
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeWithStartTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListOrderTypeLikeWithStartTimeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("conditions_id")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdWithEndTimeLike(endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListConditionIdWithEndTimeLikeTotalCount(endTime, search);
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdWithStartTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListConditionIdWithStartTimeLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("message")){
-                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageWithEndTimeLike(endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-                    Integer count = listSmsConditionRepo.getListMessageWithEndTimeLikeTotalCount(endTime, search);
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageWithStartTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListMessageWithStartTimeLikeTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
                 }
             }
             
-            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithEndTimeAllLike(endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-            Integer count = listSmsConditionRepo.getListSmsConditionWithEndTimeAllLikeTotalCount(endTime, search);
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithStartTimeAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithStartTimeAllLikeTotalCount(startTime, endTime, search);
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }
+    }
+
+    public PaginationDataResp ListAllSmsConditionOnlyEndTime(ListConditionReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        Timestamp startTime = null;
+        if (!req.getStartTime().isEmpty()){
+            startTime = Timestamp.valueOf(req.getStartTime());
+        }
+        Timestamp endTime = null;
+        if (!req.getEndTime().isEmpty()){
+            endTime = Timestamp.valueOf(req.getEndTime());
+        }
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = offset / limit;
+        String sortName = req.getSortName();
+        String sortBy = req.getSortBy();
+        String search = req.getSearch();
+        String searchField = req.getSearchField().toLowerCase();
+
+        if ( search.isEmpty()){
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithEndTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithEndTimeTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }else {
+            if( !req.getSearchField().isEmpty()){
+                if (searchField.equals("ordertype")){
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListOrderTypeWithEndTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListOrderTypeLikeWithEndTimeTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("conditions_id")){
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListConditionIdWithEndTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListConditionIdWithEndTimeLikeTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("message")){
+                    List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListMessageWithEndTimeLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsConditionRepo.getListMessageWithEndTimeLikeTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }
+            }
+            
+            List<ListSmsCondition> smsConditionEntities = listSmsConditionRepo.ListSmsConditionWithEndTimeAllLike(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+            Integer count = listSmsConditionRepo.getListSmsConditionWithEndTimeAllLikeTotalCount(startTime, endTime, search);
             resp.setCount(count);
             resp.setData(smsConditionEntities);
             return resp;
