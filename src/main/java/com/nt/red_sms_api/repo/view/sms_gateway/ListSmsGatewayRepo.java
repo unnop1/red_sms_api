@@ -1,17 +1,16 @@
 package com.nt.red_sms_api.repo.view.sms_gateway;
 
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
     
@@ -51,7 +50,7 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time
-                    AND ( smsgw.TRANSACTION_ID like %:search% OR smsgw.phonenumber like %:search% OR smsgw.ordertype like %:search% OR smsgw.is_status like %:search% )
+                    AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search% OR smsgw.phonenumber like %:search% OR UPPER(smsgw.ordertype) || LOWER(smsgw.ordertype) like %:search% OR smsgw.is_status like %:search% )
                     """
                     ,nativeQuery = true)
     public List<ListSmsGateway> ListSendSmsGwAllSearch(
@@ -68,7 +67,7 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( smsgw.TRANSACTION_ID like %:search% OR smsgw.phonenumber like %:search% OR smsgw.ordertype like %:search% OR smsgw.is_status like %:search% ) 
+                    AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search% OR smsgw.phonenumber like %:search% OR UPPER(smsgw.ordertype) || LOWER(smsgw.ordertype) like %:search% OR smsgw.is_status like %:search% )
                     """
                     ,nativeQuery = true)
     public Integer getListSendSmsGwAllSearchTotalCount(
@@ -119,7 +118,7 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( conf.refid like %:search% ) 
+                    AND ( UPPER(conf.refid) || LOWER(conf.refid) like %:search% ) 
                     """
                     ,nativeQuery = true)
     public List<ListSmsGateway> ListSendRefIdField(
@@ -136,7 +135,7 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    AND ( conf.refid like %:search% ) 
+                    AND ( UPPER(conf.refid) || LOWER(conf.refid) like %:search% ) 
                     """
                     ,nativeQuery = true)
     public Integer getListSendRefIdFieldTotalCount(
