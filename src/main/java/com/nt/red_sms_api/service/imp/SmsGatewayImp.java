@@ -1,5 +1,14 @@
 package com.nt.red_sms_api.service.imp;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.JpaSort;
+import org.springframework.stereotype.Service;
+
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
@@ -8,22 +17,12 @@ import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
-import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByConditionRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByResponseTimeRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.BySendingRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ListSmsGatewayRepo;
 import com.nt.red_sms_api.service.SmsGatewayService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.JpaSort;
-import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 @Service
 public class SmsGatewayImp implements SmsGatewayService{
@@ -248,11 +247,24 @@ public class SmsGatewayImp implements SmsGatewayService{
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
-        Integer page = offset / limit;
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch();
         String searchField = req.getSearchField().toLowerCase();
+
+        if(offset.equals(0) && limit.equals(0)){
+            if(searchField.equals("ordertype")){
+                List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendOrderTypeField(startTime, endTime, search);
+                Integer count = listSmsGatewayRepo.getListSendOrderTypeFieldTotalCount(startTime, endTime, search);
+                resp.setCount(count);
+                resp.setData(smsGws);
+                return resp;
+            }
+        }
 
         if ( search.isEmpty()){
             List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGw(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
@@ -262,19 +274,31 @@ public class SmsGatewayImp implements SmsGatewayService{
             return resp;
         }else {
             if( !req.getSearchField().isEmpty()){
-                if(searchField.equals("smsmessage")){
+                if(searchField.equals("transaction_id")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendTransactionIDTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendTransactionIDFieldTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                } else if(searchField.equals("phonenumber")){
+                    List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendPhonenumberTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+                    Integer count = listSmsGatewayRepo.getListSendPhonenumberFieldTotalCount(startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                } else if(searchField.equals("smsmessage")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsMsgField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendSmsMsgFieldTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
-                }if(searchField.equals("refid")){
+                } else if(searchField.equals("refid")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendRefIdField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendRefIdFieldTotalCount(startTime, endTime, search);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
-                }if(searchField.equals("ordertype")){
+                } else if(searchField.equals("ordertype")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendOrderTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendOrderTypeFieldTotalCount(startTime, endTime, search);
                     resp.setCount(count);
