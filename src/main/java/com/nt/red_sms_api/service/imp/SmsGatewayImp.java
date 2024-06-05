@@ -52,10 +52,22 @@ public class SmsGatewayImp implements SmsGatewayService{
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
-        Integer page = offset / limit;
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
         String sortBy = req.getSortBy();
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
+
+        if(offset.equals(0) && limit.equals(0)){
+            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime);
+            Integer count = byConditionRepo.getListByConditionTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsGatewayEntities);
+            return resp;
+        }
+        
 
         List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime, PageRequest.of(page, limit, sort) );
         Integer count = byConditionRepo.getListByConditionTotalCount(startTime, endTime);
@@ -67,17 +79,25 @@ public class SmsGatewayImp implements SmsGatewayService{
     @Override
     public PaginationDataResp findSmsGatewaySendAndUnSend(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        // String sort = "TRUNC(smsgw.created_date)" + " " + req.getSortBy();
-        // String startTime = req.getStartTime();
-        // String endTime = req.getEndTime();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
-        Integer page = offset / limit;
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
         String sortBy = req.getSortBy();
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
+
+        if(offset.equals(0) && limit.equals(0)){
+            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime);
+            Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsGatewayEntities);
+            return resp;
+        }
 
         List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, sort));
         Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
@@ -120,7 +140,10 @@ public class SmsGatewayImp implements SmsGatewayService{
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
-        Integer page = offset / limit;
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch();
@@ -128,6 +151,73 @@ public class SmsGatewayImp implements SmsGatewayService{
 
         Long orderTypeMainID = req.getOrder_type_main_id();
         Integer isStatus = req.getIsStatus();
+
+        if ( orderTypeMainID == 0){
+            if (searchField.equals("phonenumber")){
+                if(offset.equals(0) && limit.equals(0)){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusNoOrderIDSearchPhone(
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+
+                    Integer count = smsGatewayRepo.getOdtStatusNoOrderIDSearchPhoneTotalCount(
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }
+                List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusNoOrderIDSearchPhone(
+                    isStatus,
+                    search,
+                    startTime,
+                    endTime,
+                    PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                );
+
+                Integer count = smsGatewayRepo.getOdtStatusNoOrderIDSearchPhoneTotalCount(
+                    isStatus,
+                    search,
+                    startTime,
+                    endTime
+                );
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
+            if(offset.equals(0) && limit.equals(0)){
+                List<SmsGatewayEntity> smsGw = smsGatewayRepo.OdtStatusNoOrderID(
+                isStatus,
+                startTime,
+                endTime);
+                Integer count = smsGatewayRepo.getOdtStatusNoOrderIDTotalCount(
+                    isStatus,
+                    startTime,
+                    endTime
+                );
+                resp.setCount(count);
+                resp.setData(smsGw);
+                return resp;
+            }
+            List<SmsGatewayEntity> smsGw = smsGatewayRepo.OdtStatusNoOrderID(
+                isStatus,
+                startTime,
+                endTime,
+                PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = smsGatewayRepo.getOdtStatusNoOrderIDTotalCount(
+                isStatus,
+                startTime,
+                endTime
+            );
+            resp.setCount(count);
+            resp.setData(smsGw);
+            return resp;
+        }
 
         if ( search.isEmpty()){
             List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayByOrderTypeAndStatus(
@@ -263,7 +353,19 @@ public class SmsGatewayImp implements SmsGatewayService{
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
+            } else if(searchField.equals("phonenumber")){
+                List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendPhonenumberTypeField(startTime, endTime, search);
+                Integer count = listSmsGatewayRepo.getListSendPhonenumberFieldTotalCount(startTime, endTime, search);
+                resp.setCount(count);
+                resp.setData(smsGws);
+                return resp;
             }
+            List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGwAllSearch(startTime, endTime, search);
+            Integer count = listSmsGatewayRepo.getListSendSmsGwAllSearchTotalCount(startTime, endTime, search);
+            resp.setCount(count);
+            resp.setData(smsGws);
+            return resp;
+
         }
 
         if ( search.isEmpty()){

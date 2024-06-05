@@ -73,6 +73,9 @@ public class SmsGatewayEntity {
         @Column(name = "RefID", unique = false,nullable = true)
         private String RefID = null;
 
+        @Column(name = "transaction_id", unique = false,nullable = true)
+        private String transaction_id = null;
+
         @Column(name = "DATE_START", unique = false,nullable = true)
         private Timestamp date_Start = null;
 

@@ -2,6 +2,9 @@
 package com.nt.red_sms_api.repo.view.sms_gateway;
 
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,10 +12,6 @@ import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
-import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
-
-import java.sql.Timestamp;
-import java.util.List;
 
 public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     
@@ -20,10 +19,12 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
                     smsgw.receive_date,
                     smsgw.send_date,
+                    smsgw.is_status,
                     conf.refid,
                     SUM(
                             extract ( day from (send_date - receive_date) )*86400 
@@ -33,10 +34,9 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     ) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
-                    config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                    config_conditions conf 
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id 
                     WHERE smsgw.send_date BETWEEN :start_time AND :end_time 
-                    GROUP BY GID, config_conditions_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, conf.refid
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTime(
@@ -64,10 +64,12 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
                     smsgw.receive_date,
                     smsgw.send_date,
+                    smsgw.is_status,
                     conf.refid,
                     SUM(
                             extract ( day from (send_date - receive_date) )*86400 

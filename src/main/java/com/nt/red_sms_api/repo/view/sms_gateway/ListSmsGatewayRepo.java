@@ -76,6 +76,24 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
         @Param(value = "search")String search
     );
 
+    //// no page
+    @Query(value =  """
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
+                    FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                    WHERE smsgw.CREATED_DATE BETWEEN :start_time AND :end_time
+                    AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search% OR smsgw.phonenumber like %:search% OR UPPER(smsgw.ordertype) || LOWER(smsgw.ordertype) like %:search% OR smsgw.is_status like %:search% ) 
+                    ORDER BY smsgw.send_date DESC
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsGateway> ListSendSmsGwAllSearch(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,
+        @Param(value = "search")String search
+    );
+
     // smsmessage
     @Query(value =  """
                     SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
@@ -264,6 +282,24 @@ public interface ListSmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long>
     public Integer getListSendPhonenumberFieldTotalCount(
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,  
+        @Param(value = "search")String search
+    );
+
+    //phonenumber no page
+    @Query(value =  """
+                    SELECT smsgw.GID, smsgw.TRANSACTION_ID, smsgw.send_date, smsgw.phonenumber, smsgw.ordertype, smsgw.is_status , conf.refid 
+                    FROM sms_gateway smsgw 
+                    LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                    WHERE smsgw.CREATED_DATE BETWEEN :start_time AND :end_time 
+                    AND ( smsgw.phonenumber like %:search% ) 
+                    ORDER BY smsgw.send_date DESC
+                    """
+                    ,nativeQuery = true)
+    public List<ListSmsGateway> ListSendPhonenumberTypeField(
+        @Param(value = "start_time")Timestamp startTime,
+        @Param(value = "end_time")Timestamp endTime,
         @Param(value = "search")String search
     );
 

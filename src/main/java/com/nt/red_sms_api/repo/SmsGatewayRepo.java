@@ -219,4 +219,106 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     """,
                     nativeQuery = true)
     public SmsGatewayEntity GetSmsGatewayInfo(@Param(value = "gid") Long gid);
+
+    /// no ordertype_main_id
+    @Query(value = """
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                WHERE smsgw.Is_Status=:is_status 
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> OdtStatusNoOrderID(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                    WHERE smsgw.Is_Status=:is_status 
+                    AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getOdtStatusNoOrderIDTotalCount(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    /// no ordertype_main_id /// no page
+    @Query(value = """
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                WHERE smsgw.Is_Status=:is_status 
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> OdtStatusNoOrderID(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    /// no ordertype_main_id search phonenumber
+    @Query(value = """ 
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                WHERE smsgw.Is_Status=:is_status 
+                AND ( smsgw.phonenumber like %:search% ) 
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> OdtStatusNoOrderIDSearchPhone(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                    WHERE smsgw.Is_Status=:is_status 
+                    AND ( smsgw.phonenumber like %:search% ) 
+                    AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getOdtStatusNoOrderIDSearchPhoneTotalCount(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    /// no ordertype_main_id search phonenumber // no page
+    @Query(value = """ 
+                SELECT smsgw.*, conf.refid, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
+                WHERE smsgw.Is_Status=:is_status 
+                AND ( smsgw.phonenumber like %:search% ) 
+                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> OdtStatusNoOrderIDSearchPhone(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
 }

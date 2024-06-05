@@ -10,4 +10,5 @@ public interface ByResponseTime {
     String getPHONENUMBER();
     Integer getIS_STATUS();
     String getRESPONSE_TIME();
+    String getTRANSACTION_ID();
 }
