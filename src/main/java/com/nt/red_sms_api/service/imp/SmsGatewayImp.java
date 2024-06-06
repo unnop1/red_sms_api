@@ -113,7 +113,10 @@ public class SmsGatewayImp implements SmsGatewayService{
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
-        Integer page = offset / limit;
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
         String sortName = req.getSortName();
         String sortBy = req.getSortBy();
         String search = req.getSearch(); // fix search phone number
