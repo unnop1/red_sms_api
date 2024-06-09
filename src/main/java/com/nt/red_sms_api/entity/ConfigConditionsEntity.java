@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.entity;
 
 
+import java.sql.Clob;
 import java.sql.Timestamp;
 
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "config_conditions")
+@Table (name = "config_conditions", schema="reddbsms")
 public class ConfigConditionsEntity {
         
         @Id
@@ -44,10 +45,10 @@ public class ConfigConditionsEntity {
         private String message = null;
 
         @Column(name = "conditions_or", unique = false,nullable = true)
-        private String conditions_or = null;
+        private Clob conditions_or = null;
 
         @Column(name = "conditions_and", unique = false,nullable = true)
-        private String conditions_and = null;
+        private Clob conditions_and = null;
 
         @Column(name = "created_Date", unique = false,nullable = true)
         private Timestamp created_Date = null;
@@ -74,10 +75,10 @@ public class ConfigConditionsEntity {
         private Timestamp is_Delete_Date = null;
 
         @Column(name = "conditions_or_select", unique = false,nullable = true)
-        private String conditions_or_select = null;
+        private Clob conditions_or_select = null;
 
         @Column(name = "conditions_and_select", unique = false,nullable = true)
-        private String conditions_and_select = null;
+        private Clob conditions_and_select = null;
 
         
 }

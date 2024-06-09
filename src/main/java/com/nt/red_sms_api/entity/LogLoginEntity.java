@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "sa_log_login")
+@Table (name = "sa_log_login", schema="reddbsms")
 public class LogLoginEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sa_log_login_seq")

@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "data_model_template")
+@Table (name = "data_model_template", schema="reddbsms")
 public class DataModelEntity {
         
         @Id

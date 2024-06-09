@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table(name = "AUDIT_LOG")
+@Table(name = "AUDIT_LOG", schema="reddbsms")
 public class AuditLogEntity {
  
         @Id

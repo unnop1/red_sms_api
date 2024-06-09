@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.entity.view.permission;
 
 
+import java.sql.Clob;
 import java.sql.Timestamp;
 
 import jakarta.persistence.*;
@@ -26,7 +27,7 @@ public class ListPermissionTotalUser {
         private String permission_Name=null;
 
         @Column(name = "permission_json", unique = false,nullable = true)
-        private String permission_json=null;
+        private Clob permission_json=null;
 
         @Column(name = "created_Date", unique = false,nullable = true)
         private Timestamp created_Date=null;
@@ -40,6 +41,7 @@ public class ListPermissionTotalUser {
         @Column(name = "updated_By", unique = false,nullable = true)
         private String updated_By=null;
 
+        @Transient
         @Column(name = "totalUser", unique = false,nullable = true)
         private Integer totalUser=0;
 }

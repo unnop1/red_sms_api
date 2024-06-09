@@ -1,7 +1,11 @@
 package com.nt.red_sms_api.service.imp;
 
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -297,12 +301,43 @@ public class SmsConditionImp implements SmsConditionService{
         String refID = orderTypeName.toUpperCase() + paddedNumber;
         
         ConfigConditionsEntity newCondition = new ConfigConditionsEntity();
-        newCondition.setConditions_and(req.getConditions_and());
+        Clob conditions_andClob;
+        
+        try {
+            conditions_andClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_and().toCharArray());
+            newCondition.setConditions_and(conditions_andClob);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+
+        Clob conditions_orClob;
+        try {
+            conditions_orClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_or().toCharArray());
+            newCondition.setConditions_or(conditions_orClob);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+
+        Clob conditions_and_selectClob;
+        try {
+            conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_AND_SELECT().toCharArray());
+            newCondition.setConditions_and_select(conditions_and_selectClob);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+
+        Clob conditions_or_selectClob;
+        try {
+            conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_OR_SELECT().toCharArray());
+            newCondition.setConditions_or_select(conditions_or_selectClob);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
         newCondition.setOrder_type_MainID(orderType.getMainID());
-        newCondition.setConditions_and_select(req.getCONDITIONS_AND_SELECT());
-        newCondition.setConditions_or(req.getConditions_or());
-        newCondition.setConditions_or_select(req.getCONDITIONS_OR_SELECT());
-        newCondition.setConditions_or(req.getConditions_or());
         newCondition.setCreated_By(createdBy);
         newCondition.setCreated_Date(timeNow);
         newCondition.setDate_Start(dateStart);
@@ -330,10 +365,25 @@ public class SmsConditionImp implements SmsConditionService{
 
             Timestamp timeNow = DateTime.getTimeStampNow();
             if (updates.getConditions_and() != null ){
-                existingEntity.setConditions_and(updates.getConditions_and());
+                Clob conditions_andClob;
+                try {
+                    conditions_andClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_and().toCharArray());
+                    existingEntity.setConditions_and(conditions_andClob);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } 
+                
             }
             if (updates.getConditions_or() != null ){
-                existingEntity.setConditions_or(updates.getConditions_or());
+                Clob conditions_orClob;
+                try {
+                    conditions_orClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_or().toCharArray());
+                    existingEntity.setConditions_or(conditions_orClob);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } 
             }
             if (updates.getDate_end() != null ){
                 Timestamp dateStart = Timestamp.valueOf(updates.getDate_start());
@@ -353,11 +403,26 @@ public class SmsConditionImp implements SmsConditionService{
             }
 
             if (updates.getCONDITIONS_OR_SELECT() != null ){
-                existingEntity.setConditions_or_select(updates.getCONDITIONS_OR_SELECT());
+                Clob conditions_or_selectClob;
+                try {
+                    conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_OR_SELECT().toCharArray());
+                    existingEntity.setConditions_or_select(conditions_or_selectClob);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } 
+                
             }
 
             if (updates.getCONDITIONS_AND_SELECT() != null ){
-                existingEntity.setConditions_and_select(updates.getCONDITIONS_AND_SELECT());
+                Clob conditions_and_selectClob;
+                try {
+                    conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_AND_SELECT().toCharArray());
+                    existingEntity.setConditions_and_select(conditions_and_selectClob);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
 
             if (updates.getMessage() != null ){
