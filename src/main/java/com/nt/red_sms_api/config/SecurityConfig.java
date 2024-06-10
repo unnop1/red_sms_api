@@ -32,6 +32,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests.
                         requestMatchers("/home").permitAll().
+                        requestMatchers("/red-sms-api/**/*").permitAll().
                         requestMatchers(
                             "/actuator/*",
                             "actuator/metrics/*"

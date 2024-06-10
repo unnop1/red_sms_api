@@ -12,15 +12,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginResp {
+    @Column
     @JsonProperty("user")
     private UserResp userLogin;
 
+    @Column
     @JsonProperty("access_token")
     private String jwtToken;
 
+    @Column
     @JsonProperty("permission_menu")
     private Object permissionJson;
 
+    @Column
     @JsonProperty("permissionName")    
     private String permissionName;
 }
