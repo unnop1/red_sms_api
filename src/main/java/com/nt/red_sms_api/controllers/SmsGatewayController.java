@@ -1,26 +1,27 @@
 package com.nt.red_sms_api.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
-import com.nt.red_sms_api.dto.req.smsgw.SmsGwOdtReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
-import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.SmsGatewayDetail;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
 import jakarta.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -58,6 +59,7 @@ public class SmsGatewayController {
         try{
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsGws = smsGatewayService.ListSendSmsGateWays(req);
+            
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
             auditLog.setAuditable("sms_gateway");
@@ -75,6 +77,8 @@ public class SmsGatewayController {
             response.setRecordsFiltered(smsGws.getCount());
             response.setRecordsTotal(smsGws.getCount());
             response.setCount(smsGws.getCount());
+            response.setCountSend(smsGws.getCountSend());
+            response.setCountUnSend(smsGws.getCountUnSend());
             response.setMessage("Success");
             response.setData(smsGws.getData());
             response.setStatusCode(200);

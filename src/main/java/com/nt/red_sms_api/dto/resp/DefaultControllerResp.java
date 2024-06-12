@@ -9,6 +9,8 @@ import lombok.Setter;
 public class DefaultControllerResp {
     private int statusCode;
     private int count;
+    private int countUnSend=0;
+    private int countSend=0;
     private String message;
     private Object data;
     private Integer draw=11;

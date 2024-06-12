@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public interface ByResponseTime {
     String getCONFIG_CONDITIONS_ID();
     String getREFID();
+    String getORDERTYPE();
     Timestamp getRECEIVE_DATE();
     Timestamp getSEND_DATE();
     String getPHONENUMBER();

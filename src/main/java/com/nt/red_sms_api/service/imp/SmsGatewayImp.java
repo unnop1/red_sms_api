@@ -121,6 +121,23 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortBy = req.getSortBy();
         String search = req.getSearch(); // fix search phone number
 
+        if(offset.equals(0) && limit.equals(0)){
+            if ( search.isEmpty()){
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(startTime, endTime);
+                Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGws);
+                return resp;
+            }else {
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(startTime, endTime, search);
+                Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(startTime, endTime, search);
+                resp.setCount(count);
+                resp.setData(smsGws);
+                return resp;
+            }
+
+        }
+
         if ( search.isEmpty()){
             List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
             Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
@@ -374,6 +391,10 @@ public class SmsGatewayImp implements SmsGatewayService{
         if ( search.isEmpty()){
             List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGw(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
             Integer count = listSmsGatewayRepo.getListSendSmsGwTotalCount(startTime, endTime);
+            Integer countSend = listSmsGatewayRepo.getListSendSmsGwStatusSendTotalCount(startTime, endTime);
+            Integer countUnSend = listSmsGatewayRepo.getListSendSmsGwStatusUnSendTotalCount(startTime, endTime);
+            resp.setCountUnSend(countUnSend);
+            resp.setCountSend(countSend);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;
@@ -382,30 +403,50 @@ public class SmsGatewayImp implements SmsGatewayService{
                 if(searchField.equals("transaction_id")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendTransactionIDTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendTransactionIDFieldTotalCount(startTime, endTime, search);
+                    Integer countSend = listSmsGatewayRepo.getListSendTransactionIDFieldStatusSendTotalCount(startTime, endTime, search);
+                    Integer countUnSend = listSmsGatewayRepo.getListSendTransactionIDFieldStatusUnSendTotalCount(startTime, endTime, search);
+                    resp.setCountUnSend(countUnSend);
+                    resp.setCountSend(countSend);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
                 } else if(searchField.equals("phonenumber")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendPhonenumberTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendPhonenumberFieldTotalCount(startTime, endTime, search);
+                    Integer countSend = listSmsGatewayRepo.getListSendPhonenumberFieldStatusSendTotalCount(startTime, endTime, search);
+                    Integer countUnSend = listSmsGatewayRepo.getListSendPhonenumberFieldStatusUnSendTotalCount(startTime, endTime, search);
+                    resp.setCountUnSend(countUnSend);
+                    resp.setCountSend(countSend);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
                 } else if(searchField.equals("smsmessage")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsMsgField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendSmsMsgFieldTotalCount(startTime, endTime, search);
+                    Integer countSend = listSmsGatewayRepo.getListSendSmsMsgFieldStatusSendTotalCount(startTime, endTime, search);
+                    Integer countUnSend = listSmsGatewayRepo.getListSendSmsMsgFieldStatusUnSendTotalCount(startTime, endTime, search);
+                    resp.setCountUnSend(countUnSend);
+                    resp.setCountSend(countSend);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
                 } else if(searchField.equals("refid")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendRefIdField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendRefIdFieldTotalCount(startTime, endTime, search);
+                    Integer countSend = listSmsGatewayRepo.getListSendRefIdFieldStatusSendTotalCount(startTime, endTime, search);
+                    Integer countUnSend = listSmsGatewayRepo.getListSendRefIdFieldStatusUnSendTotalCount(startTime, endTime, search);
+                    resp.setCountUnSend(countUnSend);
+                    resp.setCountSend(countSend);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
                 } else if(searchField.equals("ordertype")){
                     List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendOrderTypeField(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                     Integer count = listSmsGatewayRepo.getListSendOrderTypeFieldTotalCount(startTime, endTime, search);
+                    Integer countSend = listSmsGatewayRepo.getListSendOrderTypeFieldStatusSendTotalCount(startTime, endTime, search);
+                    Integer countUnSend = listSmsGatewayRepo.getListSendOrderTypeFieldStatusUnSendTotalCount(startTime, endTime, search);
+                    resp.setCountUnSend(countUnSend);
+                    resp.setCountSend(countSend);
                     resp.setCount(count);
                     resp.setData(smsGws);
                     return resp;
@@ -414,6 +455,10 @@ public class SmsGatewayImp implements SmsGatewayService{
             // System.out.println("3");
             List<ListSmsGateway> smsGws = listSmsGatewayRepo.ListSendSmsGwAllSearch(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
             Integer count = listSmsGatewayRepo.getListSendSmsGwAllSearchTotalCount(startTime, endTime, search);
+            Integer countSend = listSmsGatewayRepo.getListSendSmsGwAllStatusSendTotalCount(startTime, endTime, search);
+            Integer countUnSend = listSmsGatewayRepo.getListSendSmsGwAllStatusUnSendTotalCount(startTime, endTime, search);
+            resp.setCountUnSend(countUnSend);
+            resp.setCountSend(countSend);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;

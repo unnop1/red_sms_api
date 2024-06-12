@@ -1,6 +1,5 @@
 package com.nt.red_sms_api.dto.resp;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,7 +7,8 @@ import lombok.Setter;
 @Setter
 public class PaginationDataResp {   
     private Integer count;
-
+    private Integer countUnSend=0;
+    private Integer countSend=0;
     private Object data;
 
 }
