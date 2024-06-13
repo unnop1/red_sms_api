@@ -11,6 +11,7 @@ import com.nt.red_sms_api.dto.resp.DataObjectResp;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsConditionService;
 
@@ -106,7 +107,7 @@ public class SmsConditionController {
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
 
-            DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
+            ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
 
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
@@ -121,40 +122,17 @@ public class SmsConditionController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
             
-            if(smsDetail.getError() != null){ 
-                response.setCount(0);
-                response.setRecordsFiltered(0);
-                response.setRecordsTotal(0);
-                response.setMessage("Error: " + smsDetail.getError());
-                response.setData(smsDetail);
-                response.setStatusCode(400);
-                // return ResponseEntity.status(HttpStatus.OK).body(response);
-                return ResponseEntity.badRequest()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
-            }
+            
+            response.setCount(1);
+            response.setRecordsFiltered(1);
+            response.setRecordsTotal(1);
+            response.setMessage("Success");
+            response.setData(smsDetail);
+            response.setStatusCode(200);
+            return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
 
-            // return ResponseEntity.ok()
-            // .contentType(MediaType.APPLICATION_JSON)
-            // .body(response);
-            if(smsDetail.getData() != null){ 
-                response.setCount(1);
-                response.setRecordsFiltered(1);
-                response.setRecordsTotal(1);
-                response.setMessage("Success");
-                response.setData(smsDetail);
-                response.setStatusCode(200);
-                return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
-            }else{
-                response.setCount(0);
-                response.setMessage("Notfound");
-                response.setData(smsDetail);
-                response.setStatusCode(404);
-                // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                return ResponseEntity.notFound().build();
-            }
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .contentType(MediaType.APPLICATION_JSON)
