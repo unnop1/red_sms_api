@@ -62,7 +62,7 @@ public class ConfigConditionsEntity {
         @Column(name = "UPDATED_BY", unique = false,nullable = true)
         private String updated_By = null;
 
-        @Column(name = "ID_DELETE", unique = false,nullable = true)
+        @Column(name = "IS_DELETE", unique = false,nullable = true)
         private Integer is_delete = 0;
 
         @Column(name = "IS_ENABLE", unique = false,nullable = true)
