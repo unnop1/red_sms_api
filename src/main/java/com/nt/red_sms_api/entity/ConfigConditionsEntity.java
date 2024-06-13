@@ -29,7 +29,7 @@ public class ConfigConditionsEntity {
         @Column(name = "order_type_MainID", unique = false,nullable = true)
         private Long order_type_MainID = null;
         
-        @Column(name = "orderType", unique = false,nullable = true)
+        @Column(name = "order_Type", unique = false,nullable = true)
         private String orderType = null;
 
         @Column(name = "refID", unique = false,nullable = true)
