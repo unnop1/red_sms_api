@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "order_type", schema="reddbsms")
+@Table (name = "ORDER_TYPE", schema="reddbsms")
 public class OrderTypeEntity {
         
         @Id
@@ -25,16 +25,16 @@ public class OrderTypeEntity {
         @Column(name = "TYPEID")
         private Long TYPEID = null;
 
-        @Column(name = "MainID", unique = false,nullable = true)
+        @Column(name = "MAINID", unique = false,nullable = true)
         private Long MainID = null;
 
-        @Column(name = "OrderType_Name", unique = false,nullable = true)
+        @Column(name = "ORDERTYPE_NAME", unique = false,nullable = true)
         private String OrderTypeName = null;
 
-        @Column(name = "Is_Enable", unique = false,nullable = true)
+        @Column(name = "IS_ENABLE", unique = false,nullable = true)
         private Integer IsEnable = 1;
 
-        @Column(name = "Is_Delete", unique = false,nullable = true)
+        @Column(name = "IS_DELETE", unique = false,nullable = true)
         private Integer IsDelete = 0;
 
         @Column(name = "Created_Date", unique = false,nullable = true)

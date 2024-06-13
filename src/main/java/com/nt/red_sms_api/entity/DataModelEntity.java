@@ -16,23 +16,23 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Table (name = "data_model_template", schema="reddbsms")
+@Table (name = "DATA_MODEL_TEMPLATE", schema="reddbsms")
 public class DataModelEntity {
         
         @Id
-        @Column(name = "id")
+        @Column(name = "ID")
         private Long id = null;
 
-        @Column(name = "model_name", unique = false,nullable = true)
+        @Column(name = "MODEL_NAME", unique = false,nullable = true)
         private String model_name = null;
 
-        @Column(name = "data_type", unique = false,nullable = true)
+        @Column(name = "DATA_TYPE", unique = false,nullable = true)
         private String data_type = null;
 
-        @Column(name = "format", unique = false,nullable = true)
+        @Column(name = "FORMAT", unique = false,nullable = true)
         private String format = null;
 
-        @Column(name = "group_data_type", unique = false,nullable = true)
+        @Column(name = "GROUP_DATA_TYPE", unique = false,nullable = true)
         private String group_data_type = null;
 
 }

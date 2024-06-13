@@ -11,8 +11,6 @@ import com.nt.red_sms_api.dto.resp.DataObjectResp;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
-import com.nt.red_sms_api.entity.AuditLogEntity;
-import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsConditionService;
 
