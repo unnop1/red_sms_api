@@ -74,10 +74,10 @@ public class ConfigConditionsEntity {
         @Column(name = "IS_DELETE_DATE", unique = false,nullable = true)
         private Timestamp is_Delete_Date = null;
 
-        @Column(name = "conditions_or_select", unique = false,nullable = true)
+        @Column(name = "CONDITIONS_OR_SELECT", unique = false,nullable = true)
         private Clob conditions_or_select = null;
 
-        @Column(name = "conditions_and_select", unique = false,nullable = true)
+        @Column(name = "CONDITIONS_AND_SELECT", unique = false,nullable = true)
         private Clob conditions_and_select = null;
 
         
