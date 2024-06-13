@@ -14,7 +14,7 @@ import java.util.List;
 public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissionTotalUser,Long> {
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
+               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
                "FROM sa_menu_permission sa_pm ",
        nativeQuery = true)
     public List<ListPermissionTotalUser> GetAllWithTotalUser(
@@ -22,7 +22,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
     );
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
+               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
                "FROM sa_menu_permission sa_pm ",
        nativeQuery = true)
     public List<ListPermissionTotalUser> GetAllWithTotalUser();
@@ -32,7 +32,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
     public Integer getGetAllWithTotalUserTotalCount();
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
+               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
                "FROM sa_menu_permission sa_pm " +
                "WHERE sa_pm.permission_name like %:search% ",
        nativeQuery = true)
@@ -50,7 +50,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
 
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS totalUser " +
+               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
                "FROM sa_menu_permission sa_pm " +
                "WHERE :search_field like %:search% ",
        nativeQuery = true)

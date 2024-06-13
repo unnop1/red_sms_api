@@ -10,7 +10,6 @@ import com.nt.red_sms_api.entity.DataModelEntity;
 
 public interface DataModelRepo extends JpaRepository<DataModelEntity,Long> {
     
-    @SuppressWarnings("null")
     @Query(value = "SELECT * FROM data_model_template ORDER BY id ASC", nativeQuery = true)
     public List<DataModelEntity> ListAll();
 
