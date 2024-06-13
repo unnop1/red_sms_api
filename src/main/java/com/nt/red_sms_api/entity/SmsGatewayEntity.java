@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,9 +78,11 @@ public class SmsGatewayEntity {
         @Column(name = "transaction_id", unique = false,nullable = true)
         private String transaction_id = null;
 
+        @Transient
         @Column(name = "DATE_START", unique = false,nullable = true)
         private Timestamp date_Start = null;
 
+        @Transient
         @Column(name = "DATE_END", unique = false,nullable = true)
         private Timestamp date_End = null;
 }
