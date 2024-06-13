@@ -10,6 +10,8 @@ import lombok.ToString;
 import java.sql.Clob;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -27,6 +29,7 @@ public class PermissionMenuEntity {
     @Column(name = "PERMISSION_NAME", unique = false,nullable = true)
     private String permission_Name=null;
 
+    @JsonBackReference
     @Column(name = "PERMISSION_JSON", unique = false,nullable = true)
     private Clob permission_json=null;
 

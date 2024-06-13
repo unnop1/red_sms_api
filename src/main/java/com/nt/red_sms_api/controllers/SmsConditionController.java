@@ -110,14 +110,14 @@ public class SmsConditionController {
 
             ConfigConditionsEntity configData = smsConditionService.getSmsConditionMoreDetail(req);
 
-            String testData = "";
+            // String testData = "";
 
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                testData = objectMapper.writeValueAsString(configData);
-            } catch (Exception e) {
-                return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            // try {
+            //     ObjectMapper objectMapper = new ObjectMapper();
+            //     testData = objectMapper.writeValueAsString(configData);
+            // } catch (Exception e) {
+            //     return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            // }
 
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
@@ -146,7 +146,7 @@ public class SmsConditionController {
                 response.setRecordsFiltered(1);
                 response.setRecordsTotal(1);
                 response.setMessage("Success");
-                response.setData(testData);
+                response.setData(configData);
                 response.setStatusCode(200);
                 return new ResponseEntity<>( response, HttpStatus.OK);
             }

@@ -4,6 +4,8 @@ package com.nt.red_sms_api.entity;
 import java.sql.Clob;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,9 +53,11 @@ public class SmsGatewayEntity {
         @Column(name = "PHONENUMBER", unique = false,nullable = true)
         private String PhoneNumber = null;
 
+        @JsonBackReference
         @Column(name = "PAYLOADGW", unique = false,nullable = true)
         private Clob OfferingId = null;
 
+        @JsonBackReference
         @Column(name = "PayloadMQ", unique = false,nullable = true)
         private Clob PayloadMQ = null;
 

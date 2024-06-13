@@ -4,6 +4,8 @@ package com.nt.red_sms_api.entity.view.permission;
 import java.sql.Clob;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +28,7 @@ public class ListPermissionTotalUser {
         @Column(name = "permission_Name", unique = false,nullable = true)
         private String permission_Name=null;
 
+        @JsonBackReference
         @Column(name = "permission_json", unique = false,nullable = true)
         private Clob permission_json=null;
 
