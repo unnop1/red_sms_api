@@ -100,14 +100,12 @@ public class SmsConditionController {
         HttpServletRequest request
     ) {
         try{
-            DefaultControllerResp response = new DefaultControllerResp();
+            
             
             String ipAddress = request.getRemoteAddr();
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
-            
-            ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
 
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
@@ -122,16 +120,17 @@ public class SmsConditionController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
             
-            
+            DefaultControllerResp response = new DefaultControllerResp();
             response.setCount(1);
             response.setRecordsFiltered(1);
             response.setRecordsTotal(1);
             response.setMessage("Success");
-            response.setData(smsDetail);
+            response.setData(smsConditionService.getSmsConditionMoreDetail(req));
             response.setStatusCode(200);
-            return ResponseEntity.ok()
+            ResponseEntity<Object> obj = ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body("ok");
+                .body(response);
+            return obj;
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
