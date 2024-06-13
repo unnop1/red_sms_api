@@ -132,25 +132,27 @@ public class SmsConditionController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(response);
             }
-
-            if(smsDetail.getData() != null){ 
-                response.setCount(1);
-                response.setRecordsFiltered(1);
-                response.setRecordsTotal(1);
-                response.setMessage("Success");
-                response.setData(smsDetail);
-                response.setStatusCode(200);
-                return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
-            }else{
-                response.setCount(0);
-                response.setMessage("Notfound");
-                response.setData(smsDetail);
-                response.setStatusCode(404);
-                // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                return ResponseEntity.notFound().build();
-            }
+            return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(response);
+            // if(smsDetail.getData() != null){ 
+            //     response.setCount(1);
+            //     response.setRecordsFiltered(1);
+            //     response.setRecordsTotal(1);
+            //     response.setMessage("Success");
+            //     response.setData(smsDetail);
+            //     response.setStatusCode(200);
+            //     return ResponseEntity.ok()
+            //         .contentType(MediaType.APPLICATION_JSON)
+            //         .body(response);
+            // }else{
+            //     response.setCount(0);
+            //     response.setMessage("Notfound");
+            //     response.setData(smsDetail);
+            //     response.setStatusCode(404);
+            //     // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            //     return ResponseEntity.notFound().build();
+            // }
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
                     .contentType(MediaType.APPLICATION_JSON)
