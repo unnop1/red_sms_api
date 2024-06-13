@@ -271,16 +271,12 @@ public class SmsConditionImp implements SmsConditionService{
         DataObjectResp resp = new DataObjectResp();
         // System.out.println("smsID: " + smsID);
         try{
-            if (req.getIsEnable() != null){
-                ConfigConditionsEntity existingEntity = smsConditionRepo.findByIdAndEnable(req.getConditionsID(), req.getIsEnable());
-                resp.setData(existingEntity);
-            }else{
-                ConfigConditionsEntity existingEntity = smsConditionRepo.findSmsConditionByID(req.getConditionsID());
-                resp.setData(existingEntity);
-            }
-        }catch (Exception e){
+            ConfigConditionsEntity existingEntity = smsConditionRepo.findSmsConditionByID(req.getConditionsID());
+            resp.setData(existingEntity);
+        } catch (Exception e){
             resp.setError(e.getMessage());
         }
+            
         return resp;
         // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         
