@@ -131,7 +131,7 @@ public class SmsConditionController {
             response.setStatusCode(200);
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response.getData());
+                .body("ok");
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
