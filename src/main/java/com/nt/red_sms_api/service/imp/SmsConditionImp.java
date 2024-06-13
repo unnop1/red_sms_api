@@ -16,6 +16,7 @@ import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
+import com.nt.red_sms_api.dto.resp.DataObjectResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 import com.nt.red_sms_api.entity.OrderTypeEntity;
@@ -266,15 +267,21 @@ public class SmsConditionImp implements SmsConditionService{
     }
 
     @Override
-    public Object getSmsConditionMoreDetail(SmsConditionMoreDetailReq req) {
+    public DataObjectResp getSmsConditionMoreDetail(SmsConditionMoreDetailReq req) {
+        DataObjectResp resp = new DataObjectResp();
         // System.out.println("smsID: " + smsID);
-        if (req.getIsEnable() != null){
-            ConfigConditionsEntity existingEntity = smsConditionRepo.findByIdAndEnable(req.getConditionsID(), req.getIsEnable());
-            return existingEntity;
-        }else{
-            ConfigConditionsEntity existingEntity = smsConditionRepo.findSmsConditionByID(req.getConditionsID());
-            return existingEntity;
+        try{
+            if (req.getIsEnable() != null){
+                ConfigConditionsEntity existingEntity = smsConditionRepo.findByIdAndEnable(req.getConditionsID(), req.getIsEnable());
+                resp.setData(existingEntity);
+            }else{
+                ConfigConditionsEntity existingEntity = smsConditionRepo.findSmsConditionByID(req.getConditionsID());
+                resp.setData(existingEntity);
+            }
+        }catch (Exception e){
+            resp.setError(e.getMessage());
         }
+        return resp;
         // System.out.println("existingEntity ID: " + existingEntity.getConditionsID());
         
     }

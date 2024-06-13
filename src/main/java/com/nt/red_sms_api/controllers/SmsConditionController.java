@@ -7,6 +7,7 @@ import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
 import com.nt.red_sms_api.dto.req.smscondition.UpdateBySmsConditionReq;
+import com.nt.red_sms_api.dto.resp.DataObjectResp;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
@@ -100,7 +101,7 @@ public class SmsConditionController {
     ) {
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
+            DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
             
             String ipAddress = request.getRemoteAddr();
             String requestHeader = request.getHeader("Authorization");
@@ -120,8 +121,8 @@ public class SmsConditionController {
             auditService.AddAuditLog(auditLog);
             
 
-            if( smsDetail != null){
-                if(smsDetail.getConditionsID() != null){ 
+            if( smsDetail.getError() != null){
+                if(smsDetail.getData() != null){ 
                     response.setCount(1);
                     response.setRecordsFiltered(1);
                     response.setRecordsTotal(1);
@@ -131,7 +132,7 @@ public class SmsConditionController {
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 }else{
                     response.setCount(0);
-                    response.setMessage("Fail");
+                    response.setMessage("Notfound");
                     response.setData(smsDetail);
                     response.setStatusCode(400);
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -140,7 +141,7 @@ public class SmsConditionController {
                 response.setCount(0);
                 response.setRecordsFiltered(0);
                 response.setRecordsTotal(0);
-                response.setMessage("NOT FOUND");
+                response.setMessage(smsDetail.getError());
                 response.setData(smsDetail);
                 response.setStatusCode(400);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
