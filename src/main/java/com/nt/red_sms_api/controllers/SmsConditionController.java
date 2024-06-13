@@ -106,7 +106,7 @@ public class SmsConditionController {
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
-
+            
             ConfigConditionsEntity smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
 
             AuditLog auditLog = new AuditLog();
@@ -131,7 +131,7 @@ public class SmsConditionController {
             response.setStatusCode(200);
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+                .body(response.getData());
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
