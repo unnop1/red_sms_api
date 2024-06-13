@@ -11,14 +11,11 @@ import java.util.Optional;
 
 public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,Long> {
 
-    @Query(value = "SELECT * FROM config_conditions WHERE CONDITIONS_ID=?1 ", nativeQuery = true)
+    @Query(value = "SELECT * FROM config_conditions conf WHERE conf.CONDITIONS_ID=?1 ", nativeQuery = true)
     public ConfigConditionsEntity findSmsConditionByID(Long smsID);
 
     @Query(value = "SELECT * FROM config_conditions WHERE CONDITIONS_ID=?1 AND IS_ENABLE=?2 ", nativeQuery = true)
     public ConfigConditionsEntity findByIdAndEnable(Long smsID, Integer isEnable);
-
-    @Query(value = "SELECT * FROM config_conditions OFFSET ?1 ROWS FETCH NEXT ?2 ROWS ONLY ", nativeQuery = true)
-    public List<ConfigConditionsEntity> findAll(Integer offset, Integer limit);
 
     @Query(value = "SELECT COUNT(*) FROM config_conditions ", nativeQuery = true)
     public Integer getTotalCount();

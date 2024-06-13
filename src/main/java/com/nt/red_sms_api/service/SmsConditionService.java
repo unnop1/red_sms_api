@@ -19,5 +19,5 @@ public interface SmsConditionService  {
     public Long duplicateSmsCondition(Long smsID, String createdBy);
     public void updateSmsConditionById(Long smsId, AddSmsConditionReq updates, String updatedBy);
     public void removeSmsCondition(Long permissionID);
-    public DataObjectResp getSmsConditionMoreDetail(SmsConditionMoreDetailReq req);
+    public ConfigConditionsEntity getSmsConditionMoreDetail(SmsConditionMoreDetailReq req);
 }
