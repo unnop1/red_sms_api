@@ -266,7 +266,7 @@ public class SmsConditionImp implements SmsConditionService{
     }
 
     @Override
-    public ConfigConditionsEntity getSmsConditionMoreDetail(SmsConditionMoreDetailReq req) {
+    public Object getSmsConditionMoreDetail(SmsConditionMoreDetailReq req) {
         // System.out.println("smsID: " + smsID);
         if (req.getIsEnable() != null){
             ConfigConditionsEntity existingEntity = smsConditionRepo.findByIdAndEnable(req.getConditionsID(), req.getIsEnable());
