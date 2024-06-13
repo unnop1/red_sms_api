@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class AuditLog {
-    @Column(name = "Action")
+    @Column(name = "ACTION")
     private String action=null;
 
     @Column(name = "AUDITABLE_ID")
@@ -42,7 +42,7 @@ public class AuditLog {
     @Column(name = "BROWSER")
     private String browser=null;
 
-    @Column(name = "Operating_system")
+    @Column(name = "OPERATING_SYSTEM")
     private String operating_system=null;
 
     @Column(name = "CREATED_DATE")
