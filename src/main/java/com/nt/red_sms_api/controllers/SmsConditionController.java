@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,54 +98,63 @@ public class SmsConditionController {
         HttpServletRequest request,    
         @RequestBody SmsConditionMoreDetailReq req
     ) {
-        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            DefaultControllerResp response = new DefaultControllerResp();
 
-        DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
-        
-        String ipAddress = request.getRemoteAddr();
-        String requestHeader = request.getHeader("Authorization");
+            DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
             
-        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
-        AuditLog auditLog = new AuditLog();
-        auditLog.setAction("get");
-        auditLog.setAuditable("config_conditions");
-        auditLog.setUsername(vsf.getUsername());
-        auditLog.setBrowser(vsf.getBrowser());
-        auditLog.setDevice(vsf.getDevice());
-        auditLog.setAuditable_id(req.getConditionsID());
-        auditLog.setOperating_system(vsf.getSystem());
-        auditLog.setIp_address(ipAddress);
-        auditLog.setComment("GetSmsConditionMoreDetail");
-        auditLog.setCreated_date(DateTime.getTimeStampNow());
-        auditService.AddAuditLog(auditLog);
-        
-        if(smsDetail.getError() != null){ 
-            response.setCount(0);
-            response.setRecordsFiltered(0);
-            response.setRecordsTotal(0);
-            response.setMessage("Error: " + smsDetail.getError());
-            response.setData(smsDetail);
-            response.setStatusCode(400);
-            // return ResponseEntity.status(HttpStatus.OK).body(response);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+            String ipAddress = request.getRemoteAddr();
+            String requestHeader = request.getHeader("Authorization");
+                
+            VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+            AuditLog auditLog = new AuditLog();
+            auditLog.setAction("get");
+            auditLog.setAuditable("config_conditions");
+            auditLog.setUsername(vsf.getUsername());
+            auditLog.setBrowser(vsf.getBrowser());
+            auditLog.setDevice(vsf.getDevice());
+            auditLog.setAuditable_id(req.getConditionsID());
+            auditLog.setOperating_system(vsf.getSystem());
+            auditLog.setIp_address(ipAddress);
+            auditLog.setComment("GetSmsConditionMoreDetail");
+            auditLog.setCreated_date(DateTime.getTimeStampNow());
+            auditService.AddAuditLog(auditLog);
+            
+            if(smsDetail.getError() != null){ 
+                response.setCount(0);
+                response.setRecordsFiltered(0);
+                response.setRecordsTotal(0);
+                response.setMessage("Error: " + smsDetail.getError());
+                response.setData(smsDetail);
+                response.setStatusCode(400);
+                // return ResponseEntity.status(HttpStatus.OK).body(response);
+                return ResponseEntity.badRequest()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+            }
 
-        if(smsDetail.getData() != null){ 
-            response.setCount(1);
-            response.setRecordsFiltered(1);
-            response.setRecordsTotal(1);
-            response.setMessage("Success");
-            response.setData(smsDetail);
-            response.setStatusCode(200);
-            // return ResponseEntity.status(HttpStatus.OK).body(response);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else{
-            response.setCount(0);
-            response.setMessage("Notfound");
-            response.setData(smsDetail);
-            response.setStatusCode(404);
-            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            if(smsDetail.getData() != null){ 
+                response.setCount(1);
+                response.setRecordsFiltered(1);
+                response.setRecordsTotal(1);
+                response.setMessage("Success");
+                response.setData(smsDetail);
+                response.setStatusCode(200);
+                return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+            }else{
+                response.setCount(0);
+                response.setMessage("Notfound");
+                response.setData(smsDetail);
+                response.setStatusCode(404);
+                // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(e.getMessage());
         }
         
     }
