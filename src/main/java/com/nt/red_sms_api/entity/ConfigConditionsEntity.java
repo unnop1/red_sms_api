@@ -32,7 +32,7 @@ public class ConfigConditionsEntity {
         @Column(name = "ORDERTYPE", unique = false,nullable = true)
         private String orderType = null;
 
-        @Column(name = "REDID", unique = false,nullable = true)
+        @Column(name = "REFID", unique = false,nullable = true)
         private String refID = null;
 
         @Column(name = "DATE_START", unique = false,nullable = true)
