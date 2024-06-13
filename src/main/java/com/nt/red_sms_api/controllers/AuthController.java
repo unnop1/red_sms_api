@@ -148,7 +148,6 @@ public class AuthController {
 
             
             UserResp userInfo = new UserResp();
-            // PermissionMenu permissionMenu = 
 
             // User
             userInfo.setId(userDetails.getId());

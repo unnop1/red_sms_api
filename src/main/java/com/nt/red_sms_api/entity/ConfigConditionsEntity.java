@@ -50,7 +50,7 @@ public class ConfigConditionsEntity {
         @Column(name = "CONDITIONS_AND", unique = false,nullable = true)
         private Clob conditions_and = null;
 
-        @Column(name = "created_Date", unique = false,nullable = true)
+        @Column(name = "CREATED_DATE", unique = false,nullable = true)
         private Timestamp created_Date = null;
 
         @Column(name = "CREATED_BY", unique = false,nullable = true)
@@ -79,6 +79,20 @@ public class ConfigConditionsEntity {
 
         @Column(name = "CONDITIONS_AND_SELECT", unique = false,nullable = true)
         private Clob conditions_and_select = null;
+
+        @Column(name = "IS_PDPA", unique = false,nullable = true)
+        private Integer is_pdpa = null;
+
+        @Column(name = "IS_PERIOD_TIME", unique = false,nullable = true)
+        private Integer is_period_time = null;
+
+        @Column(name = "TIME_START", unique = false,nullable = true)
+        private String time_start = null;
+
+        @Column(name = "TIME_END", unique = false,nullable = true)
+        private String time_end = null;
+
+
 
         
 }

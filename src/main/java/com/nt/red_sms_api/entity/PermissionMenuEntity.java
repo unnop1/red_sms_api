@@ -16,29 +16,29 @@ import jakarta.persistence.*;
 @Getter
 @Setter
 @ToString
-@Table (name = "sa_menu_permission", schema="reddbsms")
+@Table (name = "SA_MENU_PERMISSION", schema="reddbsms")
 public class PermissionMenuEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sa_menu_permission_seq")
     @SequenceGenerator(name = "sa_menu_permission_seq", allocationSize = 1)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Long id;
 
-    @Column(name = "permission_Name", unique = false,nullable = true)
+    @Column(name = "PERMISSION_NAME", unique = false,nullable = true)
     private String permission_Name=null;
 
-    @Column(name = "permission_json", unique = false,nullable = true)
+    @Column(name = "PERMISSION_JSON", unique = false,nullable = true)
     private Clob permission_json=null;
 
-    @Column(name = "created_Date", unique = false,nullable = true)
+    @Column(name = "CREATED_DATE", unique = false,nullable = true)
     private Timestamp created_Date=null;
     
-    @Column(name = "created_By", unique = false,nullable = true)
+    @Column(name = "CREATED_BY", unique = false,nullable = true)
     private String created_By=null;
 
-    @Column(name = "updated_Date", unique = false,nullable = true)
+    @Column(name = "UPDATED_DATE", unique = false,nullable = true)
     private Timestamp updated_Date=null;
 
-    @Column(name = "updated_By", unique = false,nullable = true)
+    @Column(name = "UPDATED_BY", unique = false,nullable = true)
     private String updated_By=null;
 }

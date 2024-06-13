@@ -37,7 +37,7 @@ public class OrderTypeEntity {
         @Column(name = "IS_DELETE", unique = false,nullable = true)
         private Integer IsDelete = 0;
 
-        @Column(name = "Created_Date", unique = false,nullable = true)
+        @Column(name = "CREATED_DATE", unique = false,nullable = true)
         private Timestamp CreatedDate = null;
 
         @Column(name = "Created_By", unique = false,nullable = true)

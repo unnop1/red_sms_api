@@ -95,18 +95,19 @@ public class SmsConditionController {
 
     @PostMapping("/by_id")
     public ResponseEntity<Object> GetSmsConditionMoreDetail(
-        HttpServletRequest request,    
-        @RequestBody SmsConditionMoreDetailReq req
+        @RequestBody SmsConditionMoreDetailReq req,
+        HttpServletRequest request
     ) {
         try{
             DefaultControllerResp response = new DefaultControllerResp();
-
-            DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
             
             String ipAddress = request.getRemoteAddr();
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+
+            DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
+
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
             auditLog.setAuditable("config_conditions");
@@ -132,6 +133,7 @@ public class SmsConditionController {
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(response);
             }
+            
             return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(response);

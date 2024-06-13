@@ -33,25 +33,25 @@ public class SmsGatewayEntity {
         @Column(name = "GID")
         private Long GID = null;
 
-        @Column(name = "config_conditions_ID", unique = false,nullable = true)
+        @Column(name = "CONFIG_CONDITIONS_ID", unique = false,nullable = true)
         private Long config_conditions_ID = null;
         
-        @Column(name = "SMSMessage", unique = false,nullable = true)
+        @Column(name = "SMSMESSAGE", unique = false,nullable = true)
         private String SMSMessage = null;
 
-        @Column(name = "Message_raw", unique = false,nullable = true)
+        @Column(name = "MESSAGE_RAW", unique = false,nullable = true)
         private String Message_raw = null;
 
-        @Column(name = "order_type_mainID", unique = false,nullable = true)
+        @Column(name = "ORDER_TYPE_MAINID", unique = false,nullable = true)
         private Long order_type_mainID = null;
 
-        @Column(name = "OrderType", unique = false,nullable = true)
+        @Column(name = "ORDERTYPE", unique = false,nullable = true)
         private String OrderType = null;
 
-        @Column(name = "PhoneNumber", unique = false,nullable = true)
+        @Column(name = "PHONENUMBER", unique = false,nullable = true)
         private String PhoneNumber = null;
 
-        @Column(name = "payloadGW", unique = false,nullable = true)
+        @Column(name = "PAYLOADGW", unique = false,nullable = true)
         private Clob OfferingId = null;
 
         @Column(name = "PayloadMQ", unique = false,nullable = true)
