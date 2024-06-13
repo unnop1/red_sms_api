@@ -12,7 +12,7 @@ import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
     @Query(value = """
-                SELECT smsgw.*, conf.refid , conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                SELECT smsgw.*, conf.REFID , conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
