@@ -101,7 +101,7 @@ public class SmsConditionController {
     ) {
         DefaultControllerResp response = new DefaultControllerResp();
 
-        DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
+        // DataObjectResp smsDetail = smsConditionService.getSmsConditionMoreDetail(req);
         
         String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
@@ -121,30 +121,30 @@ public class SmsConditionController {
         auditService.AddAuditLog(auditLog);
         
 
-        if( smsDetail.getError() == null){
-            if(smsDetail.getData() != null){ 
-                response.setCount(1);
-                response.setRecordsFiltered(1);
-                response.setRecordsTotal(1);
-                response.setMessage("Success");
-                response.setData(smsDetail);
-                response.setStatusCode(200);
-                // return ResponseEntity.status(HttpStatus.OK).body(response);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            }else{
-                response.setCount(0);
-                response.setMessage("Notfound");
-                response.setData(smsDetail);
-                response.setStatusCode(404);
-                // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-            }
-        }
+        // if( smsDetail.getError() == null){
+        //     if(smsDetail.getData() != null){ 
+        //         response.setCount(1);
+        //         response.setRecordsFiltered(1);
+        //         response.setRecordsTotal(1);
+        //         response.setMessage("Success");
+        //         response.setData(smsDetail);
+        //         response.setStatusCode(200);
+        //         // return ResponseEntity.status(HttpStatus.OK).body(response);
+        //         return new ResponseEntity<>(response, HttpStatus.OK);
+        //     }else{
+        //         response.setCount(0);
+        //         response.setMessage("Notfound");
+        //         response.setData(smsDetail);
+        //         response.setStatusCode(404);
+        //         // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        //         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        //     }
+        // }
         response.setCount(0);
         response.setRecordsFiltered(0);
         response.setRecordsTotal(0);
-        response.setMessage(smsDetail.getError());
-        response.setData(smsDetail);
+        // response.setMessage(smsDetail.getError());
+        // response.setData(smsDetail);
         response.setStatusCode(400);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         
