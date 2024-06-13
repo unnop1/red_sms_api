@@ -121,7 +121,7 @@ public class SmsConditionController {
             auditService.AddAuditLog(auditLog);
             
 
-            if( smsDetail.getError() != null){
+            if( smsDetail.getError() == null){
                 if(smsDetail.getData() != null){ 
                     response.setCount(1);
                     response.setRecordsFiltered(1);
@@ -129,13 +129,15 @@ public class SmsConditionController {
                     response.setMessage("Success");
                     response.setData(smsDetail);
                     response.setStatusCode(200);
-                    return ResponseEntity.status(HttpStatus.OK).body(response);
+                    // return ResponseEntity.status(HttpStatus.OK).body(response);
+                    return new ResponseEntity<>(response, HttpStatus.OK);
                 }else{
                     response.setCount(0);
                     response.setMessage("Notfound");
                     response.setData(smsDetail);
-                    response.setStatusCode(400);
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                    response.setStatusCode(404);
+                    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                    return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
                 }
             }else{
                 response.setCount(0);
@@ -144,15 +146,16 @@ public class SmsConditionController {
                 response.setMessage(smsDetail.getError());
                 response.setData(smsDetail);
                 response.setStatusCode(400);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+                new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         }catch (Exception e){
+            
             response.setCount(0);
             response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setData(null);
-            response.setMessage("Error while getting : " + e.getMessage());
-            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.setMessage("Error while getting : " + e.getMessage());   
         }
+        return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
