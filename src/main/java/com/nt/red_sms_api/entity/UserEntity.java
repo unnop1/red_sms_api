@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
         @Column(name = "phoneNumber", unique = false,nullable = true)
         private String phoneNumber=null;
 
-        @Column(name = "current_Token", unique = true,nullable = true)
+        @Column(name = "currentToken", unique = true,nullable = true)
         private String currentToken=null;
 
         @Column(name = "about_me", unique = false,nullable = true)
