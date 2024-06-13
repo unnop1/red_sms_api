@@ -1,5 +1,6 @@
 package com.nt.red_sms_api.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
@@ -107,6 +108,17 @@ public class SmsConditionController {
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
 
+            ConfigConditionsEntity configData = smsConditionService.getSmsConditionMoreDetail(req);
+
+            String testData = "";
+
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                testData = objectMapper.writeValueAsString(configData);
+            } catch (Exception e) {
+                return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
             AuditLog auditLog = new AuditLog();
             auditLog.setAction("get");
             auditLog.setAuditable("config_conditions");
@@ -121,16 +133,23 @@ public class SmsConditionController {
             auditService.AddAuditLog(auditLog);
             
             DefaultControllerResp response = new DefaultControllerResp();
-            response.setCount(1);
-            response.setRecordsFiltered(1);
-            response.setRecordsTotal(1);
-            response.setMessage("Success");
-            response.setData(smsConditionService.getSmsConditionMoreDetail(req));
-            response.setStatusCode(200);
-            ResponseEntity<Object> obj = ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
-            return obj;
+            
+            if (configData == null) {
+                response.setCount(0);
+                response.setRecordsFiltered(0);
+                response.setRecordsTotal(0);
+                response.setMessage("Not Found");
+                response.setStatusCode(404);
+                return new ResponseEntity<>( response, HttpStatus.NOT_FOUND);
+            } else {
+                response.setCount(1);
+                response.setRecordsFiltered(1);
+                response.setRecordsTotal(1);
+                response.setMessage("Success");
+                response.setData(testData);
+                response.setStatusCode(200);
+                return new ResponseEntity<>( response, HttpStatus.OK);
+            }
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
