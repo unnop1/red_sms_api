@@ -3,9 +3,7 @@ package com.nt.red_sms_api.service;
 import com.nt.red_sms_api.dto.req.user.ListUserReq;
 import com.nt.red_sms_api.dto.req.user.UpdateUserDto;
 import com.nt.red_sms_api.dto.req.user.UserRequestDto;
-import com.nt.red_sms_api.dto.resp.LoginResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
-import com.nt.red_sms_api.dto.resp.UserInfoResp;
 import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.entity.UserEntity;
 

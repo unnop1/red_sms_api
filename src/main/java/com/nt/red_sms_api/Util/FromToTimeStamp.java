@@ -1,6 +1,5 @@
 package com.nt.red_sms_api.Util;
 
-import java.sql.Timestamp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

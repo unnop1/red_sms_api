@@ -6,7 +6,6 @@ import java.util.Map;
 import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.ListConditionReq;
 import com.nt.red_sms_api.dto.req.smscondition.SmsConditionMoreDetailReq;
-import com.nt.red_sms_api.dto.resp.DataObjectResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
 
