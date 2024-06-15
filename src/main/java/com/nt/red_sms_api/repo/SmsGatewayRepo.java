@@ -15,10 +15,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status 
-                AND smsgw.receive_date BETWEEN :start_time AND :end_time 
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status 
+                AND smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time 
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatus(
@@ -34,10 +34,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status 
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status 
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getSmsGatewayByOrderTypeAndStatusTotalCount(
@@ -53,11 +53,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END  FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.phonenumber || smsgw.smsmessage like %:search% )
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN_ID=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> findSmsGatewayByOrderTypeAndStatusAllSearch(
@@ -74,10 +74,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.phonenumber || smsgw.smsmessage like %:search% )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
                 AND ( receive_date BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
@@ -94,11 +94,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( smsgw.phonenumber like %:search% )
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( smsgw.PHONENUMBER like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusPhoneFieldSearch(
@@ -114,11 +114,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( smsgw.phonenumber like %:search% )
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( smsgw.PHONENUMBER like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusPhoneFieldSearchTotalCount(
@@ -134,11 +134,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( smsgw.smsmessage like %:search% )
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( smsgw.SMSMESSAGE like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusSmsMsgFieldSearch(
@@ -154,11 +154,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND ( smsmessage like %:search% )
-                AND ( receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND ( SMSMESSAGE like %:search% )
+                AND ( RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusSmsMsgFieldSearchTotalCount(
@@ -174,11 +174,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND conf.refid=:search
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND conf.REFID=:search
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusRefIdFieldSearch(
@@ -194,11 +194,11 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.order_type_mainID=:order_type_main_id 
-                AND smsgw.Is_Status=:is_status
-                AND conf.refid=:search
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAIN=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND conf.REFID=:search
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusRefIdFieldSearchTotalCount(
@@ -214,8 +214,8 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     SELECT smsgw.* , conf.DATE_START , conf.DATE_END
                     FROM sms_gateway smsgw 
                     LEFT JOIN config_conditions conf 
-                    ON conf.conditions_id = smsgw.CONFIG_CONDITIONS_ID
-                    WHERE smsgw.gid=:gid
+                    ON conf.CONDITIONS_ID = smsgw.CONFIG_CONDITIONS_ID
+                    WHERE smsgw.GID=:gid
                     """,
                     nativeQuery = true)
     public SmsGatewayEntity GetSmsGatewayInfo(@Param(value = "gid") Long gid);
@@ -225,9 +225,9 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.Is_Status=:is_status 
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.IS_STATUS=:is_status 
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusNoOrderID(
@@ -241,9 +241,9 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                    WHERE smsgw.Is_Status=:is_status 
-                    AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                    WHERE smsgw.IS_STATUS=:is_status 
+                    AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusNoOrderIDTotalCount(
@@ -257,9 +257,9 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.Is_Status=:is_status 
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.IS_STATUS=:is_status 
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusNoOrderID(
@@ -273,10 +273,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.Is_Status=:is_status 
-                AND ( smsgw.phonenumber like %:search% ) 
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.IS_STATUS=:is_status 
+                AND ( smsgw.PHONENUMBER like %:search% ) 
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusNoOrderIDSearchPhone(
@@ -291,10 +291,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT COUNT(*) FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                    WHERE smsgw.Is_Status=:is_status 
-                    AND ( smsgw.phonenumber like %:search% ) 
-                    AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                    WHERE smsgw.IS_STATUS=:is_status 
+                    AND ( smsgw.PHONENUMBER like %:search% ) 
+                    AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public Integer getOdtStatusNoOrderIDSearchPhoneTotalCount(
@@ -309,10 +309,10 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
                     config_conditions conf
-                    ON smsgw.CONFIG_CONDITIONS_ID = conf.conditions_id
-                WHERE smsgw.Is_Status=:is_status 
-                AND ( smsgw.phonenumber like %:search% ) 
-                AND ( smsgw.receive_date BETWEEN :start_time AND :end_time )
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.IS_STATUS=:is_status 
+                AND ( smsgw.PHONENUMBER like %:search% ) 
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusNoOrderIDSearchPhone(
