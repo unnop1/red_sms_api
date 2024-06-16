@@ -11,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -53,33 +54,33 @@ public class SmsGatewayEntity {
         @Column(name = "PHONENUMBER", unique = false,nullable = true)
         private String PhoneNumber = null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "PAYLOADGW", unique = false,nullable = true)
-        private Clob OfferingId = null;
+        private String payloadGW = null;
 
-        @JsonBackReference
-        @Column(name = "PayloadMQ", unique = false,nullable = true)
-        private Clob PayloadMQ = null;
+        @Lob
+        @Column(name = "PAYLOADMQ", unique = false,nullable = true)
+        private String PayloadMQ = null;
 
-        @Column(name = "Is_Status", unique = false,nullable = true)
+        @Column(name = "IS_STATUS", unique = false,nullable = true)
         private Integer Is_Status = 0;
 
-        @Column(name = "Remark", unique = false,nullable = true)
+        @Column(name = "REMARK", unique = false,nullable = true)
         private String Remark = null;
 
-        @Column(name = "Created_Date", unique = false,nullable = true)
+        @Column(name = "CREATED_DATE", unique = false,nullable = true)
         private Timestamp Created_Date = null;
 
-        @Column(name = "Receive_Date", unique = false,nullable = true)
+        @Column(name = "RECEIVE_DATE", unique = false,nullable = true)
         private Timestamp Receive_Date = null;
 
-        @Column(name = "Send_Date", unique = false,nullable = true)
+        @Column(name = "SEND_DATE", unique = false,nullable = true)
         private Timestamp Send_Date = null;
 
         @Column(name = "REFID", unique = false,nullable = true)
         private String RefID = null;
 
-        @Column(name = "transaction_id", unique = false,nullable = true)
+        @Column(name = "TRANSACTION_ID", unique = false,nullable = true)
         private String transaction_id = null;
 
         @Transient

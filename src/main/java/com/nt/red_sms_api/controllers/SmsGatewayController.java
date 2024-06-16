@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
@@ -305,6 +306,15 @@ public class SmsGatewayController {
             auditLog.setComment("GetAllSmsGatewaysOrderTypeAndStatus");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+            // ObjectMapper mapper = new ObjectMapper();
+            // String jsonResponse;
+            // try{
+            //     jsonResponse = mapper.writeValueAsString(smsGateways.getData());
+            // }catch (Exception e){
+            //     response.setMessage(e.getMessage());
+            //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            // }
+
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());

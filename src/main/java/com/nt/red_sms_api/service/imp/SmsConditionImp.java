@@ -298,8 +298,8 @@ public class SmsConditionImp implements SmsConditionService{
         Clob conditions_andClob;
         
         try {
-            conditions_andClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_and().toCharArray());
-            newCondition.setConditions_and(conditions_andClob);
+            // conditions_andClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_and().toCharArray());
+            newCondition.setConditions_and(req.getConditions_and());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -307,8 +307,8 @@ public class SmsConditionImp implements SmsConditionService{
 
         Clob conditions_orClob;
         try {
-            conditions_orClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_or().toCharArray());
-            newCondition.setConditions_or(conditions_orClob);
+            // conditions_orClob = new javax.sql.rowset.serial.SerialClob(req.getConditions_or().toCharArray());
+            newCondition.setConditions_or(req.getConditions_or());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -316,8 +316,8 @@ public class SmsConditionImp implements SmsConditionService{
 
         Clob conditions_and_selectClob;
         try {
-            conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_AND_SELECT().toCharArray());
-            newCondition.setConditions_and_select(conditions_and_selectClob);
+            // conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_AND_SELECT().toCharArray());
+            newCondition.setConditions_and_select(req.getCONDITIONS_AND_SELECT());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -325,8 +325,8 @@ public class SmsConditionImp implements SmsConditionService{
 
         Clob conditions_or_selectClob;
         try {
-            conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_OR_SELECT().toCharArray());
-            newCondition.setConditions_or_select(conditions_or_selectClob);
+            // conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(req.getCONDITIONS_OR_SELECT().toCharArray());
+            newCondition.setConditions_or_select(req.getCONDITIONS_OR_SELECT());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -361,8 +361,8 @@ public class SmsConditionImp implements SmsConditionService{
             if (updates.getConditions_and() != null ){
                 Clob conditions_andClob;
                 try {
-                    conditions_andClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_and().toCharArray());
-                    existingEntity.setConditions_and(conditions_andClob);
+                    // conditions_andClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_and().toCharArray());
+                    existingEntity.setConditions_and(updates.getConditions_and());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -372,8 +372,8 @@ public class SmsConditionImp implements SmsConditionService{
             if (updates.getConditions_or() != null ){
                 Clob conditions_orClob;
                 try {
-                    conditions_orClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_or().toCharArray());
-                    existingEntity.setConditions_or(conditions_orClob);
+                    // conditions_orClob = new javax.sql.rowset.serial.SerialClob(updates.getConditions_or().toCharArray());
+                    existingEntity.setConditions_or(updates.getConditions_or());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -399,8 +399,8 @@ public class SmsConditionImp implements SmsConditionService{
             if (updates.getCONDITIONS_OR_SELECT() != null ){
                 Clob conditions_or_selectClob;
                 try {
-                    conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_OR_SELECT().toCharArray());
-                    existingEntity.setConditions_or_select(conditions_or_selectClob);
+                    // conditions_or_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_OR_SELECT().toCharArray());
+                    existingEntity.setConditions_or_select(updates.getCONDITIONS_OR_SELECT());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -411,8 +411,8 @@ public class SmsConditionImp implements SmsConditionService{
             if (updates.getCONDITIONS_AND_SELECT() != null ){
                 Clob conditions_and_selectClob;
                 try {
-                    conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_AND_SELECT().toCharArray());
-                    existingEntity.setConditions_and_select(conditions_and_selectClob);
+                    // conditions_and_selectClob = new javax.sql.rowset.serial.SerialClob(updates.getCONDITIONS_AND_SELECT().toCharArray());
+                    existingEntity.setConditions_and_select(updates.getCONDITIONS_AND_SELECT());
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

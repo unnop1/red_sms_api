@@ -171,15 +171,10 @@ public class AuthController {
             // permissionMenu
             PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userDetails.getSa_menu_permission_id());
             String permissionJSonStr;
-            try {
-                if(permissionMenuEntity!=null){
-                    permissionJSonStr = Convert.clobToString(permissionMenuEntity.getPermission_json());
-                    loginResp.setPermissionJson(permissionJSonStr);
-                    loginResp.setPermissionName(permissionMenuEntity.getPermission_Name());
-                }
-            } catch (java.io.IOException | SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if(permissionMenuEntity!=null){
+                // permissionJSonStr = Convert.clobToString(permissionMenuEntity.getPermission_json());
+                loginResp.setPermissionJson(permissionMenuEntity.getPermission_json());
+                loginResp.setPermissionName(permissionMenuEntity.getPermission_Name());
             }
 
             // System.out.println("token:"+token);
@@ -245,15 +240,10 @@ public class AuthController {
                 // permissionMenu
                 PermissionMenuEntity permissionMenuEntity = permissionMenuService.getMenuPermission(userDetails.getSa_menu_permission_id());
                 String permissionJSonStr;
-                try {
-                    if(permissionMenuEntity!=null){
-                        permissionJSonStr = Convert.clobToString(permissionMenuEntity.getPermission_json());
-                        userResp.setPermissionJson(permissionJSonStr);
-                        userResp.setPermissionName(permissionMenuEntity.getPermission_Name());
-                    }
-                } catch (java.io.IOException | SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                if(permissionMenuEntity!=null){
+                    // permissionJSonStr = Convert.clobToString(permissionMenuEntity.getPermission_json());
+                    userResp.setPermissionJson(permissionMenuEntity.getPermission_json());
+                    userResp.setPermissionName(permissionMenuEntity.getPermission_Name());
                 }
                 return new ResponseEntity<>(userResp, HttpStatus.OK);
             }

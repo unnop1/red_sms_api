@@ -28,9 +28,9 @@ public class ListPermissionTotalUser {
         @Column(name = "permission_Name", unique = false,nullable = true)
         private String permission_Name=null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "permission_json", unique = false,nullable = true)
-        private Clob permission_json=null;
+        private String permission_json=null;
 
         @Column(name = "created_Date", unique = false,nullable = true)
         private Timestamp created_Date=null;

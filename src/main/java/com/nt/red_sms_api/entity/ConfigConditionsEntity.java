@@ -46,13 +46,13 @@ public class ConfigConditionsEntity {
         @Column(name = "MESSAGE", unique = false,nullable = true)
         private String message = null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "CONDITIONS_OR", unique = false,nullable = true)
-        private Clob conditions_or = null;
+        private String conditions_or = null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "CONDITIONS_AND", unique = false,nullable = true)
-        private Clob conditions_and = null;
+        private String conditions_and = null;
 
         @Column(name = "CREATED_DATE", unique = false,nullable = true)
         private Timestamp created_Date = null;
@@ -78,13 +78,13 @@ public class ConfigConditionsEntity {
         @Column(name = "IS_DELETE_DATE", unique = false,nullable = true)
         private Timestamp is_Delete_Date = null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "CONDITIONS_OR_SELECT", unique = false,nullable = true)
-        private Clob conditions_or_select = null;
+        private String conditions_or_select = null;
 
-        @JsonBackReference
+        @Lob
         @Column(name = "CONDITIONS_AND_SELECT", unique = false,nullable = true)
-        private Clob conditions_and_select = null;
+        private String conditions_and_select = null;
 
         @Column(name = "IS_PDPA", unique = false,nullable = true)
         private Integer is_pdpa = null;
