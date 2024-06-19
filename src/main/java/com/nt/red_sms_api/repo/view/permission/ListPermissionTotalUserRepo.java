@@ -4,14 +4,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Pageable;
+
+import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.view.permission.ListPermissionTotalUser;
 
 import java.util.List;
 
-public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissionTotalUser,Long> {
+public interface ListPermissionTotalUserRepo extends JpaRepository<PermissionMenuEntity,Long> {
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
+               "(SELECT COUNT(id) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TotalUser " +
                "FROM sa_menu_permission sa_pm ",
        nativeQuery = true)
     public List<ListPermissionTotalUser> GetAllWithTotalUser(
@@ -19,7 +21,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
     );
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
+               "(SELECT COUNT(id) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TotalUser " +
                "FROM sa_menu_permission sa_pm ",
        nativeQuery = true)
     public List<ListPermissionTotalUser> GetAllWithTotalUser();
@@ -29,7 +31,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
     public Integer getGetAllWithTotalUserTotalCount();
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
+               "(SELECT COUNT(id) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TotalUser " +
                "FROM sa_menu_permission sa_pm " +
                "WHERE sa_pm.permission_name like %:search% ",
        nativeQuery = true)
@@ -47,7 +49,7 @@ public interface ListPermissionTotalUserRepo extends JpaRepository<ListPermissio
 
 
     @Query(value = "SELECT sa_pm.*, " +
-               "(SELECT COUNT(u.ID) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TOTALUSER " +
+               "(SELECT COUNT(id) FROM user_db u WHERE u.SA_MENU_PERMISSION_ID = sa_pm.ID) AS TotalUser " +
                "FROM sa_menu_permission sa_pm " +
                "WHERE :search_field like %:search% ",
        nativeQuery = true)
