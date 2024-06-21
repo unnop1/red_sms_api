@@ -60,18 +60,6 @@ public class OrderTypeController {
             search,
             searchField
         );
-
-        AuditLog auditLog = new AuditLog();
-        auditLog.setAction("get");
-        auditLog.setAuditable("order_type");
-        auditLog.setUsername(vsf.getUsername());
-        auditLog.setBrowser(vsf.getBrowser());
-        auditLog.setDevice(vsf.getDevice());
-        auditLog.setOperating_system(vsf.getSystem());
-        auditLog.setIp_address(ipAddress);
-        auditLog.setComment("getAllOrderTypes");
-        auditLog.setCreated_date(DateTime.getTimeStampNow());
-        auditService.AddAuditLog(auditLog);
         
         return new ResponseEntity<>( orderTypeService.ListAllOrderType(req), HttpStatus.OK);
     }

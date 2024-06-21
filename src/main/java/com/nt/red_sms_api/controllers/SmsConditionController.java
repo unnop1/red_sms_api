@@ -60,18 +60,6 @@ public class SmsConditionController {
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
             System.out.println("vsf:"+vsf.toString());
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("Get");
-            auditLog.setAuditable("config_conditions");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("getAllSmsConditions");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
-            
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsConditions.getCount());
@@ -118,19 +106,6 @@ public class SmsConditionController {
             // } catch (Exception e) {
             //     return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             // }
-
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("config_conditions");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setAuditable_id(req.getConditionsID());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("GetSmsConditionMoreDetail");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
             
             DefaultControllerResp response = new DefaultControllerResp();
             

@@ -61,19 +61,6 @@ public class SmsGatewayController {
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsGws = smsGatewayService.ListSendSmsGateWays(req);
             
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("sms_gateway");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("getAllSendSmsGateways");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
-            
-            
             response.setDraw(draw);
             response.setRecordsFiltered(smsGws.getCount());
             response.setRecordsTotal(smsGws.getCount());
@@ -119,18 +106,6 @@ public class SmsGatewayController {
         try{
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(req);
-            
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("sms_gateway");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("GetAllSmsGatewaysBySending");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
@@ -178,18 +153,6 @@ public class SmsGatewayController {
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayMatchAndUnMatch(req);
             
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("sms_gateway");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("GetAllSmsGatewaysByCondition");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
-            
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
@@ -235,18 +198,6 @@ public class SmsGatewayController {
         try{
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
-            
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("sms_gateway");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("GetAllSmsGatewaysByResponseTime");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
@@ -294,18 +245,7 @@ public class SmsGatewayController {
         try{
             SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq(orderTypeMainID, isStatus,sortBy,sortName,startTime, endTime,start,length,search,searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
-            
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("sms_gateway");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("GetAllSmsGatewaysOrderTypeAndStatus");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
+
             // ObjectMapper mapper = new ObjectMapper();
             // String jsonResponse;
             // try{
@@ -346,18 +286,6 @@ public class SmsGatewayController {
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
         SmsGatewayEntity smsGwDetail = smsGatewayService.findSmsGatewayByID(id);
         DefaultControllerResp response = new DefaultControllerResp();
-        AuditLog auditLog = new AuditLog();
-        auditLog.setAction("get");
-        auditLog.setAuditable("sms_gateway");
-        auditLog.setAuditable_id(id);
-        auditLog.setUsername(vsf.getUsername());
-        auditLog.setBrowser(vsf.getBrowser());
-        auditLog.setDevice(vsf.getDevice());
-        auditLog.setOperating_system(vsf.getSystem());
-        auditLog.setIp_address(ipAddress);
-        auditLog.setComment("GetSmsGatewayMoreDetail");
-        auditLog.setCreated_date(DateTime.getTimeStampNow());
-        auditService.AddAuditLog(auditLog);
         
         if( smsGwDetail != null){
             if(smsGwDetail.getGID() != null){ 

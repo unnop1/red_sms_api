@@ -60,18 +60,6 @@ public class DataModelController {
             ListDataModelReq req = new ListDataModelReq(draw, sortBy, sortName,  start, length, search, searchField);
             PaginationDataResp listDataModel = dataModelService.ListAllDataModel(req);
 
-            AuditLog auditLog = new AuditLog();
-            auditLog.setAction("get");
-            auditLog.setAuditable("data_model_template");
-            auditLog.setUsername(vsf.getUsername());
-            auditLog.setBrowser(vsf.getBrowser());
-            auditLog.setDevice(vsf.getDevice());
-            auditLog.setOperating_system(vsf.getSystem());
-            auditLog.setIp_address(ipAddress);
-            auditLog.setComment("ListDataModel");
-            auditLog.setCreated_date(DateTime.getTimeStampNow());
-            auditService.AddAuditLog(auditLog);
-
             response.setRecordsFiltered(listDataModel.getCount());
             response.setRecordsTotal(listDataModel.getCount());
             response.setCount(listDataModel.getCount());
