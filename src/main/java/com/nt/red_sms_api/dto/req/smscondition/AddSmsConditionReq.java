@@ -1,9 +1,9 @@
 package com.nt.red_sms_api.dto.req.smscondition;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -38,6 +38,18 @@ public class AddSmsConditionReq {
 
     @JsonProperty("conditions_and_select")
     private String CONDITIONS_AND_SELECT;
+    
+    @JsonProperty("is_pdpa")
+    private Integer is_pdpa=0;
+
+    @JsonProperty("is_period_time")
+    private Integer is_period_time=0;
+
+    @JsonProperty("time_end")
+    private String time_end=null;
+    
+    @JsonProperty("time_start")
+    private String time_start=null;
 
     
 }
