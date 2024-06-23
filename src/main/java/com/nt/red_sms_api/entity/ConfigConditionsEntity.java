@@ -87,10 +87,10 @@ public class ConfigConditionsEntity {
         private String conditions_and_select = null;
 
         @Column(name = "IS_PDPA", unique = false,nullable = true)
-        private Integer is_pdpa = null;
+        private Integer is_pdpa = 0;
 
         @Column(name = "IS_PERIOD_TIME", unique = false,nullable = true)
-        private Integer is_period_time = null;
+        private Integer is_period_time = 0;
 
         @Column(name = "TIME_START", unique = false,nullable = true)
         private String time_start = null;

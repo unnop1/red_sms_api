@@ -339,6 +339,8 @@ public class SmsConditionImp implements SmsConditionService{
         newCondition.setMessage(req.getMessage());
         newCondition.setOrderType(orderTypeName);
         newCondition.setIs_enable(req.getIs_enable());
+        newCondition.setIs_pdpa(req.getIs_pdpa());
+        newCondition.setIs_period_time(req.getIs_period_time());
         newCondition.setRefID(refID);
         ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
 
@@ -419,6 +421,22 @@ public class SmsConditionImp implements SmsConditionService{
                 }
             }
 
+            if (!updates.getIs_pdpa().equals(existingEntity.getIs_pdpa()) ){
+                existingEntity.setIs_pdpa(updates.getIs_pdpa());
+            }
+
+            if (!updates.getIs_period_time().equals(existingEntity.getIs_period_time()) ){
+                existingEntity.setIs_period_time(updates.getIs_period_time());
+            }
+
+            if (updates.getTime_start() != null ){
+                existingEntity.setTime_start(updates.getTime_start());
+            }
+
+            if (updates.getTime_end() != null ){
+                existingEntity.setTime_end(updates.getTime_end());
+            }
+
             if (updates.getMessage() != null ){
                 existingEntity.setMessage(updates.getMessage());
             }
@@ -462,6 +480,10 @@ public class SmsConditionImp implements SmsConditionService{
             newCondition.setMessage(exist.getMessage());
             newCondition.setOrderType(orderType.getOrderTypeName());
             newCondition.setIs_enable(0);
+            newCondition.setIs_pdpa(exist.getIs_pdpa());
+            newCondition.setIs_period_time(exist.getIs_period_time());
+            newCondition.setTime_start(exist.getTime_start());
+            newCondition.setTime_end(exist.getTime_end());
             ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
             return created.getConditionsID();
         }
