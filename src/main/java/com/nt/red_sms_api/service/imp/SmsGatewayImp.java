@@ -321,6 +321,26 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setCount(count);
                     resp.setData(smsConditionEntities);
                     return resp;
+                }else if (searchField.equals("transaction_id")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.OdtStatusTransaction_idFieldSearch(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getOdtStatusTransaction_idFieldSearchTotalCount(
+                        orderTypeMainID,
+                        isStatus,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
                 }
             }
 

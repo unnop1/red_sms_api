@@ -56,7 +56,7 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
                 WHERE smsgw.ORDER_TYPE_MAINID=:order_type_main_id 
                 AND smsgw.IS_STATUS=:is_status
-                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
+                AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) || UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
                 AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
                 , nativeQuery = true)
@@ -316,6 +316,46 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
                 """
                 , nativeQuery = true)
     public List<SmsGatewayEntity> OdtStatusNoOrderIDSearchPhone(
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    // transaction_id
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAINID=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search%
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> OdtStatusTransaction_idFieldSearch(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
+        @Param(value = "is_status") Integer isStatus,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.ORDER_TYPE_MAINID=:order_type_main_id 
+                AND smsgw.IS_STATUS=:is_status
+                AND UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search%
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getOdtStatusTransaction_idFieldSearchTotalCount(
+        @Param(value = "order_type_main_id") Long orderTypeMainID,
         @Param(value = "is_status") Integer isStatus,
         @Param(value = "search") String search,
         @Param(value = "start_time") Timestamp startTime,
