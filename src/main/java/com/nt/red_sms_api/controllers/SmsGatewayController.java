@@ -1,5 +1,9 @@
 package com.nt.red_sms_api.controllers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.Calculate;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
@@ -197,7 +204,7 @@ public class SmsGatewayController {
         DefaultControllerResp response = new DefaultControllerResp();
         try{
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
-            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
+            SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
@@ -206,9 +213,71 @@ public class SmsGatewayController {
             response.setMessage("Success");
             response.setData(smsGateways.getData());
             response.setStatusCode(200);
+            return new ResponseEntity<>( response, HttpStatus.OK);
+        }catch (Exception e){
+            response.setDraw(draw);
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-            // ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-            // String json = ow.writeValueAsString(receiveSmsPayload);
+    @GetMapping
+    @RequestMapping("/graph_response_time")
+    public ResponseEntity<DefaultControllerResp> GraphSmsGatewaysByResponseTime(
+        HttpServletRequest request,       
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+
+    ) throws Exception{
+        String ipAddress = request.getRemoteAddr();
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+
+            HashMap<String, Object> dataResp = new HashMap<String, Object>();
+
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
+
+            List<Double> graphRespTimes = new ArrayList<Double>();
+            for(ByResponseTime smsGateway : smsGateways.getData()){
+                graphRespTimes.add(Double.valueOf(smsGateway.getRESPONSE_TIME()));
+            }
+
+            // Find MED, Max, Min, Avg
+            Double medValue = Calculate.findMedian(graphRespTimes);
+            Double maxValue = Calculate.findMax(graphRespTimes);
+            Double minValue = Calculate.findMin(graphRespTimes);
+            Double avgValue = Calculate.findAverage(graphRespTimes);
+
+
+            // Response Time data
+            dataResp.put("median_response_time", medValue);
+            dataResp.put("max_response_time", maxValue);
+            dataResp.put("min_response_time", minValue);
+            dataResp.put("average_response_time", avgValue);
+            dataResp.put("data", smsGateways.getData());
+                        
+            response.setDraw(draw);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
+
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }catch (Exception e){
             response.setDraw(draw);

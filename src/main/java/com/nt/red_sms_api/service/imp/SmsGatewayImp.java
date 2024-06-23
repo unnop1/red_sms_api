@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
@@ -107,8 +108,8 @@ public class SmsGatewayImp implements SmsGatewayService{
     }
 
     @Override
-    public PaginationDataResp findSmsGatewayResponseTime(SmsGwListReq req) {
-        PaginationDataResp resp = new PaginationDataResp();
+    public SmsGatewayResponseTimeResp findSmsGatewayResponseTime(SmsGwListReq req) {
+        SmsGatewayResponseTimeResp resp = new SmsGatewayResponseTimeResp();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();

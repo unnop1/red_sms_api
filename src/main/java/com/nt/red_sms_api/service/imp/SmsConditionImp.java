@@ -421,11 +421,11 @@ public class SmsConditionImp implements SmsConditionService{
                 }
             }
 
-            if (!updates.getIs_pdpa().equals(existingEntity.getIs_pdpa()) ){
+            if (updates.getIs_pdpa()!= null ){
                 existingEntity.setIs_pdpa(updates.getIs_pdpa());
             }
 
-            if (!updates.getIs_period_time().equals(existingEntity.getIs_period_time()) ){
+            if (updates.getIs_period_time() != null ){
                 existingEntity.setIs_period_time(updates.getIs_period_time());
             }
 

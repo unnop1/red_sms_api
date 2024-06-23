@@ -31,6 +31,9 @@ public class OrderTypeEntity {
         @Column(name = "ORDERTYPE_NAME", unique = false,nullable = true)
         private String OrderTypeName = null;
 
+        @Column(name = "DESCRIPTION", unique = false,nullable = true)
+        private String DESCRIPTION = null;
+
         @Column(name = "IS_ENABLE", unique = false,nullable = true)
         private Integer IsEnable = 1;
 

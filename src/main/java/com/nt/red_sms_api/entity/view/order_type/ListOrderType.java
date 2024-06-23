@@ -13,6 +13,7 @@ import lombok.ToString;
 public interface ListOrderType {
         Long getTYPEID();
         Long getMAINID();
+        String getDESCRIPTION();
         String getORDERTYPE_NAME();
         Integer getIS_ENABLE();
         Integer getIS_DELETE();
