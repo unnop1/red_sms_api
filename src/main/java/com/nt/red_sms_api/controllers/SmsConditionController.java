@@ -13,10 +13,14 @@ import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.ConfigConditionsEntity;
+import com.nt.red_sms_api.log.LogFlie;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsConditionService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,6 +40,8 @@ public class SmsConditionController {
 
     @Autowired
     private AuditService auditService;
+
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");    
 
     @GetMapping
     public ResponseEntity<DefaultControllerResp> getAllSmsConditions(
@@ -156,6 +162,23 @@ public class SmsConditionController {
             auditLog.setComment("addSmsCondition");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SmsConditionController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "insert",
+                    "addSmsCondition",
+                    "config_conditions",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
 
             resp.setCount(1);
@@ -196,7 +219,25 @@ public class SmsConditionController {
                 auditLog.setComment("duplicateSmsCondition");
                 auditLog.setCreated_date(DateTime.getTimeStampNow());
                 auditService.AddAuditLog(auditLog);
+                
             }
+
+            LogFlie.logMessage(
+                "SmsConditionController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "insert",
+                    "duplicateSmsCondition",
+                    "config_conditions",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
 
             resp.setCount(1);
@@ -236,6 +277,23 @@ public class SmsConditionController {
             auditLog.setComment("updateSmsCondition");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SmsConditionController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "update",
+                    "updateSmsCondition",
+                    "config_conditions",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
             resp.setCount(1);
             resp.setData(updateReq);
@@ -273,6 +331,23 @@ public class SmsConditionController {
             auditLog.setComment("DeleteSmsCondition");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SmsConditionController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "delete",
+                    "DeleteSmsCondition",
+                    "config_conditions",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
             resp.setCount(1);
             resp.setData(smsConditionID);

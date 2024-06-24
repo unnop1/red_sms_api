@@ -17,6 +17,7 @@ import com.nt.red_sms_api.entity.LogLoginEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
 import com.nt.red_sms_api.entity.UserEntity;
 import com.nt.red_sms_api.exp.UserAlreadyExistsException;
+import com.nt.red_sms_api.log.LogFlie;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.LogLoginService;
 import com.nt.red_sms_api.service.PermissionMenuService;
@@ -27,9 +28,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.HashMap;
-
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,8 @@ public class AuthController {
     @Autowired
     private PermissionMenuService permissionMenuService; 
 
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");    
+
 
     @PostMapping("/create")
     public ResponseEntity<AuthSuccessResp> createUser(HttpServletRequest request, @RequestBody UserRequestDto userRequestDto) {
@@ -97,6 +101,23 @@ public class AuthController {
             jwtReq.setDevice(vsf.getDevice());
             jwtReq.setSystem(vsf.getSystem());
 
+            LogFlie.logMessage(
+                "AuthController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "insert",
+                    "createUser",
+                    "user_db",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
+
             String token = this.helper.generateToken(jwtReq, userDetails.getEmail());
             return new ResponseEntity<>(new AuthSuccessResp(token), HttpStatus.CREATED);
         } catch (UserAlreadyExistsException ex) {
@@ -107,9 +128,9 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody JwtRequest jwtRequest, HttpServletRequest request) {
+        String ipAddress = request.getRemoteAddr();
         try{
             // Get the IP address from the request
-            String ipAddress = request.getRemoteAddr();
             LoginResp loginResp = new LoginResp();
             // String userAgent = request.getHeader("User-Agent");
             // String deviceInfo = parseUserAgent(userAgent);
@@ -191,10 +212,38 @@ public class AuthController {
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
 
+            LogFlie.logMessage(
+                "AuthController", 
+                "success",
+                String.format(
+                    "%s %s %s %s %s %s",
+                    df.format(new Date()),
+                    jwtRequest.getUsername(),
+                    ipAddress,
+                    jwtRequest.getDevice(),
+                    jwtRequest.getBrowser(),
+                    jwtRequest.getSystem()
+                )
+            );
+
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(loginResp);
         }catch (Exception e){
+            LogFlie.logMessage(
+                "AuthController", 
+                "fail",
+                String.format(
+                    "%s %s %s %s %s %s",
+                    df.format(new Date()),
+                    jwtRequest.getUsername(),
+                    ipAddress,
+                    jwtRequest.getDevice(),
+                    jwtRequest.getBrowser(),
+                    jwtRequest.getSystem()
+                )
+            );
+
             return ResponseEntity.internalServerError()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body(e.getMessage());

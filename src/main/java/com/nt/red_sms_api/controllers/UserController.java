@@ -12,11 +12,14 @@ import com.nt.red_sms_api.dto.resp.UserResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.log.LogFlie;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.PermissionMenuService;
 import com.nt.red_sms_api.service.UserService;
-
+import java.util.Date;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,9 @@ public class UserController {
 
     @Autowired
     private AuditService auditService;
+
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
 
     @GetMapping("/list")
     public ResponseEntity<DefaultControllerResp> getAllUser(
@@ -134,6 +140,23 @@ public class UserController {
             auditLog.setComment("updateUser");
             auditService.AddAuditLog(auditLog);
 
+            LogFlie.logMessage(
+                "UserController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "update",
+                    "updateUser",
+                    "user_db",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
+
             response.setCount(1);
             response.setMessage("Success");
             response.setData(req);
@@ -170,6 +193,23 @@ public class UserController {
             auditLog.setIp_address(ipAddress);
             auditLog.setComment("DeleteUser");
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "UserController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "delete",
+                    "deleteUser",
+                    "user_db",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
 
             resp.setCount(1);
             resp.setData(userID);

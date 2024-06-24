@@ -11,10 +11,14 @@ import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.AuditLogEntity;
 import com.nt.red_sms_api.entity.PermissionMenuEntity;
+import com.nt.red_sms_api.log.LogFlie;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.PermissionMenuService;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +37,9 @@ public class SystemAdminController {
 
     @Autowired
     private AuditService auditService;
+
+    private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");    
+
 
     @GetMapping("/permission")
     public ResponseEntity<DefaultControllerResp> getSaMenuPermission(
@@ -135,6 +142,23 @@ public class SystemAdminController {
             auditLog.setComment("addSaMenuPermission");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SystemAdminController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "insert",
+                    "addSaMenuPermission",
+                    "sa_menu_permission",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
             resp.setCount(1);
             resp.setData(addPermissionReq);
@@ -174,6 +198,23 @@ public class SystemAdminController {
             auditLog.setComment("updateSaMenuPermission");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SystemAdminController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "update",
+                    "updateSaMenuPermission",
+                    "sa_menu_permission",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
             resp.setCount(1);
             resp.setData(updateReq);
@@ -213,6 +254,23 @@ public class SystemAdminController {
             auditLog.setComment("DeleteSaMenuPermission");
             auditLog.setCreated_date(DateTime.getTimeStampNow());
             auditService.AddAuditLog(auditLog);
+
+            LogFlie.logMessage(
+                "SystemAdminController", 
+                "audit_logs",
+                String.format(
+                    "%s %s %s %s %s %s %s %s %s",
+                    df.format(new Date()),
+                    "delete",
+                    "DeleteSaMenuPermission",
+                    "sa_menu_permission",
+                    vsf.getUsername(),
+                    ipAddress,
+                    vsf.getDevice(),
+                    vsf.getBrowser(),
+                    vsf.getSystem()
+                )
+            );
             
             resp.setCount(1);
             resp.setData(permissionID);
