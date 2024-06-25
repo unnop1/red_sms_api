@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import org.springframework.boot.logging.java.SimpleFormatter;
 
@@ -19,15 +20,9 @@ public class LogFlie {
             SimpleDateFormat df = new SimpleDateFormat("MMyyyy");
             
             // Use JBoss data directory
-            String jbossDataDir = System.getProperty("jboss.server.data.dir");
-            if (jbossDataDir == null) {
-                jbossDataDir = "";
-            }
+            String jbossDataDir = "data";
             
             String pathLog = jbossDataDir + "/" + path + "/";
-            if(jbossDataDir.isBlank()){
-                pathLog = path + "/";
-            }
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String fileName = dateFormat.format(date) + ".txt";
 
@@ -46,6 +41,10 @@ public class LogFlie {
             fileHandler.setFormatter(new PlainTextFormatter());
             logger.addHandler(fileHandler);
             logger.setUseParentHandlers(false); // Prevents logging to console
+
+            // Set log level to ensure the message is logged
+            logger.setLevel(Level.INFO);
+            fileHandler.setLevel(Level.INFO);
 
             // Log the message
             logger.info(messageLog);
