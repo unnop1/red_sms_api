@@ -275,7 +275,7 @@ public class SmsGatewayController {
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
             response.setMessage("Success");
-            response.setData(smsGateways.getData());
+            response.setData(dataResp);
             response.setStatusCode(200);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);
