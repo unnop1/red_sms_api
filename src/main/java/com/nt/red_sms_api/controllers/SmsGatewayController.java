@@ -251,31 +251,31 @@ public class SmsGatewayController {
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
             SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
 
-            List<Double> graphRespTimes = new ArrayList<Double>();
-            for(ByResponseTime smsGateway : smsGateways.getData()){
-                graphRespTimes.add(Double.valueOf(smsGateway.getRESPONSE_TIME()));
-            }
+            // List<Double> graphRespTimes = new ArrayList<Double>();
+            // for(ByResponseTime smsGateway : smsGateways.getData()){
+            //     graphRespTimes.add(Double.valueOf(smsGateway.getRESPONSE_TIME()));
+            // }
 
             // Find MED, Max, Min, Avg
-            Double medValue = Calculate.findMedian(graphRespTimes);
-            Double maxValue = Calculate.findMax(graphRespTimes);
-            Double minValue = Calculate.findMin(graphRespTimes);
-            Double avgValue = Calculate.findAverage(graphRespTimes);
+            // Double medValue = Calculate.findMedian(graphRespTimes);
+            // Double maxValue = Calculate.findMax(graphRespTimes);
+            // Double minValue = Calculate.findMin(graphRespTimes);
+            // Double avgValue = Calculate.findAverage(graphRespTimes);
 
 
             // Response Time data
-            dataResp.put("median_response_time", medValue);
-            dataResp.put("max_response_time", maxValue);
-            dataResp.put("min_response_time", minValue);
-            dataResp.put("average_response_time", avgValue);
-            dataResp.put("data", smsGateways.getData());
+            // dataResp.put("median_response_time", medValue);
+            // dataResp.put("max_response_time", maxValue);
+            // dataResp.put("min_response_time", minValue);
+            // dataResp.put("average_response_time", avgValue);
+            // dataResp.put("data", smsGateways.getData());
                         
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
             response.setRecordsTotal(smsGateways.getCount());
             response.setCount(smsGateways.getCount());
             response.setMessage("Success");
-            response.setData(dataResp);
+            response.setData(smsGateways.getData());
             response.setStatusCode(200);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);

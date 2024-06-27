@@ -10,6 +10,9 @@ public interface ByResponseTime {
     Timestamp getSEND_DATE();
     String getPHONENUMBER();
     Integer getIS_STATUS();
-    String getRESPONSE_TIME();
+    String getSUM_RESPONSE_TIME();
+    String getAVG_RESPONSE_TIME();
+    String getMAX_RESPONSE_TIME();
+    String getMIN_RESPONSE_TIME();
     String getTRANSACTION_ID();
 }
