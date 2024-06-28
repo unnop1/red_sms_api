@@ -1,10 +1,7 @@
 package com.nt.red_sms_api.entity;
 
 
-import java.sql.Clob;
 import java.sql.Timestamp;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -83,11 +79,11 @@ public class SmsGatewayEntity {
         @Column(name = "TRANSACTION_ID", unique = false,nullable = true)
         private String transaction_id = null;
 
-        @Transient
+        // @Transient
         @Column(name = "DATE_START", unique = false,nullable = true)
         private Timestamp date_Start = null;
 
-        @Transient
+        // @Transient
         @Column(name = "DATE_END", unique = false,nullable = true)
         private Timestamp date_End = null;
 }
