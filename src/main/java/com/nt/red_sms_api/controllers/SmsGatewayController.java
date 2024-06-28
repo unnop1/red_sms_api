@@ -22,9 +22,11 @@ import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
+import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseReportTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsGatewayService;
@@ -249,33 +251,22 @@ public class SmsGatewayController {
             HashMap<String, Object> dataResp = new HashMap<String, Object>();
 
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
-            SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
+            SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
 
-            // List<Double> graphRespTimes = new ArrayList<Double>();
-            // for(ByResponseTime smsGateway : smsGateways.getData()){
-            //     graphRespTimes.add(Double.valueOf(smsGateway.getRESPONSE_TIME()));
+            // for (ByResponseReportTime responseTime : smsGatewayReports.getData()) {
+            //     System.out.println("Receive Date: " + responseTime.getRECEIVE_DATE());
+            //     String startTimeInDay = responseTime.getRECEIVE_DATE();
+            //     String startDateInDay = startTimeInDay.split(" ")[0];
+            //     System.out.println("startDateInDay: " + startDateInDay);
+            //     String endTimeInDay = String.format("%s %s",startDateInDay,"23:59:59");
+            //     System.out.println("endTimeInDay: " + endTimeInDay);
+            //     SmsGwListReq dataReq = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            //     SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);   
             // }
 
-            // Find MED, Max, Min, Avg
-            // Double medValue = Calculate.findMedian(graphRespTimes);
-            // Double maxValue = Calculate.findMax(graphRespTimes);
-            // Double minValue = Calculate.findMin(graphRespTimes);
-            // Double avgValue = Calculate.findAverage(graphRespTimes);
-
-
-            // Response Time data
-            // dataResp.put("median_response_time", medValue);
-            // dataResp.put("max_response_time", maxValue);
-            // dataResp.put("min_response_time", minValue);
-            // dataResp.put("average_response_time", avgValue);
-            // dataResp.put("data", smsGateways.getData());
-                        
             response.setDraw(draw);
-            response.setRecordsFiltered(smsGateways.getCount());
-            response.setRecordsTotal(smsGateways.getCount());
-            response.setCount(smsGateways.getCount());
             response.setMessage("Success");
-            response.setData(smsGateways.getData());
+            response.setData(smsGatewayReports.getData());
             response.setStatusCode(200);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);

@@ -12,15 +12,18 @@ import org.springframework.stereotype.Service;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
+import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
+import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseReportTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByConditionRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByResponseTimeRepo;
+import com.nt.red_sms_api.repo.view.sms_gateway.ByResponseTimeReportRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.BySendingRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ListSmsGatewayRepo;
 import com.nt.red_sms_api.service.SmsGatewayService;
@@ -39,6 +42,9 @@ public class SmsGatewayImp implements SmsGatewayService{
 
     @Autowired
     private ByResponseTimeRepo byResponseTimeRepo;
+
+    @Autowired
+    private ByResponseTimeReportRepo byResponseTimeReportRepo;
 
     @Autowired
     private ByConditionRepo byConditionRepo;
@@ -152,6 +158,25 @@ public class SmsGatewayImp implements SmsGatewayService{
             resp.setData(smsGws);
             return resp;
         }
+    }
+
+    @Override
+    public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwListReq req) {
+        SmsGatewayResponseTimeReportResp resp = new SmsGatewayResponseTimeReportResp();
+        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+
+        List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+        
+        // for (ByResponseReportTime responseTime : smsGws) {
+        //     System.out.println("Receive Date: " + responseTime.getReceiveDate());
+        //     System.out.println("Avg Response Time: " + responseTime.getAvgResponseTimePerDay());
+        //     // Add similar logs for other fields
+        //     System.out.println("Data Column Array: " + responseTime.getDataColumnArray());
+        // }
+
+        resp.setData(smsGws);
+        return resp;
     }
 
 

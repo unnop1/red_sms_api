@@ -31,31 +31,13 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as sum_response_time,
-                    AVG(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as avg_response_time,
-                    MAX(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as max_response_time,
-                    MIN(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as min_response_time
+                    ) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY smsgw.receive_date, GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.send_date, smsgw.is_status, conf.refid 
+                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTime(
@@ -81,31 +63,13 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as sum_response_time,
-                    AVG(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as avg_response_time,
-                    MAX(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as max_response_time,
-                    MIN(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as min_response_time
+                    ) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY smsgw.receive_date, GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.send_date, smsgw.is_status, conf.refid 
+                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     ORDER BY smsgw.receive_date desc 
                     """
                     ,nativeQuery = true)
@@ -145,32 +109,14 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as sum_response_time,
-                    AVG(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as avg_response_time,
-                    MAX(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as max_response_time,
-                    MIN(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as min_response_time
+                    ) as response_time 
                     FROM sms_gateway smsgw 
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time 
                     AND smsgw.phonenumber like %:search% AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY smsgw.receive_date, GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.send_date, smsgw.is_status, conf.refid 
+                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTimeSearch(
@@ -197,32 +143,14 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as sum_response_time,
-                    AVG(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as avg_response_time,
-                    MAX(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as max_response_time,
-                    MIN(
-                            extract ( day from (send_date - receive_date) )*86400 
-                        + extract ( hour from (send_date - receive_date) )*3600 
-                        + extract ( minute from (send_date - receive_date) )*60 
-                        + extract ( second from (send_date - receive_date) )
-                    ) as min_response_time
+                    ) as response_time 
                     FROM sms_gateway smsgw 
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time 
                     AND smsgw.phonenumber like %:search% AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY smsgw.receive_date, GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.send_date, smsgw.is_status, conf.refid 
+                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     ORDER BY smsgw.receive_date desc 
                     """
                     ,nativeQuery = true)
