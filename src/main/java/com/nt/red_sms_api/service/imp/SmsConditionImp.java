@@ -341,6 +341,8 @@ public class SmsConditionImp implements SmsConditionService{
         newCondition.setIs_enable(req.getIs_enable());
         newCondition.setIs_pdpa(req.getIs_pdpa());
         newCondition.setIs_period_time(req.getIs_period_time());
+        newCondition.setTime_start(req.getTime_start());
+        newCondition.setTime_end(req.getTime_end());
         newCondition.setRefID(refID);
         ConfigConditionsEntity created = smsConditionRepo.save(newCondition);
 
