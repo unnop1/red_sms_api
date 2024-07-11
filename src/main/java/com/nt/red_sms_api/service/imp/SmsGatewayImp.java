@@ -55,6 +55,7 @@ public class SmsGatewayImp implements SmsGatewayService{
         
         // String startTime = req.getStartTime();
         // String endTime = req.getEndTime();
+        String byTime = req.getByTime().toLowerCase();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
@@ -67,19 +68,37 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
 
-        if(offset.equals(0) && limit.equals(0)){
-            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime);
-            Integer count = byConditionRepo.getListByConditionTotalCount(startTime, endTime);
+        if(byTime.equals("date")){
+            if(offset.equals(0) && limit.equals(0)){
+                List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime);
+                Integer count = byConditionRepo.getListByConditionDateTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+            
+
+            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime, PageRequest.of(page, limit, sort) );
+            Integer count = byConditionRepo.getListByConditionDateTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsGatewayEntities);
+            return resp;
+        }else if(byTime.equals("month")) {
+            if(offset.equals(0) && limit.equals(0)){
+                List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionMonth(startTime, endTime);
+                Integer count = byConditionRepo.getListByConditionMonthTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+            
+
+            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionMonth(startTime, endTime, PageRequest.of(page, limit, sort) );
+            Integer count = byConditionRepo.getListByConditionMonthTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGatewayEntities);
             return resp;
         }
-        
-
-        List<ByCondition> smsGatewayEntities = byConditionRepo.ListByCondition(startTime, endTime, PageRequest.of(page, limit, sort) );
-        Integer count = byConditionRepo.getListByConditionTotalCount(startTime, endTime);
-        resp.setCount(count);
-        resp.setData(smsGatewayEntities);
         return resp;
     }
 

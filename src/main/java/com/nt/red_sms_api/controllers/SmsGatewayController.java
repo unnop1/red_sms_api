@@ -67,7 +67,7 @@ public class SmsGatewayController {
         
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, null,startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsGws = smsGatewayService.ListSendSmsGateWays(req);
             
             response.setDraw(draw);
@@ -99,6 +99,7 @@ public class SmsGatewayController {
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
@@ -113,7 +114,7 @@ public class SmsGatewayController {
        
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendAndUnSend(req);
             
             response.setDraw(draw);
@@ -145,6 +146,7 @@ public class SmsGatewayController {
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
@@ -159,7 +161,7 @@ public class SmsGatewayController {
        
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayMatchAndUnMatch(req);
             
             response.setDraw(draw);
@@ -191,6 +193,7 @@ public class SmsGatewayController {
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
@@ -205,7 +208,7 @@ public class SmsGatewayController {
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField);
             SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
             
             response.setDraw(draw);
@@ -233,6 +236,7 @@ public class SmsGatewayController {
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
         @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
         @RequestParam(name = "start_time", defaultValue = "0")String startTime,
         @RequestParam(name = "end_time", defaultValue = "0")String endTime,
         @RequestParam(name = "start", defaultValue = "0")Integer start,
@@ -250,7 +254,7 @@ public class SmsGatewayController {
 
             HashMap<String, Object> dataResp = new HashMap<String, Object>();
 
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime, startTime, endTime, start, length, search, searchField);
             SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
 
             // for (ByResponseReportTime responseTime : smsGatewayReports.getData()) {

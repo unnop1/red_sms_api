@@ -10,8 +10,10 @@ import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
+import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 
-public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
+public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
+    
     /* BY DATE */
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
@@ -20,14 +22,14 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         AS totalEvent, 
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
-                    FROM  config_conditions conf 
+                    FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
-                    ON smsgw.config_conditions_id = conf.conditions_id
+                    ON smsgw.order_type_mainid = odt.order_type_mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
                     GROUP BY TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
-    public List<ByCondition> ListByConditionDate(
+    public List<ByOrderTypeRepo> ListByOrderTypeDate(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime,
         Pageable pageable
@@ -37,15 +39,15 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     SELECT COUNT(*)
                     FROM (
                         SELECT COUNT(DISTINCT TRUNC(smsgw.created_date)) AS date_count 
-                        FROM  config_conditions conf 
-                        LEFT JOIN sms_gateway smsgw 
-                        ON smsgw.config_conditions_id = conf.conditions_id 
+                        FROM  order_type odt 
+                        LEFT JOIN sms_gateway smsgw
+                        ON smsgw.order_type_mainid = odt.order_type_mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
                         GROUP BY TRUNC(smsgw.created_date) 
                     ) subquery 
                     """,
         nativeQuery = true)
-    public Integer getListByConditionDateTotalCount(Timestamp startTime, Timestamp endTime);
+    public Integer getListByOrderTypeDateTotalCount(Timestamp startTime, Timestamp endTime);
 
     /// no page
     @Query(value =  """
@@ -55,14 +57,14 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         AS totalEvent, 
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
-                    FROM  config_conditions conf 
+                    FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
-                    ON smsgw.config_conditions_id = conf.conditions_id
+                    ON smsgw.order_type_mainid = odt.order_type_mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
                     GROUP BY TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
-    public List<ByCondition> ListByConditionDate(
+    public List<ByOrderTypeRepo> ListByOrderTypeDate(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime
     );
@@ -76,14 +78,14 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
             AS totalEvent, 
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
-        FROM  config_conditions conf 
+        FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
-        ON smsgw.config_conditions_id = conf.conditions_id
+        ON smsgw.order_type_mainid = odt.order_type_mainid
         WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
         GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
-    public List<ByCondition> ListByConditionMonth(
+    public List<ByOrderTypeRepo> ListByOrderTypeMonth(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime,
         Pageable pageable
@@ -93,15 +95,15 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     SELECT COUNT(*)
                     FROM (
                         SELECT COUNT(DISTINCT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')) AS date_count 
-                        FROM  config_conditions conf 
+                        FROM  order_type odt 
                         LEFT JOIN sms_gateway smsgw
-                        ON smsgw.config_conditions_id = conf.conditions_id 
+                        ON smsgw.order_type_mainid = odt.order_type_mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
                         GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     ) subquery 
                     """,
         nativeQuery = true)
-    public Integer getListByConditionMonthTotalCount(Timestamp startTime, Timestamp endTime);
+    public Integer getListByOrderTypeMonthTotalCount(Timestamp startTime, Timestamp endTime);
 
     /// no page
     @Query(value =  """
@@ -111,14 +113,14 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
             AS totalEvent, 
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
-        FROM  config_conditions conf 
+        FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
-        ON smsgw.config_conditions_id = conf.conditions_id
+        ON smsgw.order_type_mainid = odt.order_type_mainid
         WHERE smsGW.created_date BETWEEN :start_time AND :end_time 
         GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
-    public List<ByCondition> ListByConditionMonth(
+    public List<ByOrderTypeRepo> ListByOrderTypeMonth(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime
     );

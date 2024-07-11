@@ -19,6 +19,9 @@ public class SmsGwListReq {
     @JsonProperty("order[0][name]")
     private String sortName="created_date";
 
+    @JsonProperty("by_time")
+    private String byTime="date";
+
     @lombok.NonNull
     @JsonProperty("start_time")
     private String startTime;

@@ -14,7 +14,7 @@ import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 
 public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long> {
-    
+    /* BY DATE */
     @Query(value =  """
                     SELECT 
                     smsgw.GID,
