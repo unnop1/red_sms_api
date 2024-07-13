@@ -57,7 +57,7 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /* BY MONTH */
     @Query(value =  """
-                    SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+                    SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
                     COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail
@@ -85,7 +85,7 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /// no page
     @Query(value =  """
-                    SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+                    SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
                     COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ByCondition;
+import com.nt.red_sms_api.entity.view.sms_gateway.ByOrderType;
 import com.nt.red_sms_api.entity.view.sms_gateway.BySending;
 
 public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
@@ -17,6 +18,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /* BY DATE */
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                        odt.ordertype_name,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
                         AS totalEvent, 
@@ -24,12 +26,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
-                    ON smsgw.order_type_mainid = odt.order_type_mainid
+                    ON smsgw.order_type_mainid = odt.mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date)
+                    GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
-    public List<ByOrderTypeRepo> ListByOrderTypeDate(
+    public List<ByOrderType> ListByOrderTypeDate(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime,
         Pageable pageable
@@ -41,9 +43,9 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         SELECT COUNT(DISTINCT TRUNC(smsgw.created_date)) AS date_count 
                         FROM  order_type odt 
                         LEFT JOIN sms_gateway smsgw
-                        ON smsgw.order_type_mainid = odt.order_type_mainid
+                        ON smsgw.order_type_mainid = odt.mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY TRUNC(smsgw.created_date) 
+                        GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date) 
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -52,6 +54,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /// no page
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                        odt.ordertype_name,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
                         AS totalEvent, 
@@ -59,12 +62,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
-                    ON smsgw.order_type_mainid = odt.order_type_mainid
+                    ON smsgw.order_type_mainid = odt.mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date)
+                    GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
-    public List<ByOrderTypeRepo> ListByOrderTypeDate(
+    public List<ByOrderType> ListByOrderTypeDate(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime
     );
@@ -72,7 +75,8 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /* BY MONTH */
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+            odt.ordertype_name,
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
             AS totalEvent, 
@@ -80,12 +84,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
         FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
-        ON smsgw.order_type_mainid = odt.order_type_mainid
+        ON smsgw.order_type_mainid = odt.mainid
         WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
-    public List<ByOrderTypeRepo> ListByOrderTypeMonth(
+    public List<ByOrderType> ListByOrderTypeMonth(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime,
         Pageable pageable
@@ -97,9 +101,9 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         SELECT COUNT(DISTINCT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')) AS date_count 
                         FROM  order_type odt 
                         LEFT JOIN sms_gateway smsgw
-                        ON smsgw.order_type_mainid = odt.order_type_mainid
+                        ON smsgw.order_type_mainid = odt.mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+                        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -107,7 +111,8 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /// no page
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+            odt.ordertype_name,
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
             AS totalEvent, 
@@ -115,12 +120,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
         FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
-        ON smsgw.order_type_mainid = odt.order_type_mainid
+        ON smsgw.order_type_mainid = odt.mainid
         WHERE smsGW.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
-    public List<ByOrderTypeRepo> ListByOrderTypeMonth(
+    public List<ByOrderType> ListByOrderTypeMonth(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime
     );

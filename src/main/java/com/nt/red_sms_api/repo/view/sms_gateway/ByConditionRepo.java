@@ -15,6 +15,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /* BY DATE */
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                        conf.conditions_id,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
                         AS totalEvent, 
@@ -24,7 +25,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date)
+                    GROUP BY conf.conditions_id, TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionDate(
@@ -41,7 +42,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         LEFT JOIN sms_gateway smsgw 
                         ON smsgw.config_conditions_id = conf.conditions_id 
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY TRUNC(smsgw.created_date) 
+                        GROUP BY conf.conditions_id, TRUNC(smsgw.created_date) 
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -50,6 +51,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /// no page
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                        conf.conditions_id,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
                         COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
                         AS totalEvent, 
@@ -59,7 +61,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date)
+                    GROUP BY conf.conditions_id, TRUNC(smsgw.created_date)
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionDate(
@@ -70,7 +72,8 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /* BY MONTH */
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+            conf.conditions_id,
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
             AS totalEvent, 
@@ -80,7 +83,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
         LEFT JOIN sms_gateway smsgw
         ON smsgw.config_conditions_id = conf.conditions_id
         WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY conf.conditions_id, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionMonth(
@@ -97,7 +100,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         LEFT JOIN sms_gateway smsgw
                         ON smsgw.config_conditions_id = conf.conditions_id 
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+                        GROUP BY conf.conditions_id, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -105,7 +108,8 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /// no page
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS MONTH_ONLY,
+        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+            conf.conditions_id,
             COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
             COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
             AS totalEvent, 
@@ -115,7 +119,7 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
         LEFT JOIN sms_gateway smsgw
         ON smsgw.config_conditions_id = conf.conditions_id
         WHERE smsGW.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY conf.conditions_id, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionMonth(

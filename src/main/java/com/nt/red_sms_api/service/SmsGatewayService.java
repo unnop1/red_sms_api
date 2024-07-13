@@ -14,7 +14,8 @@ public interface SmsGatewayService  {
     public PaginationDataResp ListSendSmsGateWays(SmsGwListReq req);
     public PaginationDataResp findSmsGatewayOrderTypeAndStatus(SmsGwOrderTypeStatusReq req);
     public PaginationDataResp findSmsGatewaySendAndUnSend(SmsGwListReq req);
-    public PaginationDataResp findSmsGatewayMatchAndUnMatch(SmsGwListReq req);
+    public PaginationDataResp findSmsGatewayCondition(SmsGwListReq req);
+    public PaginationDataResp findSmsGatewayOrderType(SmsGwListReq req);
     public SmsGatewayResponseTimeResp findSmsGatewayResponseTime(SmsGwListReq req);
     public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwListReq req);
 }
