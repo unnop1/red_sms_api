@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
@@ -457,6 +458,134 @@ public class SmsGatewayImp implements SmsGatewayService{
             Integer count = smsGatewayRepo.getSmsGatewayByOrderTypeAndStatusAllSearchTotalCount(
                 orderTypeMainID,
                 isStatus,
+                search,
+                startTime,
+                endTime
+            );
+            resp.setCount(count);
+            resp.setData(smsConditionEntities);
+            return resp;
+        }
+    }
+
+    public PaginationDataResp findSmsGatewayConditions(SmsGwConditionReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
+        String sortName = req.getSortName();
+        String sortBy = req.getSortBy();
+        String search = req.getSearch();
+        String searchField = req.getSearchField().toLowerCase();
+
+        Long conditionsID = req.getConditions_id();
+
+        if ( search.isEmpty()){
+            List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayByConditionID(
+                conditionsID,
+                startTime,
+                endTime,
+                PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = smsGatewayRepo.getSmsGatewayByConditionIDTotalCount(
+                conditionsID,
+                startTime,
+                endTime
+            );
+            resp.setCount(count);
+            resp.setData(smsGw);
+            return resp;
+        }else {
+            if( !req.getSearchField().isEmpty()){
+
+                if (searchField.equals("phonenumber")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionPhoneFieldSearch(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getConditionPhoneFieldSearchTotalCount(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("smsmessage")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionSmsMsgFieldSearch(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getConditionSmsMsgFieldSearchTotalCount(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("refid")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionRefIdFieldSearch(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getConditionRefIdFieldSearchTotalCount(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }else if (searchField.equals("transaction_id")){
+                    List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionTransaction_idFieldSearch(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime,
+                        PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+                    );
+
+                    Integer count = smsGatewayRepo.getConditionTransaction_idFieldSearchTotalCount(
+                        conditionsID,
+                        search,
+                        startTime,
+                        endTime
+                    );
+                    resp.setCount(count);
+                    resp.setData(smsConditionEntities);
+                    return resp;
+                }
+            }
+
+            List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.findSmsGatewayByConditionAllSearch(
+                conditionsID,
+                search,
+                startTime,
+                endTime,
+                PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName )
+            );
+            Integer count = smsGatewayRepo.getSmsGatewayByConditionAllSearchTotalCount(
+                conditionsID,
                 search,
                 startTime,
                 endTime

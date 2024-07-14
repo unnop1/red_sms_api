@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public interface ListSmsGateway {
     Long getGID();
+    Long getCONDITIONS_ID();
     String getTRANSACTION_ID();
     Timestamp getSEND_DATE();
     String getREFID();

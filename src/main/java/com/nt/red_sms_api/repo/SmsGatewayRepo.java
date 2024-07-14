@@ -11,6 +11,219 @@ import org.springframework.data.repository.query.Param;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
+    /* CONDITIONS ID */
+    @Query(value = """
+                SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time 
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayByConditionID(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime, 
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayByConditionIDTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    // phonenumber
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( smsgw.PHONENUMBER like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> ConditionPhoneFieldSearch(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( smsgw.PHONENUMBER like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getConditionPhoneFieldSearchTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    // smsmessage
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( smsgw.SMSMESSAGE like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> ConditionSmsMsgFieldSearch(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( SMSMESSAGE like %:search% )
+                AND ( RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getConditionSmsMsgFieldSearchTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    // refid
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND conf.REFID=:search
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> ConditionRefIdFieldSearch(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND conf.REFID=:search
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getConditionRefIdFieldSearchTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    // transaction_id
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search%
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> ConditionTransaction_idFieldSearch(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) like %:search%
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getConditionTransaction_idFieldSearchTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    @Query(value = """
+                SELECT smsgw.*, conf.DATE_START, conf.DATE_END  FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) || UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayByConditionAllSearch(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        // @Param(value = "search_date_field") String searchDateField,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.CONFIG_CONDITIONS_ID = conf.CONDITIONS_ID
+                WHERE smsgw.CONFIG_CONDITIONS_ID=:conditions_id 
+                AND ( UPPER(conf.REFID) || LOWER(conf.REFID) || smsgw.PHONENUMBER || smsgw.SMSMESSAGE like %:search% )
+                AND ( receive_date BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayByConditionAllSearchTotalCount(
+        @Param(value = "conditions_id") Long conditionsID,
+        @Param(value = "search") String search,
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+    /* ORDERTYPE ID */
     @Query(value = """
                 SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
                 LEFT JOIN 
