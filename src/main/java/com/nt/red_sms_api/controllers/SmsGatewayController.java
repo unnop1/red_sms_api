@@ -1,9 +1,6 @@
 package com.nt.red_sms_api.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nt.red_sms_api.Auth.JwtHelper;
-import com.nt.red_sms_api.Util.Calculate;
-import com.nt.red_sms_api.Util.DateTime;
-import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
@@ -27,8 +20,6 @@ import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseReportTime;
-import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseTime;
 import com.nt.red_sms_api.service.AuditService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
@@ -47,8 +38,7 @@ public class SmsGatewayController {
     @Autowired
     private AuditService auditService;
 
-    @GetMapping
-    @RequestMapping("/all_send")
+    @GetMapping("/all_send")
     public ResponseEntity<DefaultControllerResp> getAllSendSmsGateways(
         HttpServletRequest request,
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -93,8 +83,7 @@ public class SmsGatewayController {
         
     }
 
-    @GetMapping
-    @RequestMapping("/by_sending")
+    @GetMapping("/by_sending")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysBySending(
         HttpServletRequest request,    
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -140,8 +129,7 @@ public class SmsGatewayController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/by_condition")
+    @GetMapping("/by_condition")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByCondition(
         HttpServletRequest request,   
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -186,8 +174,7 @@ public class SmsGatewayController {
         }
     }
 
-    @GetMapping
-    @RequestMapping("/by_ordertype")
+    @GetMapping("/by_ordertype")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByOrderType(
         HttpServletRequest request,   
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -233,8 +220,7 @@ public class SmsGatewayController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/by_response_time")
+    @GetMapping("/by_response_time")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysByResponseTime(
         HttpServletRequest request,       
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -276,8 +262,7 @@ public class SmsGatewayController {
         }
     }
 
-    @GetMapping
-    @RequestMapping("/graph_response_time")
+    @GetMapping("/graph_response_time")
     public ResponseEntity<DefaultControllerResp> GraphSmsGatewaysByResponseTime(
         HttpServletRequest request,       
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
@@ -332,8 +317,7 @@ public class SmsGatewayController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/order_type_with_status")
+    @GetMapping("/order_type_with_status")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysOrderTypeAndStatus(
         HttpServletRequest request,       
         @RequestParam(name = "order_type_main_id")Long orderTypeMainID,
@@ -377,8 +361,7 @@ public class SmsGatewayController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/condition")
+    @GetMapping("/conditions")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysConditions(
         HttpServletRequest request,       
         @RequestParam(name = "conditions_id")Long conditionsID,
@@ -422,7 +405,7 @@ public class SmsGatewayController {
 
 
 
-    @GetMapping("by_id")
+    @GetMapping("/by_id")
     public ResponseEntity<DefaultControllerResp> GetSmsGatewayMoreDetail(HttpServletRequest request, @RequestParam(name="id") Long id){
         String ipAddress = request.getRemoteAddr();
         String requestHeader = request.getHeader("Authorization");
