@@ -17,18 +17,23 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     
     /* BY DATE */
     @Query(value =  """
-                    SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                    SELECT 
                         odt.ordertype_name,
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
-                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
-                        AS totalEvent, 
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
-                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch,
+                        SUM(
+                            extract ( day from (send_date - receive_date) )*86400 
+                            + extract ( hour from (send_date - receive_date) )*3600 
+                            + extract ( minute from (send_date - receive_date) )*60 
+                            + extract ( second from (send_date - receive_date) )
+                        ) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date)
+                    GROUP BY odt.ordertype_name
                     """,
                     nativeQuery = true)
     public List<ByOrderType> ListByOrderTypeDate(
@@ -40,12 +45,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     @Query(value = """
                     SELECT COUNT(*)
                     FROM (
-                        SELECT COUNT(DISTINCT TRUNC(smsgw.created_date)) AS date_count 
+                        SELECT COUNT(DISTINCT odt.ordertype_name) AS date_count 
                         FROM  order_type odt 
                         LEFT JOIN sms_gateway smsgw
                         ON smsgw.order_type_mainid = odt.mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date) 
+                        GROUP BY odt.ordertype_name
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -53,18 +58,23 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /// no page
     @Query(value =  """
-                    SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
+                    SELECT 
                         odt.ordertype_name,
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
-                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
-                        AS totalEvent, 
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
-                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch,
+                        SUM(
+                            extract ( day from (send_date - receive_date) )*86400 
+                            + extract ( hour from (send_date - receive_date) )*3600 
+                            + extract ( minute from (send_date - receive_date) )*60 
+                            + extract ( second from (send_date - receive_date) )
+                        ) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY odt.ordertype_name, TRUNC(smsgw.created_date)
+                    GROUP BY odt.ordertype_name
                     """,
                     nativeQuery = true)
     public List<ByOrderType> ListByOrderTypeDate(
@@ -75,18 +85,23 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /* BY MONTH */
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+        SELECT 
             odt.ordertype_name,
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
-            COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
-            AS totalEvent, 
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
-            COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
+            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
+            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
+            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch,
+            SUM(
+                extract ( day from (send_date - receive_date) )*86400 
+                + extract ( hour from (send_date - receive_date) )*3600 
+                + extract ( minute from (send_date - receive_date) )*60 
+                + extract ( second from (send_date - receive_date) )
+            ) as response_time
         FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
         ON smsgw.order_type_mainid = odt.mainid
         WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY odt.ordertype_name
                     """,
                     nativeQuery = true)
     public List<ByOrderType> ListByOrderTypeMonth(
@@ -98,12 +113,12 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
     @Query(value = """
                     SELECT COUNT(*)
                     FROM (
-                        SELECT COUNT(DISTINCT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')) AS date_count 
+                        SELECT COUNT(DISTINCT odt.ordertype_name) AS date_count 
                         FROM  order_type odt 
                         LEFT JOIN sms_gateway smsgw
                         ON smsgw.order_type_mainid = odt.mainid
                         WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+                        GROUP BY odt.ordertype_name
                     ) subquery 
                     """,
         nativeQuery = true)
@@ -111,18 +126,23 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     /// no page
     @Query(value =  """
-        SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
+        SELECT 
             odt.ordertype_name,
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
-            COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END)
-            AS totalEvent, 
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
-            COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
+            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
+            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
+            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch,
+            SUM(
+                extract ( day from (send_date - receive_date) )*86400 
+                + extract ( hour from (send_date - receive_date) )*3600 
+                + extract ( minute from (send_date - receive_date) )*60 
+                + extract ( second from (send_date - receive_date) )
+            ) as response_time
         FROM  order_type odt 
         LEFT JOIN sms_gateway smsgw
         ON smsgw.order_type_mainid = odt.mainid
         WHERE smsGW.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY odt.ordertype_name, TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
+        GROUP BY odt.ordertype_name
                     """,
                     nativeQuery = true)
     public List<ByOrderType> ListByOrderTypeMonth(

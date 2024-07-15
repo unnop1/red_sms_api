@@ -15,9 +15,10 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /* BY DATE */
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
-                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
+                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + 
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalSend,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
-                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalFail
                     FROM sms_gateway smsgw
                     WHERE smsGW.created_date BETWEEN ?1 AND ?2
                     GROUP BY TRUNC(smsgw.created_date) 
@@ -43,9 +44,10 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /// no page
     @Query(value =  """
                     SELECT TRUNC(smsgw.created_date) AS DATE_ONLY,
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + 
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalSend,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
-                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalFail
                     FROM sms_gateway smsgw
                     WHERE smsGW.created_date BETWEEN ?1 AND ?2
                     GROUP BY TRUNC(smsgw.created_date) 
@@ -58,9 +60,10 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /* BY MONTH */
     @Query(value =  """
                     SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
-                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
+                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + 
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalSend,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
-                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalFail
                     FROM sms_gateway smsgw
                     WHERE smsGW.created_date BETWEEN ?1 AND ?2
                     GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
@@ -86,9 +89,10 @@ public interface BySendingRepo extends JpaRepository<SmsGatewayEntity,Long> {
     /// no page
     @Query(value =  """
                     SELECT TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY') AS DATE_ONLY,
-                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSend,
+                    COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) + 
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalSend,
                     COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess,
-                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalFail
+                    COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) + COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalFail
                     FROM sms_gateway smsgw
                     WHERE smsGW.created_date BETWEEN ?1 AND ?2
                     GROUP BY TO_CHAR(TRUNC(smsgw.created_date, 'MONTH'), 'MON-YYYY')
