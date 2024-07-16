@@ -88,10 +88,11 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     LEFT JOIN 
                     config_conditions conf
                     ON smsgw.config_conditions_id = conf.conditions_id
-                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
                     """
                     ,nativeQuery = true)
     public Integer getListByResponseTimeTotalCount(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime
     );
@@ -175,10 +176,11 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time 
-                    AND smsgw.phonenumber like %:search% AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    AND smsgw.phonenumber like %:search% AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
                     """
                     ,nativeQuery = true)
     public Integer getListByResponseTimeSearchTotalCount(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
         @Param(value = "search")String search

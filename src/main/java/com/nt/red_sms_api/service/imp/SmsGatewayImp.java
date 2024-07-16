@@ -210,13 +210,13 @@ public class SmsGatewayImp implements SmsGatewayService{
         if(offset.equals(0) && limit.equals(0)){
             if ( search.isEmpty()){
                 List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime);
-                Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
+                Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(req.getOrderTypeMainID(), startTime, endTime);
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
             }else {
                 List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search);
-                Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(startTime, endTime, search);
+                Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(req.getOrderTypeMainID(), startTime, endTime, search);
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
@@ -226,13 +226,13 @@ public class SmsGatewayImp implements SmsGatewayService{
 
         if ( search.isEmpty()){
             List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
-            Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
+            Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(req.getOrderTypeMainID(), startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;
         }else {
             List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-            Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(startTime, endTime, search);
+            Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(req.getOrderTypeMainID(), startTime, endTime, search);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;
