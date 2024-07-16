@@ -19,6 +19,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.order_type_mainid,
                     smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
@@ -36,11 +37,12 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
-                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
+                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    GROUP BY GID, smsgw.order_type_mainid, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTime(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
         Pageable pageable
@@ -51,6 +53,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.order_type_mainid,
                     smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
@@ -68,12 +71,13 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     LEFT JOIN 
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
-                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
+                    WHERE smsgw.receive_date BETWEEN :start_time AND :end_time AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    GROUP BY GID, smsgw.order_type_mainid, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     ORDER BY smsgw.receive_date desc 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTime(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime
     );
@@ -97,6 +101,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.order_type_mainid,
                     smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
@@ -115,11 +120,12 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time 
-                    AND smsgw.phonenumber like %:search% AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
+                    AND smsgw.phonenumber like %:search% AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    GROUP BY GID, smsgw.order_type_mainid, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTimeSearch(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
         @Param(value = "search")String search,
@@ -131,6 +137,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     SELECT 
                     smsgw.GID,
                     smsgw.config_conditions_id,
+                    smsgw.order_type_mainid,
                     smsgw.transaction_id,
                     smsgw.phonenumber,
                     smsgw.ordertype,
@@ -149,12 +156,13 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                     WHERE smsgw.receive_date BETWEEN :start_time AND :end_time 
-                    AND smsgw.phonenumber like %:search% AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
-                    GROUP BY GID, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
+                    AND smsgw.phonenumber like %:search% AND smsgw.order_type_mainid = :ordertype_main_id AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    GROUP BY GID, smsgw.order_type_mainid, config_conditions_id, smsgw.transaction_id, smsgw.phonenumber, smsgw.ordertype, smsgw.receive_date, smsgw.send_date, smsgw.is_status, conf.refid 
                     ORDER BY smsgw.receive_date desc 
                     """
                     ,nativeQuery = true)
     public List<ByResponseTime> ListByResponseTimeSearch(
+        @Param(value = "ordertype_main_id") Long orderTypeMainID,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime,
         @Param(value = "search")String search

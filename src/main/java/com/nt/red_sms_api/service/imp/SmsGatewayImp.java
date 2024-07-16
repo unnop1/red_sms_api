@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
@@ -192,7 +193,7 @@ public class SmsGatewayImp implements SmsGatewayService{
     }
 
     @Override
-    public SmsGatewayResponseTimeResp findSmsGatewayResponseTime(SmsGwListReq req) {
+    public SmsGatewayResponseTimeResp findSmsGatewayResponseTime(SmsGwOrderTypeRespTimeReq req) {
         SmsGatewayResponseTimeResp resp = new SmsGatewayResponseTimeResp();
         Timestamp startTime = Timestamp.valueOf(req.getStartTime());
         Timestamp endTime = Timestamp.valueOf(req.getEndTime());
@@ -208,13 +209,13 @@ public class SmsGatewayImp implements SmsGatewayService{
 
         if(offset.equals(0) && limit.equals(0)){
             if ( search.isEmpty()){
-                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(startTime, endTime);
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime);
                 Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
             }else {
-                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(startTime, endTime, search);
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search);
                 Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(startTime, endTime, search);
                 resp.setCount(count);
                 resp.setData(smsGws);
@@ -224,13 +225,13 @@ public class SmsGatewayImp implements SmsGatewayService{
         }
 
         if ( search.isEmpty()){
-            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
             Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGws);
             return resp;
         }else {
-            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
+            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
             Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(startTime, endTime, search);
             resp.setCount(count);
             resp.setData(smsGws);
@@ -486,6 +487,22 @@ public class SmsGatewayImp implements SmsGatewayService{
         Long conditionsID = req.getConditions_id();
 
         if ( search.isEmpty()){
+            if(offset.equals(0) && limit.equals(0)){
+                List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayByConditionID(
+                    conditionsID,
+                    startTime,
+                    endTime
+                );
+                Integer count = smsGatewayRepo.getSmsGatewayByConditionIDTotalCount(
+                    conditionsID,
+                    startTime,
+                    endTime
+                );
+                resp.setCount(count);
+                resp.setData(smsGw);
+                return resp;
+            }
+
             List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayByConditionID(
                 conditionsID,
                 startTime,
@@ -503,6 +520,24 @@ public class SmsGatewayImp implements SmsGatewayService{
             if( !req.getSearchField().isEmpty()){
 
                 if (searchField.equals("phonenumber")){
+                    if(offset.equals(0) && limit.equals(0)){
+                        List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionPhoneFieldSearch(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+
+                        Integer count = smsGatewayRepo.getConditionPhoneFieldSearchTotalCount(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
                     List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionPhoneFieldSearch(
                         conditionsID,
                         search,
@@ -521,6 +556,26 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("smsmessage")){
+
+                    if(offset.equals(0) && limit.equals(0)){
+                        List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionSmsMsgFieldSearch(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+
+                        Integer count = smsGatewayRepo.getConditionSmsMsgFieldSearchTotalCount(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+
                     List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionSmsMsgFieldSearch(
                         conditionsID,
                         search,
@@ -539,6 +594,25 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("refid")){
+                    if(offset.equals(0) && limit.equals(0)){
+                        List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionRefIdFieldSearch(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+
+                        Integer count = smsGatewayRepo.getConditionRefIdFieldSearchTotalCount(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+
                     List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionRefIdFieldSearch(
                         conditionsID,
                         search,
@@ -557,6 +631,25 @@ public class SmsGatewayImp implements SmsGatewayService{
                     resp.setData(smsConditionEntities);
                     return resp;
                 }else if (searchField.equals("transaction_id")){
+                    if(offset.equals(0) && limit.equals(0)){
+                        List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionTransaction_idFieldSearch(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+
+                        Integer count = smsGatewayRepo.getConditionTransaction_idFieldSearchTotalCount(
+                            conditionsID,
+                            search,
+                            startTime,
+                            endTime
+                        );
+                        resp.setCount(count);
+                        resp.setData(smsConditionEntities);
+                        return resp;
+                    }
+
                     List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.ConditionTransaction_idFieldSearch(
                         conditionsID,
                         search,
@@ -577,6 +670,24 @@ public class SmsGatewayImp implements SmsGatewayService{
                 }
             }
 
+
+            if(offset.equals(0) && limit.equals(0)){
+                List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.findSmsGatewayByConditionAllSearch(
+                    conditionsID,
+                    search,
+                    startTime,
+                    endTime
+                );
+                Integer count = smsGatewayRepo.getSmsGatewayByConditionAllSearchTotalCount(
+                    conditionsID,
+                    search,
+                    startTime,
+                    endTime
+                );
+                resp.setCount(count);
+                resp.setData(smsConditionEntities);
+                return resp;
+            }
             List<SmsGatewayEntity> smsConditionEntities = smsGatewayRepo.findSmsGatewayByConditionAllSearch(
                 conditionsID,
                 search,

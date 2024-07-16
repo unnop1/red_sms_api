@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class SmsGwListReq {
+public class SmsGwOrderTypeRespTimeReq {
     @JsonProperty("draw")
     private Integer draw=11;
 
@@ -36,10 +36,13 @@ public class SmsGwListReq {
     @JsonProperty("length")
     private Integer length=10;
 
-    @JsonProperty("search")
+    @JsonProperty("Search")
     private String search="";
 
-    @JsonProperty("search_field")
+    @JsonProperty("Search_field")
     private String searchField="";
+
+    @JsonProperty("order_type_main_id")
+    private Long orderTypeMainID;
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
@@ -232,7 +233,8 @@ public class SmsGatewayController {
         @RequestParam(name = "start", defaultValue = "0")Integer start,
         @RequestParam(name = "length", defaultValue = "10")Integer length,
         @RequestParam(name = "Search", defaultValue = "")String search,
-        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField,
+        @RequestParam(name = "order_type_main_id")Long orderTypeMainID
 
     ) throws Exception{
         String ipAddress = request.getRemoteAddr();
@@ -241,7 +243,7 @@ public class SmsGatewayController {
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
         DefaultControllerResp response = new DefaultControllerResp();
         try{
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField);
+            SmsGwOrderTypeRespTimeReq req = new SmsGwOrderTypeRespTimeReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField, orderTypeMainID);
             SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
             
             response.setDraw(draw);
