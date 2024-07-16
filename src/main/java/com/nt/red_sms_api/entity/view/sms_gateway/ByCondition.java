@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public interface ByCondition {
         Long getCONDITIONS_ID();
+        String getREFID();
         Integer getTOTALEVENT();
         Integer getTOTALUNMATCH();
         Integer getTOTALSUCCESS();
