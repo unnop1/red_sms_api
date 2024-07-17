@@ -24,5 +24,6 @@ public interface ListOrderType {
         Integer getTotalMsg();
         Integer getTotalSend();
         Integer getTotalUnSend();
+        Integer getTotalUnMatch();
 }
     
