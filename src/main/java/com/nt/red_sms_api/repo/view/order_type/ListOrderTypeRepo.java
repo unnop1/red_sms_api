@@ -40,23 +40,23 @@ public interface ListOrderTypeRepo extends JpaRepository<OrderTypeEntity,Long> {
     // );
     @Query(value = """
                     SELECT odt.*, 
-                        (SELECT COUNT(sms_gw.GID) 
-                        FROM sms_gateway sms_gw
-                        WHERE odt.MainID = sms_gw.order_type_mainID
+                        (SELECT COUNT(sms_gw.GID)  
+                        FROM sms_gateway sms_gw 
+                        WHERE odt.MainID = sms_gw.order_type_mainID 
                         AND (sms_gw.CREATED_DATE BETWEEN :start_time AND :end_time)) AS TotalMsg,
-                        (SELECT COUNT(sms_gw.GID)
-                        FROM sms_gateway sms_gw
-                        WHERE odt.MainID = sms_gw.order_type_mainID
-                        AND sms_gw.Is_Status = 1
+                        (SELECT COUNT(sms_gw.GID) 
+                        FROM sms_gateway sms_gw 
+                        WHERE odt.MainID = sms_gw.order_type_mainID 
+                        AND sms_gw.Is_Status = 1 
                         AND (sms_gw.CREATED_DATE BETWEEN :start_time AND :end_time)) AS TotalSend,
-                        (SELECT COUNT(sms_gw.GID)
-                        FROM sms_gateway sms_gw
-                        WHERE odt.MainID = sms_gw.order_type_mainID
+                        (SELECT COUNT(sms_gw.GID) 
+                        FROM sms_gateway sms_gw 
+                        WHERE odt.MainID = sms_gw.order_type_mainID 
                         AND (sms_gw.Is_Status = 3) 
                         AND (sms_gw.CREATED_DATE BETWEEN :start_time AND :end_time)) AS TotalUnSend,
-                        (SELECT COUNT(sms_gw.GID)
-                        FROM sms_gateway sms_gw
-                        WHERE odt.MainID = sms_gw.order_type_mainID
+                        (SELECT COUNT(sms_gw.GID) 
+                        FROM sms_gateway sms_gw 
+                        WHERE odt.MainID = sms_gw.order_type_mainID 
                         AND (sms_gw.Is_Status = 2 OR sms_gw.Is_Status = 4) 
                         AND (sms_gw.CREATED_DATE BETWEEN :start_time AND :end_time)) AS TotalUnMatch
                   FROM order_type odt
