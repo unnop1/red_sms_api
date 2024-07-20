@@ -3,6 +3,7 @@ package com.nt.red_sms_api.controllers;
 import org.springframework.web.bind.annotation.*;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.CustomServlet;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.datamodel.ListDataModelReq;
@@ -54,7 +55,7 @@ public class DataModelController {
     ) {
         DefaultControllerResp response = new DefaultControllerResp();
         try {
-            String ipAddress = request.getRemoteAddr();
+            String ipAddress = CustomServlet.getClientIpAddress(request);
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);

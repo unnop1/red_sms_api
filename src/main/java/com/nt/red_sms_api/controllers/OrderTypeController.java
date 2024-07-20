@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.controllers;
 
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.CustomServlet;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.ordertype.ListOrderTypeReq;
@@ -50,7 +51,7 @@ public class OrderTypeController {
         @RequestParam(name = "Search_field", defaultValue = "")String searchField
     ){
         
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
         String requestHeader = request.getHeader("Authorization");
             
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
@@ -72,7 +73,7 @@ public class OrderTypeController {
     @PutMapping
     public ResponseEntity<DefaultControllerResp> updateOrderTypeById(HttpServletRequest request, @RequestBody UpdateOrderTypeReq req) throws Exception{
         
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
         String requestHeader = request.getHeader("Authorization");
             
         VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);

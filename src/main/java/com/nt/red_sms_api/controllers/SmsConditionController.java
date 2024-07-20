@@ -2,6 +2,7 @@ package com.nt.red_sms_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nt.red_sms_api.Auth.JwtHelper;
+import com.nt.red_sms_api.Util.CustomServlet;
 import com.nt.red_sms_api.Util.DateTime;
 import com.nt.red_sms_api.dto.req.audit.AuditLog;
 import com.nt.red_sms_api.dto.req.smscondition.AddSmsConditionReq;
@@ -61,7 +62,7 @@ public class SmsConditionController {
             ListConditionReq req = new ListConditionReq(draw, sortBy, sortName, startTime, endTime,  start, length, search, search_field);
             PaginationDataResp smsConditions = smsConditionService.ListAllSmsCondition(req);
             
-            String ipAddress = request.getRemoteAddr();
+            String ipAddress = CustomServlet.getClientIpAddress(request);
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
@@ -97,7 +98,7 @@ public class SmsConditionController {
         try{
             
             
-            String ipAddress = request.getRemoteAddr();
+            String ipAddress = CustomServlet.getClientIpAddress(request);
             String requestHeader = request.getHeader("Authorization");
                 
             VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
@@ -144,7 +145,7 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> addSmsCondition(HttpServletRequest request, @RequestBody AddSmsConditionReq  addSmsConditionReq){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
@@ -200,7 +201,7 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> duplicateSmsCondition(HttpServletRequest request, @RequestParam(value = "condition_id") Long conditionID){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
@@ -259,7 +260,7 @@ public class SmsConditionController {
     public ResponseEntity<DefaultControllerResp> updateSmsCondition(HttpServletRequest request, @RequestBody UpdateBySmsConditionReq  updateReq){
         DefaultControllerResp resp = new DefaultControllerResp();
         String requestHeader = request.getHeader("Authorization");
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         try {
@@ -313,7 +314,7 @@ public class SmsConditionController {
     @DeleteMapping("by_id")
     public ResponseEntity<DefaultControllerResp> DeleteSmsCondition(HttpServletRequest request, @RequestParam(name = "sms_condition_id") Long smsConditionID){
         String requestHeader = request.getHeader("Authorization");
-        String ipAddress = request.getRemoteAddr();
+        String ipAddress = CustomServlet.getClientIpAddress(request);
             
         VerifyAuthResp vsf = helper.verifyToken(requestHeader);
         DefaultControllerResp resp = new DefaultControllerResp();
