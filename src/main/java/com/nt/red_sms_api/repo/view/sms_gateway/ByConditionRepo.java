@@ -18,9 +18,13 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         conf.conditions_id,
                         conf.refid,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
-                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
-                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalEvent, 
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
+                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
                     FROM  config_conditions conf 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
@@ -54,9 +58,13 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                         conf.conditions_id,
                         conf.refid,
                         COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
-                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
-                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
-                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalEvent, 
+                        COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalSuccess, 
+                        COUNT(CASE WHEN smsgw.is_status = 2 THEN 1 END) +
+                        COUNT(CASE WHEN smsgw.is_status = 4 THEN 1 END) AS totalUnmatch
                     FROM  config_conditions conf 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
@@ -65,64 +73,6 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionDate(
-        @Param(value = "start_time") Timestamp startTime,
-        @Param(value = "end_time") Timestamp endTime
-    );
-
-
-    /* BY MONTH */
-    @Query(value =  """
-        SELECT 
-            conf.conditions_id,
-            conf.refid,
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
-            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
-            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch
-        FROM  config_conditions conf 
-        LEFT JOIN sms_gateway smsgw
-        ON smsgw.config_conditions_id = conf.conditions_id
-        WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY conf.conditions_id, conf.refid
-                    """,
-                    nativeQuery = true)
-    public List<ByCondition> ListByConditionMonth(
-        @Param(value = "start_time") Timestamp startTime,
-        @Param(value = "end_time") Timestamp endTime,
-        Pageable pageable
-    );
-
-    @Query(value = """
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT COUNT(DISTINCT conf.conditions_id) AS date_count 
-                        FROM  config_conditions conf 
-                        LEFT JOIN sms_gateway smsgw
-                        ON smsgw.config_conditions_id = conf.conditions_id 
-                        WHERE smsgw.created_date BETWEEN ?1 AND ?2 
-                        GROUP BY conf.conditions_id
-                    ) subquery 
-                    """,
-        nativeQuery = true)
-    public Integer getListByConditionMonthTotalCount(Timestamp startTime, Timestamp endTime);
-
-    /// no page
-    @Query(value =  """
-        SELECT 
-            conf.conditions_id,
-            conf.refid,
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) +
-            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalEvent, 
-            COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END) AS totalSuccess, 
-            COUNT(CASE WHEN smsgw.is_status = 3 THEN 1 END) AS totalUnmatch
-        FROM  config_conditions conf 
-        LEFT JOIN sms_gateway smsgw
-        ON smsgw.config_conditions_id = conf.conditions_id
-        WHERE smsGW.created_date BETWEEN :start_time AND :end_time 
-        GROUP BY conf.conditions_id, conf.refid
-                    """,
-                    nativeQuery = true)
-    public List<ByCondition> ListByConditionMonth(
         @Param(value = "start_time") Timestamp startTime,
         @Param(value = "end_time") Timestamp endTime
     );

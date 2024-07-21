@@ -14,6 +14,7 @@ import com.nt.red_sms_api.Auth.JwtHelper;
 import com.nt.red_sms_api.Util.CustomServlet;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
@@ -343,6 +344,49 @@ public class SmsGatewayController {
         try{
             SmsGwOrderTypeStatusReq req = new SmsGwOrderTypeStatusReq(orderTypeMainID, isStatus,sortBy,sortName,startTime, endTime,start,length,search,searchField);
             PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeAndStatus(req);
+            
+            response.setDraw(draw);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setDraw(draw);
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping("/ordertypes")
+    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysOrderTypes(
+        HttpServletRequest request,
+        @RequestParam(name = "order_type_main_id")Long orderTypeMainID,       
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "created_date")String sortName,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+    ) throws Exception{
+        String ipAddress = CustomServlet.getClientIpAddress(request);
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            SmsGwOrderTypeReq req = new SmsGwOrderTypeReq(orderTypeMainID,sortBy,sortName,startTime, endTime,start,length,search,searchField);
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayOrderTypeReportByID(req);
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
