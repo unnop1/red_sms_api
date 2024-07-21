@@ -451,6 +451,49 @@ public class SmsGatewayController {
     }
 
 
+    @GetMapping("/sendings")
+    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysSendings(
+        HttpServletRequest request,       
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+    ) throws Exception{
+        String ipAddress = CustomServlet.getClientIpAddress(request);
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime,start,length,search,searchField);
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendings(req);
+            
+            response.setDraw(draw);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setDraw(draw);
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
     @GetMapping("/by_id")
     public ResponseEntity<DefaultControllerResp> GetSmsGatewayMoreDetail(HttpServletRequest request, @RequestParam(name="id") Long id){

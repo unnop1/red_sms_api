@@ -842,6 +842,66 @@ public class SmsGatewayImp implements SmsGatewayService{
         resp.setData(smsGw);
         return resp;
     }
+
+    @Override
+    public PaginationDataResp findSmsGatewaySendings(SmsGwListReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
+        String sortName = req.getSortName();
+        String sortBy = req.getSortBy();
+        String search = req.getSearch();
+        String searchField = req.getSearchField().toLowerCase();
+
+        if(offset.equals(0) && limit.equals(0)){
+            List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayReportSendings(
+                startTime,
+                endTime
+            );
+            Integer count = smsGatewayRepo.getSmsGatewayReportSendingsTotalCount(
+                startTime,
+                endTime
+            );
+            resp.setCount(count);
+            resp.setData(smsGw);
+            return resp;
+        }
+
+
+        if ( search.isEmpty()){
+            List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayReportSendings(
+                startTime,
+                endTime,
+                PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = smsGatewayRepo.getSmsGatewayReportSendingsTotalCount(
+                startTime,
+                endTime
+            );
+            resp.setCount(count);
+            resp.setData(smsGw);
+            return resp;
+        }else {
+            List<SmsGatewayEntity> smsGw = smsGatewayRepo.findSmsGatewayReportSendingsSearchAll(
+                startTime,
+                endTime,
+                search,
+                PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
+            Integer count = smsGatewayRepo.getSmsGatewayReportSendingsAllSearchTotalCount(
+                startTime,
+                endTime,
+                search
+            );
+            resp.setCount(count);
+            resp.setData(smsGw);
+            return resp;
+        }
+    }
         
     
 }

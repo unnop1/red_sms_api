@@ -11,6 +11,86 @@ import org.springframework.data.repository.query.Param;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 
 public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
+
+    /* Sendings */
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
+                WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
+                AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) || UPPER(smsgw.ORDERTYPE) || LOWER(smsgw.ORDERTYPE) || smsgw.PHONENUMBER like %:search% )
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayReportSendingsAllSearchTotalCount(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime,
+        @Param(value = "search")String search
+    );
+
+    @Query(value = """
+                SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
+                WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
+                AND ( UPPER(smsgw.TRANSACTION_ID) || LOWER(smsgw.TRANSACTION_ID) || UPPER(smsgw.ORDERTYPE) || LOWER(smsgw.ORDERTYPE) || smsgw.PHONENUMBER like %:search% )
+                AND smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time 
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayReportSendingsSearchAll(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime, 
+        @Param(value = "search")String search,
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
+                WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
+                AND smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time 
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayReportSendings(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime, 
+        Pageable pageable
+    );
+
+    @Query(value = """
+                SELECT COUNT(*) FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
+                WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
+                AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
+                """
+                , nativeQuery = true)
+    public Integer getSmsGatewayReportSendingsTotalCount(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
+
+    @Query(value = """
+                SELECT smsgw.* , conf.DATE_START , conf.DATE_END FROM sms_gateway smsgw
+                LEFT JOIN 
+                    config_conditions conf
+                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
+                WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
+                AND smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time 
+                """
+                , nativeQuery = true)
+    public List<SmsGatewayEntity> findSmsGatewayReportSendings(
+        @Param(value = "start_time") Timestamp startTime,
+        @Param(value = "end_time") Timestamp endTime
+    );
+
     /* ORDER TYPE ID */
 
     @Query(value = """
