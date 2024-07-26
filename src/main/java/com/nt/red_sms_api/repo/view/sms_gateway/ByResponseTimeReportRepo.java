@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
-import com.nt.red_sms_api.entity.view.sms_gateway.ByResponseReportTime;
+import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseReportTime;
 
 
 public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity,Long> {

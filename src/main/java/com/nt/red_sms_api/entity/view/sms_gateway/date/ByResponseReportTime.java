@@ -1,4 +1,4 @@
-package com.nt.red_sms_api.entity.view.sms_gateway;
+package com.nt.red_sms_api.entity.view.sms_gateway.date;
 
 import java.sql.Clob;
 import java.sql.Timestamp;
