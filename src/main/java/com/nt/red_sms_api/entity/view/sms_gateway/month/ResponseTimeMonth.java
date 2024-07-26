@@ -2,7 +2,7 @@ package com.nt.red_sms_api.entity.view.sms_gateway.month;
 
 import java.sql.Timestamp;
 
-public interface ByResponseTimeMonth {
+public interface ResponseTimeMonth {
     String getYEAR_ONLY();
     String getMONTH_ONLY();
     String getCONFIG_CONDITIONS_ID();

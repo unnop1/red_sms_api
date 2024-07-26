@@ -246,7 +246,8 @@ public class SmsGatewayController {
         DefaultControllerResp response = new DefaultControllerResp();
         try{
             SmsGwOrderTypeRespTimeReq req = new SmsGwOrderTypeRespTimeReq(draw, sortBy, sortName, byTime,startTime, endTime, start, length, search, searchField, orderTypeMainID);
-            SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);
+            
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewayByResponseTime(req);
             
             response.setDraw(draw);
             response.setRecordsFiltered(smsGateways.getCount());
@@ -292,17 +293,6 @@ public class SmsGatewayController {
 
             SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime, startTime, endTime, start, length, search, searchField);
             SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
-
-            // for (ByResponseReportTime responseTime : smsGatewayReports.getData()) {
-            //     System.out.println("Receive Date: " + responseTime.getRECEIVE_DATE());
-            //     String startTimeInDay = responseTime.getRECEIVE_DATE();
-            //     String startDateInDay = startTimeInDay.split(" ")[0];
-            //     System.out.println("startDateInDay: " + startDateInDay);
-            //     String endTimeInDay = String.format("%s %s",startDateInDay,"23:59:59");
-            //     System.out.println("endTimeInDay: " + endTimeInDay);
-            //     SmsGwListReq dataReq = new SmsGwListReq(draw, sortBy, sortName, startTime, endTime, start, length, search, searchField);
-            //     SmsGatewayResponseTimeResp smsGateways = smsGatewayService.findSmsGatewayResponseTime(req);   
-            // }
 
             response.setDraw(draw);
             response.setMessage("Success");
@@ -453,6 +443,48 @@ public class SmsGatewayController {
 
     @GetMapping("/sendings")
     public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysSendings(
+        HttpServletRequest request,       
+        @RequestParam(name = "draw", defaultValue = "11")Integer draw,
+        @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,
+        @RequestParam(name = "order[0][name]", defaultValue = "send_date")String sortName,
+        @RequestParam(name = "by_time", defaultValue = "date")String byTime,
+        @RequestParam(name = "start_time", defaultValue = "0")String startTime,
+        @RequestParam(name = "end_time", defaultValue = "0")String endTime,
+        @RequestParam(name = "start", defaultValue = "0")Integer start,
+        @RequestParam(name = "length", defaultValue = "10")Integer length,
+        @RequestParam(name = "Search", defaultValue = "")String search,
+        @RequestParam(name = "Search_field", defaultValue = "")String searchField
+    ) throws Exception{
+        String ipAddress = CustomServlet.getClientIpAddress(request);
+        String requestHeader = request.getHeader("Authorization");
+            
+        VerifyAuthResp vsf = this.helper.verifyToken(requestHeader);
+        DefaultControllerResp response = new DefaultControllerResp();
+        try{
+            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime,startTime, endTime,start,length,search,searchField);
+            PaginationDataResp smsGateways = smsGatewayService.findSmsGatewaySendings(req);
+            
+            response.setDraw(draw);
+            response.setRecordsFiltered(smsGateways.getCount());
+            response.setRecordsTotal(smsGateways.getCount());
+            response.setCount(smsGateways.getCount());
+            response.setMessage("Success");
+            response.setData(smsGateways.getData());
+            response.setStatusCode(200);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch (Exception e){
+            response.setDraw(draw);
+            response.setCount(0);
+            response.setData(null);
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage("Error while getting : " + e.getMessage());
+            return new ResponseEntity<>( response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/response_times")
+    public ResponseEntity<DefaultControllerResp> GetAllSmsGatewaysResponseTimes(
         HttpServletRequest request,       
         @RequestParam(name = "draw", defaultValue = "11")Integer draw,
         @RequestParam(name = "order[0][dir]", defaultValue = "ASC")String sortBy,

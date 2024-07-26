@@ -11,5 +11,5 @@ import lombok.Setter;
 @Setter
 public class SmsGatewayResponseTimeReportResp {
 
-    private List<ByResponseReportTime> data;
+    private Object data;
 }

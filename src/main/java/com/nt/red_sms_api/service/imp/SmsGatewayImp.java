@@ -1,6 +1,7 @@
 package com.nt.red_sms_api.service.imp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ import com.nt.red_sms_api.entity.view.sms_gateway.date.ByOrderType;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseReportTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.BySending;
+import com.nt.red_sms_api.entity.view.sms_gateway.month.ByConditionMonth;
+import com.nt.red_sms_api.entity.view.sms_gateway.month.ByOrderTypeMonth;
+import com.nt.red_sms_api.entity.view.sms_gateway.month.ByResponseReportTimeMonth;
+import com.nt.red_sms_api.entity.view.sms_gateway.month.BySendingMonth;
+import com.nt.red_sms_api.entity.view.sms_gateway.month.ResponseTimeMonth;
 import com.nt.red_sms_api.repo.SmsGatewayRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByConditionRepo;
 import com.nt.red_sms_api.repo.view.sms_gateway.ByOrderTypeRepo;
@@ -61,11 +67,8 @@ public class SmsGatewayImp implements SmsGatewayService{
     public PaginationDataResp findSmsGatewayCondition(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
         
-        // String startTime = req.getStartTime();
-        // String endTime = req.getEndTime();
+        Integer countCustomMonth = req.getStartTime().split(",").length;
         String byTime = req.getByTime().toLowerCase();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         Integer page = 0;
@@ -75,21 +78,38 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortBy = req.getSortBy();
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
+        if(req.getByTime().equals("month")){
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<ByConditionMonth> smsGatewayEntities = byConditionRepo.ListByConditionMonth(startTime, endTime);
+                monthList.addAll(smsGatewayEntities);
+            }
+            resp.setCount(monthList.size());
+            resp.setData(monthList);
+            return resp;
 
-        if(offset.equals(0) && limit.equals(0)){
-            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime);
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            if(offset.equals(0) && limit.equals(0)){
+                List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime);
+                Integer count = byConditionRepo.getListByConditionDateTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+            
+
+            List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime, PageRequest.of(page, limit, sort) );
             Integer count = byConditionRepo.getListByConditionDateTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGatewayEntities);
             return resp;
         }
-        
-
-        List<ByCondition> smsGatewayEntities = byConditionRepo.ListByConditionDate(startTime, endTime, PageRequest.of(page, limit, sort) );
-        Integer count = byConditionRepo.getListByConditionDateTotalCount(startTime, endTime);
-        resp.setCount(count);
-        resp.setData(smsGatewayEntities);
-        return resp;
 
     }
 
@@ -97,11 +117,8 @@ public class SmsGatewayImp implements SmsGatewayService{
     public PaginationDataResp findSmsGatewayOrderType(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
         
-        // String startTime = req.getStartTime();
-        // String endTime = req.getEndTime();
+        Integer countCustomMonth = req.getStartTime().split(",").length;
         String byTime = req.getByTime().toLowerCase();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         Integer page = 0;
@@ -112,27 +129,44 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
 
-        if(offset.equals(0) && limit.equals(0)){
-            List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime);
+        if(byTime.equals("month")){
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<ByOrderTypeMonth> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeMonth(startTime, endTime);
+                monthList.addAll(smsGatewayEntities);
+            }
+            resp.setCount(monthList.size());
+            resp.setData(monthList);
+            return resp;
+
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            if(offset.equals(0) && limit.equals(0)){
+                List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime);
+                Integer count = byOrderTypeRepo.getListByOrderTypeDateTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+            
+
+            List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime, PageRequest.of(page, limit, sort) );
             Integer count = byOrderTypeRepo.getListByOrderTypeDateTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGatewayEntities);
             return resp;
         }
-        
-
-        List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime, PageRequest.of(page, limit, sort) );
-        Integer count = byOrderTypeRepo.getListByOrderTypeDateTotalCount(startTime, endTime);
-        resp.setCount(count);
-        resp.setData(smsGatewayEntities);
-        return resp;
     }
 
     @Override
     public PaginationDataResp findSmsGatewaySendAndUnSend(SmsGwListReq req) {
         PaginationDataResp resp = new PaginationDataResp();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Integer countCustomMonth = req.getStartTime().split(",").length;
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         Integer page = 0;
@@ -142,27 +176,43 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortBy = req.getSortBy();
         String sortName = req.getSortName();
         JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
+        if(req.getByTime().equals("month")){
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<BySendingMonth> smsGatewayEntities = bySendingRepo.ListBySendingMonth(startTime, endTime);
+                monthList.addAll(smsGatewayEntities);
+            }
+            resp.setCount(monthList.size());
+            resp.setData(monthList);
+            return resp;
 
-        if(offset.equals(0) && limit.equals(0)){
-            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime);
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            if(offset.equals(0) && limit.equals(0)){
+                List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime);
+                Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+
+            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, sort));
             Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
             resp.setCount(count);
             resp.setData(smsGatewayEntities);
             return resp;
         }
-
-        List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, sort));
-        Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
-        resp.setCount(count);
-        resp.setData(smsGatewayEntities);
-        return resp;
     }
 
     @Override
-    public SmsGatewayResponseTimeResp findSmsGatewayResponseTime(SmsGwOrderTypeRespTimeReq req) {
-        SmsGatewayResponseTimeResp resp = new SmsGatewayResponseTimeResp();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+    public PaginationDataResp findSmsGatewayByResponseTime(SmsGwOrderTypeRespTimeReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        Integer countCustomMonth = req.getStartTime().split(",").length;
         Integer offset = req.getStart();
         Integer limit = req.getLength();
         Integer page = 0;
@@ -173,55 +223,129 @@ public class SmsGatewayImp implements SmsGatewayService{
         String sortBy = req.getSortBy();
         String search = req.getSearch(); // fix search phone number
 
-        if(offset.equals(0) && limit.equals(0)){
+        if(req.getByTime().equals("month")){
+            // Use together with by_ordertype
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<ByOrderTypeMonth> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeMonth(startTime, endTime);
+                monthList.addAll(smsGatewayEntities);
+            }
+            resp.setCount(monthList.size());
+            resp.setData(monthList);
+            return resp;
+
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            if(offset.equals(0) && limit.equals(0)){
+                if ( search.isEmpty()){
+                    List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime);
+                    Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(req.getOrderTypeMainID(), startTime, endTime);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                }else {
+                    List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search);
+                    Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(req.getOrderTypeMainID(), startTime, endTime, search);
+                    resp.setCount(count);
+                    resp.setData(smsGws);
+                    return resp;
+                }
+
+            }
+
             if ( search.isEmpty()){
-                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime);
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
                 Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(req.getOrderTypeMainID(), startTime, endTime);
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
             }else {
-                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search);
+                List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
                 Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(req.getOrderTypeMainID(), startTime, endTime, search);
                 resp.setCount(count);
                 resp.setData(smsGws);
                 return resp;
             }
-
-        }
-
-        if ( search.isEmpty()){
-            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTime(req.getOrderTypeMainID(), startTime, endTime, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName ));
-            Integer count = byResponseTimeRepo.getListByResponseTimeTotalCount(req.getOrderTypeMainID(), startTime, endTime);
-            resp.setCount(count);
-            resp.setData(smsGws);
-            return resp;
-        }else {
-            List<ByResponseTime> smsGws = byResponseTimeRepo.ListByResponseTimeSearch(req.getOrderTypeMainID(), startTime, endTime, search, PageRequest.of(page, limit, Sort.Direction.fromString(sortBy), sortName));
-            Integer count = byResponseTimeRepo.getListByResponseTimeSearchTotalCount(req.getOrderTypeMainID(), startTime, endTime, search);
-            resp.setCount(count);
-            resp.setData(smsGws);
-            return resp;
         }
     }
 
+    
+    @Override
+    public PaginationDataResp findSmsGatewayResponseTimes(SmsGwOrderTypeRespTimeReq req) {
+        PaginationDataResp resp = new PaginationDataResp();
+        Integer countCustomMonth = req.getStartTime().split(",").length;
+        Integer offset = req.getStart();
+        Integer limit = req.getLength();
+        Integer page = 0;
+        if(limit > 0){
+            page = offset / limit;
+        }
+        String sortBy = req.getSortBy();
+        String sortName = req.getSortName();
+        JpaSort sort = JpaSort.unsafe(Sort.Direction.fromString(sortBy), "("+sortName+")");
+        if(req.getByTime().equals("month")){
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<ResponseTimeMonth> smsGatewayEntities = byResponseTimeRepo.ListByResponseTimeMonth(req.getOrderTypeMainID(),startTime, endTime);
+                monthList.addAll(smsGatewayEntities);
+            }
+            resp.setCount(monthList.size());
+            resp.setData(monthList);
+            return resp;
+
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            if(offset.equals(0) && limit.equals(0)){
+                List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime);
+                Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
+                resp.setCount(count);
+                resp.setData(smsGatewayEntities);
+                return resp;
+            }
+
+            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, sort));
+            Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
+            resp.setCount(count);
+            resp.setData(smsGatewayEntities);
+            return resp;
+        }
+    }
+    
+    
     @Override
     public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwListReq req) {
         SmsGatewayResponseTimeReportResp resp = new SmsGatewayResponseTimeReportResp();
-        Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-        Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+        Integer countCustomMonth = req.getStartTime().split(",").length;
 
-        List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
-        
-        // for (ByResponseReportTime responseTime : smsGws) {
-        //     System.out.println("Receive Date: " + responseTime.getReceiveDate());
-        //     System.out.println("Avg Response Time: " + responseTime.getAvgResponseTimePerDay());
-        //     // Add similar logs for other fields
-        //     System.out.println("Data Column Array: " + responseTime.getDataColumnArray());
-        // }
-
-        resp.setData(smsGws);
-        return resp;
+        if(req.getByTime().equals("month")){
+            String[] startTimes = req.getStartTime().split(",");
+            String[] endTimes = req.getEndTime().split(",");
+            List<Object> monthList = new ArrayList<Object>();   
+            for(int i = 0; i < countCustomMonth; i++){
+                Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                List<ByResponseReportTimeMonth> smsGws = byResponseTimeReportRepo.ListByResponseReportTimeMonth(startTime, endTime);
+                monthList.addAll(smsGws);
+            }
+            resp.setData(monthList);
+            return resp;
+        }else{
+            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+            List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+            resp.setData(smsGws);
+            return resp;
+        }
     }
 
 
@@ -902,6 +1026,5 @@ public class SmsGatewayImp implements SmsGatewayService{
             return resp;
         }
     }
-        
     
 }

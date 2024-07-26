@@ -13,5 +13,5 @@ public class SmsGatewayResponseTimeResp {
     private Integer count;
     private Integer countUnSend=0;
     private Integer countSend=0;
-    private List<ByResponseTime> data;
+    private Object data;
 }

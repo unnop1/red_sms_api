@@ -7,7 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 public interface ByResponseReportTimeMonth {
-    String getRECEIVE_DATE();
+    String getRECEIVE_MONTH();
     String getAVG_RESPONSE_TIME_PER_MONTH();
     String getMIN_RESPONSE_TIME_PER_MONTH();
     String getMAX_RESPONSE_TIME_PER_MONTH();
