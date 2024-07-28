@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.stereotype.Service;
 
+import com.nt.red_sms_api.Util.ManualSort;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwConditionReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeReq;
@@ -81,13 +82,14 @@ public class SmsGatewayImp implements SmsGatewayService{
         if(req.getByTime().equals("month")){
             String[] startTimes = req.getStartTime().split(",");
             String[] endTimes = req.getEndTime().split(",");
-            List<Object> monthList = new ArrayList<Object>();   
+            List<ByConditionMonth> monthList = new ArrayList<ByConditionMonth>();   
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);
                 List<ByConditionMonth> smsGatewayEntities = byConditionRepo.ListByConditionMonth(startTime, endTime);
                 monthList.addAll(smsGatewayEntities);
             }
+            ManualSort.sortByConditionMonth(monthList, sortName, sortBy);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -132,13 +134,14 @@ public class SmsGatewayImp implements SmsGatewayService{
         if(byTime.equals("month")){
             String[] startTimes = req.getStartTime().split(",");
             String[] endTimes = req.getEndTime().split(",");
-            List<Object> monthList = new ArrayList<Object>();   
+            List<ByOrderTypeMonth> monthList = new ArrayList<ByOrderTypeMonth>();   
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);
                 List<ByOrderTypeMonth> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeMonth(startTime, endTime);
                 monthList.addAll(smsGatewayEntities);
             }
+            ManualSort.sortByOrderTypeMonth(monthList, sortName, sortBy);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -179,13 +182,14 @@ public class SmsGatewayImp implements SmsGatewayService{
         if(req.getByTime().equals("month")){
             String[] startTimes = req.getStartTime().split(",");
             String[] endTimes = req.getEndTime().split(",");
-            List<Object> monthList = new ArrayList<Object>();   
+            List<BySendingMonth> monthList = new ArrayList<BySendingMonth>();   
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);
                 List<BySendingMonth> smsGatewayEntities = bySendingRepo.ListBySendingMonth(startTime, endTime);
                 monthList.addAll(smsGatewayEntities);
             }
+            ManualSort.sortBySendingMonth(monthList, sortName, sortBy);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -227,13 +231,14 @@ public class SmsGatewayImp implements SmsGatewayService{
             // Use together with by_ordertype
             String[] startTimes = req.getStartTime().split(",");
             String[] endTimes = req.getEndTime().split(",");
-            List<Object> monthList = new ArrayList<Object>();   
+            List<ByOrderTypeMonth> monthList = new ArrayList<ByOrderTypeMonth>();   
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);
                 List<ByOrderTypeMonth> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeMonth(startTime, endTime);
                 monthList.addAll(smsGatewayEntities);
             }
+            ManualSort.sortByOrderTypeMonth(monthList, sortName, sortBy);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
