@@ -91,6 +91,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                 monthList.addAll(smsGatewayEntities);
             }
             ManualSort.sortByConditionMonth(monthList, sortName, sortBy);
+            monthList.removeIf(month -> month.getTOTALEVENT() == 0);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -143,6 +144,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                 monthList.addAll(smsGatewayEntities);
             }
             ManualSort.sortByOrderTypeMonth(monthList, sortName, sortBy);
+            monthList.removeIf(month -> month.getTOTALEVENT() == 0);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -191,6 +193,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                 monthList.addAll(smsGatewayEntities);
             }
             ManualSort.sortBySendingMonth(monthList, sortName, sortBy);
+            monthList.removeIf(month -> month.getTOTALSEND() == 0);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -240,6 +243,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                 monthList.addAll(smsGatewayEntities);
             }
             ManualSort.sortByOrderTypeMonth(monthList, sortName, sortBy);
+            monthList.removeIf(month -> month.getTOTALEVENT() == 0);
             resp.setCount(monthList.size());
             resp.setData(monthList);
             return resp;
@@ -297,7 +301,7 @@ public class SmsGatewayImp implements SmsGatewayService{
         if(req.getByTime().equals("month")){
             String[] startTimes = req.getStartTime().split(",");
             String[] endTimes = req.getEndTime().split(",");
-            List<Object> monthList = new ArrayList<Object>();   
+            List<ResponseTimeMonth> monthList = new ArrayList<ResponseTimeMonth>();   
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);

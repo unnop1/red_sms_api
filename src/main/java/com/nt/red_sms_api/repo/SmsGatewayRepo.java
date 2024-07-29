@@ -64,9 +64,6 @@ public interface SmsGatewayRepo extends JpaRepository<SmsGatewayEntity,Long> {
 
     @Query(value = """
                 SELECT COUNT(*) FROM sms_gateway smsgw
-                LEFT JOIN 
-                    config_conditions conf
-                    ON smsgw.ORDER_TYPE_MAINID  = conf.ORDER_TYPE_MAINID
                 WHERE (smsgw.IS_STATUS = 1 OR smsgw.IS_STATUS = 3 OR smsgw.IS_STATUS = 2 OR smsgw.IS_STATUS = 4)
                 AND ( smsgw.RECEIVE_DATE BETWEEN :start_time AND :end_time )
                 """
