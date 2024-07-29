@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Setter;
+
 public interface ByResponseReportTime {
     String getRECEIVE_DATE();
     String getAVG_RESPONSE_TIME_PER_DAY();

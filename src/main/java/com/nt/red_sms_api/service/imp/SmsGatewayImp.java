@@ -23,6 +23,7 @@ import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.entity.view.sms_gateway.ListSmsGateway;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByCondition;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByOrderType;
+import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseReportRangeTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseReportTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.ByResponseTime;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.BySending;
@@ -345,11 +346,45 @@ public class SmsGatewayImp implements SmsGatewayService{
             resp.setData(monthList);
             return resp;
         }else{
-            Timestamp startTime = Timestamp.valueOf(req.getStartTime());
-            Timestamp endTime = Timestamp.valueOf(req.getEndTime());
-            List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
-            resp.setData(smsGws);
-            return resp;
+            if(countCustomMonth > 1){
+                String[] startTimes = req.getStartTime().split(",");
+                String[] endTimes = req.getEndTime().split(",");
+                List<ByResponseReportRangeTime> monthList = new ArrayList<ByResponseReportRangeTime>();   
+                for(int i = 0; i < countCustomMonth; i++){
+                    Timestamp startTime = Timestamp.valueOf(startTimes[i]);
+                    Timestamp endTime = Timestamp.valueOf(endTimes[i]);
+                    List<ByResponseReportRangeTime> monthMapList = new ArrayList<ByResponseReportRangeTime>(); 
+                    List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+
+                    if (smsGws.size()> 0){
+                        for (int j = 0; j < smsGws.size(); j++){
+                            ByResponseReportTime smsAtj = smsGws.get(j);
+                            ByResponseReportRangeTime smsMapAtj = new ByResponseReportRangeTime(
+                                startTimes[i],
+                                smsAtj.getAVG_RESPONSE_TIME_PER_DAY(),
+                                smsAtj.getMAX_RESPONSE_TIME_PER_DAY(),
+                                smsAtj.getMIN_RESPONSE_TIME_PER_DAY(),
+                                smsAtj.getMED_RESPONSE_TIME_PER_DAY()
+                            );
+
+                            monthMapList.add(smsMapAtj);
+                        }
+                    }else{
+                        ByResponseReportRangeTime smsMapAtj = new ByResponseReportRangeTime();
+                        smsMapAtj.setGetRECEIVE_DATE(startTimes[i]);
+                        monthMapList.add(smsMapAtj);
+                    }
+                    monthList.addAll(monthMapList);
+                }
+                resp.setData(monthList);
+                return resp;
+            }else{
+                Timestamp startTime = Timestamp.valueOf(req.getStartTime());
+                Timestamp endTime = Timestamp.valueOf(req.getEndTime());
+                List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+                resp.setData(smsGws);
+                return resp;
+            }
         }
     }
 
