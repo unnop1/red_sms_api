@@ -33,7 +33,8 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD'), conf.conditions_id, conf.refid
+                    GROUP BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD'), conf.conditions_id, conf.refid 
+                    ORDER BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD')
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionDate(
@@ -76,7 +77,8 @@ public interface ByConditionRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.config_conditions_id = conf.conditions_id
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
-                    GROUP BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD'), conf.conditions_id, conf.refid
+                    GROUP BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD'), conf.conditions_id, conf.refid 
+                    ORDER BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD')
                     """,
                     nativeQuery = true)
     public List<ByCondition> ListByConditionDate(
