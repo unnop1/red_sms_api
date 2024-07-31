@@ -5,6 +5,7 @@ import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwResponseTimeReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
@@ -24,5 +25,5 @@ public interface SmsGatewayService  {
     public PaginationDataResp findSmsGatewayOrderType(SmsGwListReq req);
     public PaginationDataResp findSmsGatewayByResponseTime(SmsGwOrderTypeRespTimeReq req);
     public PaginationDataResp findSmsGatewayResponseTimes(SmsGwOrderTypeRespTimeReq req);
-    public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwListReq req);
+    public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwResponseTimeReq req);
 }

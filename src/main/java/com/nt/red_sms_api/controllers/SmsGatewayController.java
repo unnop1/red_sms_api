@@ -1,6 +1,8 @@
 package com.nt.red_sms_api.controllers;
 
 import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +19,16 @@ import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwResponseTimeReq;
 import com.nt.red_sms_api.dto.resp.DefaultControllerResp;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
 import com.nt.red_sms_api.dto.resp.VerifyAuthResp;
+import com.nt.red_sms_api.entity.OrderTypeEntity;
 import com.nt.red_sms_api.entity.SmsGatewayEntity;
 import com.nt.red_sms_api.service.AuditService;
+import com.nt.red_sms_api.service.OrderTypeService;
 import com.nt.red_sms_api.service.SmsGatewayService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +39,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class SmsGatewayController {
     @Autowired
     private SmsGatewayService smsGatewayService;
+
+    @Autowired
+    private OrderTypeService orderTypeService;
 
     @Autowired
     private JwtHelper helper;
@@ -291,12 +299,16 @@ public class SmsGatewayController {
 
             HashMap<String, Object> dataResp = new HashMap<String, Object>();
 
-            SmsGwListReq req = new SmsGwListReq(draw, sortBy, sortName, byTime, startTime, endTime, start, length, search, searchField);
-            SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
+            List<OrderTypeEntity> ordertypes = orderTypeService.getAllOrderType();
 
+            for(OrderTypeEntity ordertype : ordertypes){
+                SmsGwResponseTimeReq req = new SmsGwResponseTimeReq(ordertype.getOrderTypeName(), draw, sortBy, sortName, byTime, startTime, endTime, start, length, search, searchField);
+                SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
+                dataResp.put(ordertype.getOrderTypeName(), smsGatewayReports);
+            }
             response.setDraw(draw);
             response.setMessage("Success");
-            response.setData(smsGatewayReports.getData());
+            response.setData(dataResp);
             response.setStatusCode(200);
 
             return ResponseEntity.status(HttpStatus.OK).body(response);

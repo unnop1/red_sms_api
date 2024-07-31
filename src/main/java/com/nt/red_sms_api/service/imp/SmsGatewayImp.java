@@ -16,6 +16,7 @@ import com.nt.red_sms_api.dto.req.smsgw.SmsGwListReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeRespTimeReq;
 import com.nt.red_sms_api.dto.req.smsgw.SmsGwOrderTypeStatusReq;
+import com.nt.red_sms_api.dto.req.smsgw.SmsGwResponseTimeReq;
 import com.nt.red_sms_api.dto.resp.PaginationDataResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeReportResp;
 import com.nt.red_sms_api.dto.resp.SmsGatewayResponseTimeResp;
@@ -333,9 +334,10 @@ public class SmsGatewayImp implements SmsGatewayService{
     
     
     @Override
-    public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwListReq req) {
+    public SmsGatewayResponseTimeReportResp findSmsGatewayResponseTimeReport(SmsGwResponseTimeReq req) {
         SmsGatewayResponseTimeReportResp resp = new SmsGatewayResponseTimeReportResp();
         Integer countCustomMonth = req.getStartTime().split(",").length;
+        String orderType = req.getOrderTypeName();
 
         if(req.getByTime().equals("month")){
             String[] startTimes = req.getStartTime().split(",");
@@ -344,7 +346,7 @@ public class SmsGatewayImp implements SmsGatewayService{
             for(int i = 0; i < countCustomMonth; i++){
                 Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                 Timestamp endTime = Timestamp.valueOf(endTimes[i]);
-                List<ByResponseReportTimeMonth> smsGws = byResponseTimeReportRepo.ListByResponseReportTimeMonth(startTime, endTime);
+                List<ByResponseReportTimeMonth> smsGws = byResponseTimeReportRepo.ListByResponseReportTimeMonth(orderType, startTime, endTime);
                 monthList.addAll(smsGws);
             }
             resp.setData(monthList);
@@ -358,7 +360,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                     Timestamp startTime = Timestamp.valueOf(startTimes[i]);
                     Timestamp endTime = Timestamp.valueOf(endTimes[i]);
                     List<ByResponseReportRangeTime> monthMapList = new ArrayList<ByResponseReportRangeTime>(); 
-                    List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+                    List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(orderType, startTime, endTime);
 
                     if (smsGws.size()> 0){
                         for (int j = 0; j < smsGws.size(); j++){
@@ -385,7 +387,7 @@ public class SmsGatewayImp implements SmsGatewayService{
             }else{
                 Timestamp startTime = Timestamp.valueOf(req.getStartTime());
                 Timestamp endTime = Timestamp.valueOf(req.getEndTime());
-                List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(startTime, endTime);
+                List<ByResponseReportTime> smsGws = byResponseTimeReportRepo.ListByResponseReportTime(orderType, startTime, endTime);
                 resp.setData(smsGws);
                 return resp;
             }

@@ -21,6 +21,7 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
             WITH response_times AS (
                 SELECT 
                     TRUNC(smsgw.receive_date) AS receive_date, 
+                    smsgw.ORDERTYPE as ordertype,
                     EXTRACT(DAY FROM (smsgw.send_date - smsgw.receive_date)) * 86400 
                     + EXTRACT(HOUR FROM (smsgw.send_date - smsgw.receive_date)) * 3600 
                     + EXTRACT(MINUTE FROM (smsgw.send_date - smsgw.receive_date)) * 60 
@@ -31,8 +32,9 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                 WHERE 
-                    smsgw.receive_date BETWEEN :start_time AND :end_time 
+                    smsgw.ORDERTYPE = :ordertype_name
                     AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    AND smsgw.receive_date BETWEEN :start_time AND :end_time 
             )
             SELECT 
                 receive_date,
@@ -48,6 +50,7 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
                 receive_date DESC
             """, nativeQuery = true)
     public List<ByResponseReportTime> ListByResponseReportTime(
+        @Param(value = "ordertype_name")String ordertypeName,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime
     );
@@ -59,6 +62,7 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
             WITH response_times AS (
                 SELECT 
                     TRUNC(smsgw.receive_date, 'MONTH') AS receive_month, 
+                    smsgw.ORDERTYPE as ordertype,
                     EXTRACT(DAY FROM (smsgw.send_date - smsgw.receive_date)) * 86400 
                     + EXTRACT(HOUR FROM (smsgw.send_date - smsgw.receive_date)) * 3600 
                     + EXTRACT(MINUTE FROM (smsgw.send_date - smsgw.receive_date)) * 60 
@@ -69,8 +73,10 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
                     config_conditions conf 
                     ON smsgw.config_conditions_id = conf.conditions_id 
                 WHERE 
-                    smsgw.receive_date BETWEEN :start_time AND :end_time 
+                    smsgw.ORDERTYPE = :ordertype_name
                     AND (smsgw.is_status = 1 OR smsgw.is_status = 3)
+                    AND smsgw.receive_date BETWEEN :start_time AND :end_time 
+                    
             )
             SELECT 
                 receive_month,
@@ -86,6 +92,7 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
                 receive_month DESC
             """, nativeQuery = true)
     public List<ByResponseReportTimeMonth> ListByResponseReportTimeMonth(
+        @Param(value = "ordertype_name")String ordertypeName,
         @Param(value = "start_time")Timestamp startTime,
         @Param(value = "end_time")Timestamp endTime
     );

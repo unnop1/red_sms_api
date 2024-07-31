@@ -75,6 +75,12 @@ public class OrderTypeImp implements OrderTypeService{
         }
     }
 
+    @Override
+    public List<OrderTypeEntity> getAllOrderType() {
+        List<OrderTypeEntity> existingEntity = orderTypeRepo.findAll();
+        return existingEntity;
+    }
+
 
 
 
