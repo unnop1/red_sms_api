@@ -304,7 +304,7 @@ public class SmsGatewayController {
             for(OrderTypeEntity ordertype : ordertypes){
                 SmsGwResponseTimeReq req = new SmsGwResponseTimeReq(ordertype.getOrderTypeName(), draw, sortBy, sortName, byTime, startTime, endTime, start, length, search, searchField);
                 SmsGatewayResponseTimeReportResp smsGatewayReports = smsGatewayService.findSmsGatewayResponseTimeReport(req);
-                dataResp.put(ordertype.getOrderTypeName(), smsGatewayReports);
+                dataResp.put(ordertype.getOrderTypeName(), smsGatewayReports.getData());
             }
             response.setDraw(draw);
             response.setMessage("Success");
