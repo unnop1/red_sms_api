@@ -3,6 +3,7 @@ package com.nt.red_sms_api.Util;
 import java.util.Comparator;
 import java.util.List;
 
+import com.nt.red_sms_api.entity.view.sms_gateway.date.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.ByConditionMonth;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.ByOrderTypeMonth;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.BySendingMonth;
@@ -68,6 +69,30 @@ public class ManualSort {
                 break;
             case "totalfail":
                 comparator = Comparator.comparingInt(BySendingMonth::getTOTALFAIL);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid sort field: " + sortName);
+        }
+
+        if ("desc".equalsIgnoreCase(sortBy)) {
+            comparator = comparator.reversed();
+        }
+
+        list.sort(comparator);
+    }
+
+    public  static void sortBySendingDate(List<BySending> list, String sortName, String sortBy) {
+        Comparator<BySending> comparator;
+
+        switch (sortName.toLowerCase()) {
+            case "totalevent":
+                comparator = Comparator.comparingInt(BySending::getTOTALSEND);
+                break;
+            case "totalsuccess":
+                comparator = Comparator.comparingInt(BySending::getTOTALSUCCESS);
+                break;
+            case "totalfail":
+                comparator = Comparator.comparingInt(BySending::getTOTALFAIL);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid sort field: " + sortName);
