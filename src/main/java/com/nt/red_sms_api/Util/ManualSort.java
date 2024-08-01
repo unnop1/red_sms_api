@@ -1,5 +1,7 @@
 package com.nt.red_sms_api.Util;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 
@@ -93,6 +95,15 @@ public class ManualSort {
                 break;
             case "totalfail":
                 comparator = Comparator.comparingInt(BySending::getTOTALFAIL);
+                break;
+            case "dateonly":
+                comparator = Comparator.comparing(bySending -> 
+                    LocalDate.of(
+                        Integer.parseInt(bySending.getYEAR_ONLY()), 
+                        Month.valueOf(bySending.getMONTH_ONLY().toUpperCase()), 
+                        Integer.parseInt(bySending.getDATE_ONLY())
+                    )
+                );
                 break;
             default:
                 throw new IllegalArgumentException("Invalid sort field: " + sortName);
