@@ -211,7 +211,7 @@ public class SmsGatewayImp implements SmsGatewayService{
                 return resp;
             }
 
-            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit, sort));
+            List<BySending> smsGatewayEntities = bySendingRepo.ListBySending(startTime, endTime, PageRequest.of(page, limit));
             Integer count = bySendingRepo.getListBySendingTotalCount(startTime, endTime);
             ManualSort.sortBySendingDate(smsGatewayEntities, sortName, sortBy);
             resp.setCount(count);
