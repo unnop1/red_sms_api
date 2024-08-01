@@ -81,11 +81,11 @@ public class ManualSort {
         list.sort(comparator);
     }
 
-    public  static void sortBySendingDate(List<BySending> list, String sortName, String sortBy) {
+    public static void sortBySendingDate(List<BySending> list, String sortName, String sortBy) {
         Comparator<BySending> comparator;
 
         switch (sortName.toLowerCase()) {
-            case "totalevent":
+            case "totalsend":
                 comparator = Comparator.comparingInt(BySending::getTOTALSEND);
                 break;
             case "totalsuccess":
