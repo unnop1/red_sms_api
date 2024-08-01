@@ -89,7 +89,7 @@ public interface ByResponseTimeReportRepo extends JpaRepository<SmsGatewayEntity
             GROUP BY 
                 receive_month
             ORDER BY 
-                receive_month DESC
+                receive_month ASC
             """, nativeQuery = true)
     public List<ByResponseReportTimeMonth> ListByResponseReportTimeMonth(
         @Param(value = "ordertype_name")String ordertypeName,
