@@ -378,9 +378,9 @@ public class SmsGatewayImp implements SmsGatewayService{
                             monthMapList.add(smsMapAtj);
                         }
                     }else{
-                        ByResponseReportRangeTime smsMapAtj = new ByResponseReportRangeTime();
-                        smsMapAtj.setGetRECEIVE_DATE(startTimes[i]);
-                        monthMapList.add(smsMapAtj);
+                        // ByResponseReportRangeTime smsMapAtj = new ByResponseReportRangeTime();
+                        // smsMapAtj.setGetRECEIVE_DATE(startTimes[i]);
+                        // monthMapList.add(smsMapAtj);
                     }
                     monthList.addAll(monthMapList);
                 }
