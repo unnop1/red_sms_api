@@ -2,8 +2,12 @@ package com.nt.red_sms_api.Util;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import com.nt.red_sms_api.entity.view.sms_gateway.date.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.ByConditionMonth;
@@ -11,6 +15,17 @@ import com.nt.red_sms_api.entity.view.sms_gateway.month.ByOrderTypeMonth;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.BySendingMonth;
 
 public class ManualSort {
+
+    private static final Map<String, Month> MONTH_MAP = createMonthMap();
+
+    private static Map<String, Month> createMonthMap() {
+        Map<String, Month> map = new HashMap<>();
+        for (Month month : Month.values()) {
+            map.put(month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(), month);
+        }
+        return map;
+    }
+
     public static void sortByOrderTypeMonth(List<ByOrderTypeMonth> list, String sortName, String sortBy) {
         Comparator<ByOrderTypeMonth> comparator;
 
@@ -96,11 +111,11 @@ public class ManualSort {
             case "totalfail":
                 comparator = Comparator.comparingInt(BySending::getTOTALFAIL);
                 break;
-            case "dateonly":
+            case "date_only":
                 comparator = Comparator.comparing(bySending -> 
                     LocalDate.of(
                         Integer.parseInt(bySending.getYEAR_ONLY()), 
-                        Month.valueOf(bySending.getMONTH_ONLY().toUpperCase()), 
+                        MONTH_MAP.get(bySending.getMONTH_ONLY().toUpperCase()), 
                         Integer.parseInt(bySending.getDATE_ONLY())
                     )
                 );
