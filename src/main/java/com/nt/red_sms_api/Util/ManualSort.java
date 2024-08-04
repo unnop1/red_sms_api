@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.nt.red_sms_api.entity.view.sms_gateway.date.ByOrderType;
 import com.nt.red_sms_api.entity.view.sms_gateway.date.BySending;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.ByConditionMonth;
 import com.nt.red_sms_api.entity.view.sms_gateway.month.ByOrderTypeMonth;
@@ -24,6 +25,30 @@ public class ManualSort {
             map.put(month.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toUpperCase(), month);
         }
         return map;
+    }
+
+    public static void sortByOrderTypeDate(List<ByOrderType> list, String sortName, String sortBy) {
+        Comparator<ByOrderType> comparator;
+
+        switch (sortName.toLowerCase()) {
+            case "totalevent":
+                comparator = Comparator.comparingInt(ByOrderType::getTOTALEVENT);
+                break;
+            case "totalunmatch":
+                comparator = Comparator.comparingInt(ByOrderType::getTOTALUNMATCH);
+                break;
+            case "totalsuccess":
+                comparator = Comparator.comparingInt(ByOrderType::getTOTALSUCCESS);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid sort field: " + sortName);
+        }
+
+        if ("desc".equalsIgnoreCase(sortBy)) {
+            comparator = comparator.reversed();
+        }
+
+        list.sort(comparator);
     }
 
     public static void sortByOrderTypeMonth(List<ByOrderTypeMonth> list, String sortName, String sortBy) {
