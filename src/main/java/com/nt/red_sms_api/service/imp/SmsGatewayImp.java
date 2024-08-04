@@ -164,7 +164,7 @@ public class SmsGatewayImp implements SmsGatewayService{
             }
             
 
-            List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime, PageRequest.of(page, limit, sort) );
+            List<ByOrderType> smsGatewayEntities = byOrderTypeRepo.ListByOrderTypeDate(startTime, endTime, PageRequest.of(page, limit) );
             Integer count = byOrderTypeRepo.getListByOrderTypeDateTotalCount(startTime, endTime);
             ManualSort.sortByOrderTypeDate(smsGatewayEntities, sortName, sortBy);
             smsGatewayEntities.removeIf(date -> date.getTOTALEVENT() == 0);

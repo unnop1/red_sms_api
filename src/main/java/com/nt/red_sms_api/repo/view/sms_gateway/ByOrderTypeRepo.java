@@ -38,6 +38,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                     ON smsgw.order_type_mainid = odt.mainid
                     WHERE smsgw.created_date BETWEEN :start_time AND :end_time 
                     GROUP BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD'), odt.ordertype_name 
+                    ORDER BY TRUNC(smsgw.created_date, 'YEAR'), TRUNC(smsgw.created_date, 'MONTH'), TRUNC(smsgw.created_date, 'DD')
                     """,
                     nativeQuery = true)
     public List<ByOrderType> ListByOrderTypeDate(
