@@ -276,8 +276,12 @@ public class SmsConditionImp implements SmsConditionService{
     
     @Override
     public String getPaddingShiftRefID() {
-        ConfigConditionsEntity lastRow = smsConditionRepo.getLastID();
-        String paddedNumber = String.format("%05d", lastRow.getConditionsID()+2);
+        List<ConfigConditionsEntity> lastRowList = smsConditionRepo.getLastID();
+        Long lastRow = 0L;
+        if( lastRowList.size()> 0){
+            lastRow = lastRowList.get(0).getConditionsID();
+        }
+        String paddedNumber = String.format("%05d", lastRow+2);
         return paddedNumber;
     }
 

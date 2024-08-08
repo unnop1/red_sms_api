@@ -20,8 +20,8 @@ public interface SmsConditionRepo extends JpaRepository<ConfigConditionsEntity,L
     @Query(value = "SELECT COUNT(*) FROM config_conditions ", nativeQuery = true)
     public Integer getTotalCount();
 
-    @Query(value = "SELECT * FROM ( SELECT * FROM config_conditions ORDER BY CONDITIONS_ID DESC ) WHERE ROWNUM = 1 ", nativeQuery = true)
-    public ConfigConditionsEntity getLastID();
+    @Query(value = "SELECT * FROM config_conditions ORDER BY CONDITIONS_ID DESC FETCH FIRST 1 ROWS ONLY ", nativeQuery = true)
+    public List<ConfigConditionsEntity> getLastID();
     
 
 }
