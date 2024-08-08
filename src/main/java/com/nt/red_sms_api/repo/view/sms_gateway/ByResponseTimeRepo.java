@@ -35,7 +35,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as response_time
+                    ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
                     config_conditions conf 
@@ -71,7 +71,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as response_time
+                    ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
                     config_conditions conf 
@@ -121,7 +121,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as response_time 
+                    ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time 
                     FROM sms_gateway smsgw 
                     LEFT JOIN 
                     config_conditions conf 
@@ -158,7 +158,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as response_time 
+                    ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time 
                     FROM sms_gateway smsgw 
                     LEFT JOIN 
                     config_conditions conf 
@@ -215,7 +215,7 @@ public interface ByResponseTimeRepo extends JpaRepository<SmsGatewayEntity,Long>
                         + extract ( hour from (send_date - receive_date) )*3600 
                         + extract ( minute from (send_date - receive_date) )*60 
                         + extract ( second from (send_date - receive_date) )
-                    ) as response_time
+                    ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM sms_gateway smsgw
                     LEFT JOIN 
                     config_conditions conf 

@@ -32,7 +32,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                             + extract ( hour from (send_date - receive_date) )*3600 
                             + extract ( minute from (send_date - receive_date) )*60 
                             + extract ( second from (send_date - receive_date) )
-                        ) as response_time
+                        ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
@@ -77,7 +77,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                             + extract ( hour from (send_date - receive_date) )*3600 
                             + extract ( minute from (send_date - receive_date) )*60 
                             + extract ( second from (send_date - receive_date) )
-                        ) as response_time
+                        ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
@@ -108,7 +108,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                             + extract ( hour from (send_date - receive_date) )*3600 
                             + extract ( minute from (send_date - receive_date) )*60 
                             + extract ( second from (send_date - receive_date) )
-                        ) as response_time
+                        ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
@@ -151,7 +151,7 @@ public interface ByOrderTypeRepo extends JpaRepository<SmsGatewayEntity,Long> {
                             + extract ( hour from (send_date - receive_date) )*3600 
                             + extract ( minute from (send_date - receive_date) )*60 
                             + extract ( second from (send_date - receive_date) )
-                        ) as response_time
+                        ) / NULLIF(COUNT(CASE WHEN smsgw.is_status = 1 THEN 1 END), 0) as response_time
                     FROM  order_type odt 
                     LEFT JOIN sms_gateway smsgw
                     ON smsgw.order_type_mainid = odt.mainid
